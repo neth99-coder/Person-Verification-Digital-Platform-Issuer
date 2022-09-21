@@ -37,21 +37,21 @@ export default function NavBar({ theme, toggleTheme }) {
         </button>
         <div className="collapse navbar-collapse" id="nav-body">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Add New Verifier Services
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 View Profile
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Request Digital Identity
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Contact Us

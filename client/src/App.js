@@ -5,6 +5,7 @@ import Home from "./components/home";
 import ThemeSelector from "./components/themeSelector";
 import AppRouter from "./routes/router";
 import { getTheme, saveTheme } from "./utils/theme";
+import UsrReg from "./components/UsrReg";
 
 function App() {
   const [theme, setTheme] = useState(getTheme());
@@ -21,6 +22,7 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/register-user" element={<UsrReg />}></Route>
       </Routes>
     </div>
   );

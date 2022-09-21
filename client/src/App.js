@@ -1,10 +1,31 @@
-import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import NavBar from "./components/navBar";
+import Home from "./components/home";
+import ThemeSelector from "./components/themeSelector";
 import AppRouter from "./routes/router";
+import { getTheme, saveTheme } from "./utils/theme";
+import UsrReg from "./components/UsrReg";
+import VerReg from "./components/VerReg";
 
 function App() {
+  const [theme, setTheme] = useState(getTheme());
+
   return (
-    <div>
-      <AppRouter />
+    <div className="d-flex flex-column min-vh-100">
+      <ThemeSelector theme={theme} />
+      <NavBar
+        theme={theme}
+        toggleTheme={(theme) => {
+          setTheme(theme);
+          saveTheme(theme);
+        }}
+      />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/register-user" element={<UsrReg />}></Route>
+        <Route path="/register-veri" element={<VerReg />}></Route>
+      </Routes>
     </div>
   );
 }

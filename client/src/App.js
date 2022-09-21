@@ -6,6 +6,7 @@ import ThemeSelector from "./components/themeSelector";
 import AppRouter from "./routes/router";
 import { getTheme, saveTheme } from "./utils/theme";
 import UsrReg from "./components/UsrReg";
+import VerReg from "./components/VerReg";
 
 function App() {
   const [theme, setTheme] = useState(getTheme());
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/register-user" element={<UsrReg />}></Route>
+        <Route path="/register-veri" element={<VerReg />}></Route>
       </Routes>
     </div>
   );

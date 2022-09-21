@@ -12,14 +12,16 @@ import {
     MDBCheckbox
 }
     from 'mdb-react-ui-kit';
+
 import bg1 from '../images/Data_security_05.jpg';
 import bg2 from '../images/Tiny cartoon business people reading legal document.jpg'
-import { HiHome } from 'react-icons/fa';
+import bg3 from '../images/5869.jpg'
+
 import { Button } from 'bootstrap';
 
 
 
-function UsrReg() {
+function VerReg() {
     return (
         <MDBContainer fluid >
 
@@ -28,27 +30,29 @@ function UsrReg() {
                     <MDBRow>
                         <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
 
-                        <h2 classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{color:"blue"}}>Register as a User</h2>
+                            <h2 classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{color:"blue"}}>Register as a Verifier</h2>
 
                             <div className="d-flex flex-row align-items-center mb-4 ">
 
-                                <MDBInput label='First Name' id='form1' type='text' style={{ width: "250px" }} />
+                                <MDBInput label='Name of Organization' id='form1' type='text' style={{ width: "250px" }} />
                             </div>
 
                             <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBInput label='Last Name' id='form2' type='text' style={{ width: "250px" }} />
+                                <MDBInput label='Type of Organization' id='form2' type='text' style={{ width: "250px" }} />
                             </div>
 
                             <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBInput label='NIC Number' id='form3' type='text' style={{ width: "250px" }} />
-                            </div>
-
-                            <div className="d-flex flex-row align-items-center mb-4" >
-                                <MDBInput label='DOB' id='form4' type='date' style={{ width: "250px" }} />
+                                <MDBInput label='Address' id='form3' type='text' style={{ width: "250px" }} />
                             </div>
 
                             <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBInput label='Phone Number' id='form5' type='text' style={{ width: "250px" }} />
+                                <MDBInput label='Postal Code' id='form4' type='text' style={{ width: "250px" }} />
+                            </div>
+                            <div className="d-flex flex-row align-items-center mb-4">
+                                <MDBInput label='Contact Number' id='form5' type='text' style={{ width: "250px" }} />
+                            </div>
+                            <div className="d-flex flex-row align-items-center mb-4">
+                                <MDBInput label='E-mail' id='form6' type='email' style={{ width: "250px" }} />
                             </div>
 
 
@@ -57,7 +61,7 @@ function UsrReg() {
                         </MDBCol>
 
                         <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
-                            <MDBCardImage src={bg1} fluid />
+                            <MDBCardImage src={bg3} fluid />
                         </MDBCol>
 
                     </MDBRow>
@@ -71,27 +75,35 @@ function UsrReg() {
 
                             <p classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{ color: "red" }}>* Do not submit forged documents *</p>
 
-                            <div className="d-flex flex-row align-items-center mb-4 ">
+                            
+                                <div style={{display:"flex",flexDirection:"column"}}>
+                                    <h5>Select required services</h5>
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" value="" id="account"/>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Bank Account Creation
+                                        </label>
+                                    
+                                </div>
+                                <div class="form-check mb-4 ">
+                                    <input class="form-check-input" type="checkbox" value="" id="credit"/>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Credit Card Services
+                                        </label>
+                                    
+                                </div>
+                                </div>
 
-                                <MDBInput label='Address' id='form6' type='text' style={{ width: "300px" }} />
-                            </div>
+
+
 
                             <div className="d-flex flex-row align-items-center mb-4">
 
 
-                                <MDBInput type="file" label='upload NIC copy' class="form-control" id="customFile1" style={{ width: "300px" }} />
+                                <MDBInput type="file" label='upload a copy of registeration document' class="form-control" id="bankDoc" style={{ width: "300px" }} />
                             </div>
 
-
-                            <div className="d-flex flex-row align-items-center mb-4">
-
-
-                                <MDBInput type="file" label='upload Birth Certificate copy' class="form-control" id="customFile2" style={{ width: "300px" }} />
-                            </div>
-
-                            <div className="d-flex flex-row align-items-center mb-4">
-                                <MDBInput label='email' id='form7' type='email' style={{ width: "300px" }} />
-                            </div>
+                            
 
 
 
@@ -114,4 +126,4 @@ function UsrReg() {
     );
 }
 
-export default UsrReg;
+export default VerReg;

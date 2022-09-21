@@ -12,7 +12,7 @@ export default function NavBar({ theme, toggleTheme }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-custom mb-5">
       <div className="container-fluid">
-        <NavLink to="#" className="navbar-brand hover-focus">
+        <NavLink to="/" className="navbar-brand hover-focus">
           <img
             src="https://img.freepik.com/free-vector/qr-code-person-holding-smartphone_23-2148620753.jpg?size=338&ext=jpg&ga=GA1.2.1101288580.1663340965"
             alt="icon1"

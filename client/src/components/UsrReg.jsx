@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     MDBBtn,
     MDBContainer,
@@ -28,7 +29,7 @@ function UsrReg() {
                     <MDBRow>
                         <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
 
-                        <h2 classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{color:"blue"}}>Register as a User</h2>
+                            <h2 classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" style={{ color: "blue", marginBottom: "20px" }}>Register as a User</h2>
 
                             <div className="d-flex flex-row align-items-center mb-4 ">
 
@@ -76,17 +77,21 @@ function UsrReg() {
                                 <MDBInput label='Address' id='form6' type='text' style={{ width: "300px" }} />
                             </div>
 
-                            <div className="d-flex flex-row align-items-center mb-4">
+                            <div className="d-flex flex-column align-items-center mb-4">
 
 
-                                <MDBInput type="file" label='upload NIC copy' class="form-control" id="customFile1" style={{ width: "300px" }} />
+                                <MDBInput type="file" class="form-control" id="customFile1" style={{ width: "300px" }} />
+                                <p style={{ color: "blue" }}>upload copy of NIC</p>
+
                             </div>
 
 
-                            <div className="d-flex flex-row align-items-center mb-4">
+                            <div className="d-flex flex-column align-items-center mb-4">
 
 
-                                <MDBInput type="file" label='upload Birth Certificate copy' class="form-control" id="customFile2" style={{ width: "300px" }} />
+                                <MDBInput type="file" class="form-control" id="customFile2" style={{ width: "300px" }} />
+                                <p style={{ color: "blue" }}>upload Birth Certificate copy</p>
+
                             </div>
 
                             <div className="d-flex flex-row align-items-center mb-4">

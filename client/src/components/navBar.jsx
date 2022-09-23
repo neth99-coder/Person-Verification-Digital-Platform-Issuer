@@ -52,6 +52,39 @@ export default function NavBar({ theme, toggleTheme }) {
                 Request Digital Identity
               </NavLink>
             </li> */}
+            <li className="nav-item dropdown">
+              <span
+                className="nav-link dropdown-toggle hover-focus"
+                role="button"
+                id="registerDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span className="ms-2">Requests</span>
+              </span>
+              <ul
+                className="dropdown-menu collapsed"
+                id="register-collapse"
+                aria-labelledby="registerDropdown"
+              >
+                <li>
+                  <NavLink
+                    className="dropdown-item hover-focus"
+                    to="/requests-user/"
+                  >
+                    User Requests
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="dropdown-item hover-focus"
+                    to="/requests-verifier/"
+                  >
+                    Verifier Requests
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
             <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Contact Us

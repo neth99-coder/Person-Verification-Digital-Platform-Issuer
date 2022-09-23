@@ -102,7 +102,7 @@ export default function NavBar({ theme, toggleTheme }) {
             {/* )}
             {!user && ( */}
             <li className="nav-item d-flex align-items-center">
-              <NavLink className="nav-link hover-focus" to="#">
+              <NavLink className="nav-link hover-focus" to="/login">
                 <span className="ms-2">
                   <MdLogin size={30} style={{ fill: "grey" }}></MdLogin>
                   <span className="ms-2">Login</span>

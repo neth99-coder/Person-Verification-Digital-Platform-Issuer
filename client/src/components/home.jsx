@@ -62,7 +62,7 @@ function Home(props) {
         </div>
         <div className="col col-md-6 col-lg-6 px-3">
           <div className="div-dark hover-focus">
-            <a className="text-decoration-none" href="/register-user">
+            <a className="text-decoration-none" href="/register-veri">
               <div className="row">
                 <div className="col col-md-6 col-lg-8 fw-bold d-flex justify-content-center">
                   <h3 className="">REGISTER AS VERIFIER</h3>

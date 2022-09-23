@@ -12,7 +12,7 @@ export default function NavBar({ theme, toggleTheme }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-custom mb-5">
       <div className="container-fluid">
-        <NavLink to="#" className="navbar-brand hover-focus">
+        <NavLink to="/" className="navbar-brand hover-focus">
           <img
             src="https://img.freepik.com/free-vector/qr-code-person-holding-smartphone_23-2148620753.jpg?size=338&ext=jpg&ga=GA1.2.1101288580.1663340965"
             alt="icon1"
@@ -37,21 +37,21 @@ export default function NavBar({ theme, toggleTheme }) {
         </button>
         <div className="collapse navbar-collapse" id="nav-body">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Add New Verifier Services
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 View Profile
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Request Digital Identity
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink className="nav-link hover-focus" to="#">
                 Contact Us

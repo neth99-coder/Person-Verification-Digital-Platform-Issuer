@@ -20,7 +20,7 @@ class UserRequestTable extends Component {
           </span>
           <span className="me-2 my-2 my-lg-0">
             <button
-              className="btn btn-danger btn-sm hover-focus"
+              className="btn btn-warning btn-sm hover-focus"
               onClick={() => this.props.acceptRequest(user_id)}
             >
               <span className="me-2">Accept Request</span>
@@ -44,7 +44,6 @@ class UserRequestTable extends Component {
 
   render() {
     const { userRequests } = this.props;
-    console.log(userRequests);
 
     return (
       <div className="pb-5">

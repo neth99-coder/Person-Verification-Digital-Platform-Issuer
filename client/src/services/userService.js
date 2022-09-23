@@ -10,3 +10,5 @@ const userRequests = [
 export function getUserRequests() {
   return { data: userRequests };
 }
+
+export function acceptRequest(user_id) {}

@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import AppRouter from "./routes/router";
 import { getTheme, saveTheme } from "./utils/theme";
 import NavBar from "./components/navBar";
@@ -10,6 +11,7 @@ import UsrReg from "./components/user/UsrReg";
 import VerReg from "./components/verifier/VerReg";
 import UserRequests from "./components/user/userRequests";
 import VerifierRequests from "./components/verifier/verifierRequests";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [theme, setTheme] = useState(getTheme());
@@ -29,6 +31,7 @@ function App() {
           saveTheme(theme);
         }}
       />
+      <ToastContainer />
       <Routes>
         <Route
           path="/login"

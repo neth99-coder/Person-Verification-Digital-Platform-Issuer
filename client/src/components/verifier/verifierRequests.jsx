@@ -25,6 +25,7 @@ class VerifierRequests extends Component {
 
     try {
       // await acceptRequest(verifierID);
+      toast.success("Request accepted", { theme: "dark" });
     } catch (e) {
       toast.error("Could not accept the request", { theme: "dark" });
       this.setState({ verifierRequests: copyverifierRequests });
@@ -45,6 +46,7 @@ class VerifierRequests extends Component {
 
     try {
       // await rejctRequest(verifierId);
+      toast.success("Request rejected", { theme: "dark" });
     } catch (e) {
       toast.error("Could not reject the request", { theme: "dark" });
       this.setState({ verifierRequests: copyverifierRequests });

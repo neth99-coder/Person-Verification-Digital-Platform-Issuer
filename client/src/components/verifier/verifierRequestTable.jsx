@@ -20,7 +20,7 @@ class VerifierRequestTable extends Component {
           </span>
           <span className="me-2 my-2 my-lg-0">
             <button
-              className="btn btn-danger btn-sm hover-focus"
+              className="btn btn-warning btn-sm hover-focus"
               onClick={() => this.props.acceptRequest(verifier_id)}
             >
               <span className="me-2">Accept Request</span>

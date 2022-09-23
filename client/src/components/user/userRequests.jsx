@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getUserRequests } from "../../services/userService";
+import { getUserRequests, acceptRequest } from "../../services/userService";
 import UserRequestTable from "./userRequestTable";
 import { toast } from "react-toastify";
 
@@ -26,7 +26,8 @@ class UserRequests extends Component {
     this.setState({ userRequests });
 
     try {
-      // await acceptRequest(userID);
+      await acceptRequest(userId);
+      toast.success("Request accepted", { theme: "dark" });
     } catch (e) {
       toast.error("Could not accept the request", { theme: "dark" });
       this.setState({ userRequests: copyUserRequests });
@@ -47,6 +48,7 @@ class UserRequests extends Component {
 
     try {
       // await rejctRequest(userId);
+      toast.success("Request rejected", { theme: "dark" });
     } catch (e) {
       toast.error("Could not reject the request", { theme: "dark" });
       this.setState({ userRequests: copyUserRequests });
@@ -56,7 +58,6 @@ class UserRequests extends Component {
   render() {
     const { length: count } = this.state.userRequests;
     if (count === 0) return <p>There are no user requests.</p>;
-    console.log(this.state.userRequests);
     return (
       <div className="container-fluid mb-5">
         <UserRequestTable

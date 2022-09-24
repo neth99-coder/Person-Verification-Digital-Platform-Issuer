@@ -12,6 +12,7 @@ import VerReg from "./components/verifier/VerReg";
 import UserRequests from "./components/user/userRequests";
 import VerifierRequests from "./components/verifier/verifierRequests";
 import "react-toastify/dist/ReactToastify.css";
+import ContactUs from "./components/contactUs";
 
 function App() {
   const [theme, setTheme] = useState(getTheme());
@@ -45,9 +46,10 @@ function App() {
         ></Route>
         <Route path="/" element={<Home />}></Route>
         <Route path="/register-user" element={<UsrReg />}></Route>
-        <Route path="/register-veri" element={<VerReg />}></Route>
+        <Route path="/register-verifier" element={<VerReg />}></Route>
         <Route path="/requests-user" element={<UserRequests />}></Route>
         <Route path="/requests-verifier" element={<VerifierRequests />}></Route>
+        <Route path="/contactUs" element={<ContactUs />}></Route>
       </Routes>
     </div>
   );

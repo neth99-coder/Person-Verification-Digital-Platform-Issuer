@@ -49,8 +49,7 @@ class VerifierRequestTable extends Component {
       <div className="pb-5">
         <div className="container div-dark">
           <h3 className="mb-4 d-flex justify-content-center">
-            {" "}
-            Veifier Requests{" "}
+            Veifier Requests
           </h3>
           <div className="mt-5 d-flex justify-content-center">
             <Table columns={this.columns} data={verifierRequests} />

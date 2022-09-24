@@ -86,7 +86,7 @@ export default function NavBar({ theme, toggleTheme }) {
               </ul>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link hover-focus" to="#">
+              <NavLink className="nav-link hover-focus" to="/contactUs/">
                 Contact Us
               </NavLink>
             </li>

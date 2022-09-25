@@ -8,6 +8,8 @@ import { getTheme, saveTheme } from "./utils/theme";
 import UsrReg from "./components/UsrReg";
 import VerReg from "./components/VerReg";
 import IssuerDashboard from "./components/IssuerDashboard";
+import VerifierDashboard from "./components/VerifierDashboard";
+import UserDashboard from "./components/UserDashboard";
 import IDListPage from './components/IDListPage.jsx';
 import VerListPage from './components/VerListPage.jsx';
 import IDReqViewPage from "./components/IDReqViewPage";
@@ -41,6 +43,10 @@ function App() {
         <Route path="/register-user" element={<UsrReg />}></Route>
         <Route path="/register-veri" element={<VerReg />}></Route>
         <Route path="/issuer" element={<IssuerDashboard />}></Route>
+        <Route path="/user" element={<UserDashboard />}></Route>
+        <Route path="/verifier" element={<VerifierDashboard />}></Route>
+
+
 
       </Routes>
     </div>

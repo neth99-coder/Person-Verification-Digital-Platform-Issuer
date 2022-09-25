@@ -1,44 +1,47 @@
-const express = require('express');
-require('dotenv').config();
+const express = require("express");
+require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
-const mongoose = require('mongoose');
-const morgan = require('morgan');
+const mongoose = require("mongoose");
+const morgan = require("morgan");
 
 //routers
-const userRouter = require('./routes/users');
-const typeRouter = require('./routes/types')
+const userRouter = require("./routes/users");
+const typeRouter = require("./routes/types");
+const authRouter = require("./routes/auth");
 
 const api = process.env.API_URL;
 //middleware
-const bodyParser = require('body-parser');
-app.use(morgan('tiny'));
+const bodyParser = require("body-parser");
+app.use(morgan("tiny"));
 
-
-app.use(express.json()); 
+app.use(express.json());
 app.use(cors());
-app.options('*',cors());
-require('dotenv').config();
-app.use(express.static('public')); 
-
+app.options("*", cors());
+require("dotenv").config();
+app.use(express.static("public"));
 
 //Routes
 app.use(`${api}/users`, userRouter);
 app.use(`${api}/types`, typeRouter);
+app.use(`${api}/auth`, authRouter);
 
-//establish database connection 
-mongoose.connect(process.env.CONNECTION_STRING,{
+//establish database connection
+mongoose
+  .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(()=>{
-    console.log("Database Connection is ready")
-}).catch((err)=>{
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Database Connection is ready");
+  })
+  .catch((err) => {
     console.log(err);
-})
+  });
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, ()=>{
-    console.log("Listening to port number "+ PORT);
-}); 
+app.listen(PORT, () => {
+  console.log("Listening to port number " + PORT);
+});

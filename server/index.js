@@ -5,9 +5,11 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require('morgan');
+const fileUpload = require("express-fileupload")
 
 //routers
 const auth = require("./routes/auth");
+const user = require('./routes/users');
 
 
 const api = process.env.API_URL;
@@ -21,20 +23,11 @@ app.use(cors());
 app.options("*", cors());
 require("dotenv").config();
 app.use(express.static("public"));
+app.use(fileUpload());
 
-app.use("/api/auth", auth);
-
-mongoose
-  .connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Database Connection is ready");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.use("/api/auth", auth); // TODO: "wrong url ????"
+app.use(api+"/user", user);
+ 
 
 //establish database connection 
 mongoose.connect(process.env.CONNECTION_STRING,{

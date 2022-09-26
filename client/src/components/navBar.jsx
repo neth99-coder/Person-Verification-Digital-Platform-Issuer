@@ -93,7 +93,7 @@ export default function NavBar({ theme, toggleTheme }) {
                   <li>
                     <a
                       className="dropdown-item hover-focus"
-                      href="/register-verifier/"
+                      href="/register-veri/"
                     >
                       Register as Verifier
                     </a>

@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import UsrReg from "../views/Person/UsrReg";
 import VerReg from "../views/Bank/VerReg";
-import Home from "../views/Home/home";
+import Home from "../views/Home/Home";
 import IDListPage from "../views/Issuer/IDListPage";
 import VerListPage from "../views/Issuer/VerListPage";
 import IDReqViewPage from "../views/Issuer/IDReqViewPage";

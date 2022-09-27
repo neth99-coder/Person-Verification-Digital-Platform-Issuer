@@ -12,60 +12,105 @@ const getUsers = async (req, res) => {
 };
 
 const addUser = async (req, res) => {
-  //console.log(req.files.nic_photo_id);
-  const nic = req.files.nic_photo_id;
-  const bc = req.files.bc_photo_id;
+  const doesExist = await User.findOne({ email: req.body.email });
 
-  const nic_type = nic.mimetype.split("/")[1];
-  const bc_type = nic.mimetype.split("/")[1];
+  if (!doesExist) {
+    const nic = req.files.nic_photo_id;
+    const bc = req.files.bc_photo_id;
+    const cc = req.files.cc_photo_id;
 
-  nic.mv(
-    `${__dirname}/../public/reg/${"nic_" + req.body.nic + "." + nic_type}`,
-    (err) => {
-      if (err) {
-        console.error(err);
-      }
+    const nic_type = nic != null ? nic.mimetype.split("/")[1] : "";
+    const bc_type = bc != null ? bc.mimetype.split("/")[1] : "";
+    const cc_type = cc != null ? cc.mimetype.split("/")[1] : "";
+
+    const addedServices = [];
+    req.body.account == "true" && addedServices.push("Bank Account Creation");
+    req.body.loan == "true" && addedServices.push("Bank Loan Services");
+    req.body.card == "true" && addedServices.push("Credit Card Services");
+
+    if (nic != null) {
+      nic.mv(
+        `${__dirname}/../public/reg/${"nic_" + req.body.nic + "." + nic_type}`,
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
     }
-  );
 
-  bc.mv(
-    `${__dirname}/../public/reg/${"bc_" + req.body.nic + "." + nic_type}`,
-    (err) => {
-      if (err) {
-        console.error(err);
-      }
+    if (bc != null) {
+      bc.mv(
+        `${__dirname}/../public/reg/${"bc_" + req.body.nic + "." + bc_type}`,
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
     }
-  );
 
-  const user = new User({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    status: req.body.status,
-    nationality: req.body.nationality,
-    nic: req.body.nic,
-    dob: req.body.dob,
-    nic_photo_id: "nic_" + req.body.nic + "." + nic_type,
-    bc_photo_id: "bc_" + req.body.nic + "." + nic_type,
-    email: req.body.email,
-    password: req.body.password,
-    address: req.body.address,
-    contact_number: req.body.contact_number,
-    role: req.body.role,
-    isAccepted: req.body.isAccepted,
-  });
-
-  user
-    .save()
-    .then((createdUser) => {
-      res.status(201).json({success:true});
-    })
-    .catch((err) => {
-        console.log(err)
-      res.status(500).json({
-        error: err,
-        success: false,
+    if (cc != null) {
+      cc.mv(
+        `${__dirname}/../public/reg/${"cc_" + req.body.name + "." + cc_type}`,
+        (err) => {
+          if (err) {
+            console.error(err);
+          }
+        }
+      );
+    }
+    let user = null;
+    if (cc == null) {
+      user = new User({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        status: req.body.status,
+        nationality: req.body.nationality,
+        nic: req.body.nic,
+        dob: req.body.dob,
+        nic_photo_id: "nic_" + req.body.nic + "." + nic_type,
+        bc_photo_id: "bc_" + req.body.nic + "." + bc_type,
+        email: req.body.email,
+        password: req.body.password,
+        address: req.body.address,
+        contact_number: req.body.contact_number,
+        role: req.body.role,
+        isAccepted: req.body.isAccepted,
       });
+    } else {
+      user = new User({
+        email: req.body.email,
+        password: req.body.password,
+        address: req.body.address,
+        contact_number: req.body.contact_number,
+        role: req.body.role,
+        isAccepted: req.body.isAccepted,
+        cc_photo_id: "cc_" + req.body.name + "." + cc_type,
+        name: req.body.name,
+        services: addedServices,
+      });
+    }
+
+    user
+      .save()
+      .then((createdUser) => {
+        res.status(201).json({ success: true });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          error: err,
+          success: false,
+        });
+      });
+  }else{
+    console.log("duplicate error")
+    return res.status(201).json({
+      error: "Duplicate Entry",
+      success: false,
     });
+  }
 };
 
 const updateUser = async (req, res) => {

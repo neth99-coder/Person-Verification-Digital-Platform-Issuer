@@ -29,8 +29,8 @@ function UsrReg() {
     nationality: "Sinhalese",
     nic: "",
     dob: "",
-    nic_photo_id: "123",
-    bc_photo_id: "456",
+    nic_photo_id: "",
+    bc_photo_id: "",
     email: "",
     password: "XXXXX",
     address: "",
@@ -105,8 +105,9 @@ function UsrReg() {
     formData.append("password", person.password);
     formData.append("address", person.address);
     formData.append("contact_number", person.contact_number);
-    formData.append("role", person.role);
+    formData.append("role", person.role);  
     formData.append("isAccepted", person.isAccepted);
+ 
 
     Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
       headers: {
@@ -311,6 +312,7 @@ function UsrReg() {
                     style={{ width: "300px" }}
                     name="email"
                     onChange={handleChange}
+                    value={person.email}
                     required
                   />
                 </div>

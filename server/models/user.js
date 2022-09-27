@@ -73,6 +73,12 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 50,
   },
+  services:{
+    type: [{type: String}],
+    required:function () {
+      return this.role == "bank";
+    },
+  },
   email: {
     type: String,
     required: true,

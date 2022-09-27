@@ -34,7 +34,7 @@ export default function IDReqViewPage() {
       } else {
         alert("Succefully Updated")
          //console.log("success");
-        navigate("/id-requests"); 
+        navigate("/ver-requests"); 
       }
     })
   }

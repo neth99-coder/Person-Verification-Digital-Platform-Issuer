@@ -27,7 +27,7 @@ export default function VerReqCard(props) {
               style={{ width: "100px" }}
             />
           </div>
-          <MDBTypography tag="h4">Julie L. Arsenault</MDBTypography>
+          <MDBTypography tag="h4">{props.name} </MDBTypography>
           <MDBCardText className="text-muted mb-4">verifier</MDBCardText>
 
           <MDBBtn

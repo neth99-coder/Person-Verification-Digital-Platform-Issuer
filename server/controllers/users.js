@@ -2,6 +2,10 @@ const { User } = require("../models/user");
 const { Type } = require("../models/type");
 const mongoose = require("mongoose");
 const express = require("express");
+const transporter = require("../helpers/transporter");
+var generator = require("generate-password");
+const bcrypt = require("bcrypt");
+const { has } = require("config");
 
 const getUsers = async (req, res) => {
   const userList = await User.find();
@@ -60,6 +64,9 @@ const addUser = async (req, res) => {
         }
       );
     }
+
+    //TODO: password ??????
+
     let user = null;
     if (cc == null) {
       user = new User({
@@ -114,29 +121,83 @@ const addUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  console.log(req.body);
-  //const type = await Type.findById(req.body.type);
-  // if (!type) {
-  //   return res.status(400).send("Invalid type");
-  // }
+  //console.log(req.body);
+
+  const password = generator.generate({
+    length: 10,
+    numbers: true,
+  });
 
   if (!mongoose.isValidObjectId(req.params.id)) {
     console.log("invalid object id");
     return res.status(400).send("Invalid user Id");
   }
 
-  const user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      isAccepted: req.body.isAccepted,
-    },
-    { new: true }
-  );
-  if (!user) {
-    console.log("Updating error");
-    return res.status(404).send("the user cannot be update");
-  }
-  res.send({ user: user, success: true });
+var hashed_password = '';
+  await bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      User.findByIdAndUpdate(
+        req.params.id,
+        {
+          isAccepted: req.body.isAccepted,
+          password: hash,
+        },
+        { new: true }  
+      ).exec().then((user)=>{
+        if (!user) {  
+          console.log("Updating error");
+          return res.status(404).send("the user cannot be update");
+        }else{
+          let mailOptions = {};
+          if (req.body.isAccepted === "1") {
+            if (req.body.role === "wallet_owner") {
+              mailOptions = {
+                from: "personverificationdigitalplatform1@hotmail.com",
+                to: req.body.email,
+                subject: "Temporary Password For Person Verification Digital Platform",
+                text: "Password: " + password,
+              };
+            }else{
+              mailOptions = {
+                from: "personverificationdigitalplatform1@hotmail.com",
+                to: req.body.email,
+                subject: "Temporary Password For Person Verification Digital Platform",
+                text: "Password: " + password,
+              };
+              //TODO: QR Code
+            }
+        
+            //console.log(password);
+            
+          }else{
+            mailOptions = {
+              from: "personverificationdigitalplatform1@hotmail.com",
+              to: req.body.email,
+              subject: "Request Rejection For Person Verification Digital Platform",
+              text: "Your registration request has been rejected" 
+            };           
+          }
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error);
+              throw err;
+            } else {
+              console.log("Email sent: " + info.response);
+              return resolve("Email Sent");   
+            }
+          });
+          res.send({ user: user, success: true });
+        }
+      })
+      
+    })
+  })
+  
+  
+  
+ 
+  
+
 };
 
 const deleteUser = async (req, res) => {

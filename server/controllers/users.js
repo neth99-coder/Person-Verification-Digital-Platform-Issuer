@@ -104,8 +104,8 @@ const addUser = async (req, res) => {
           success: false,
         });
       });
-  }else{
-    console.log("duplicate error")
+  } else {
+    console.log("duplicate error");
     return res.status(201).json({
       error: "Duplicate Entry",
       success: false,
@@ -114,29 +114,29 @@ const addUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const type = await Type.findById(req.body.type);
-  if (!type) {
-    return res.status(400).send("Invalid type");
-  }
+  console.log(req.body);
+  //const type = await Type.findById(req.body.type);
+  // if (!type) {
+  //   return res.status(400).send("Invalid type");
+  // }
 
   if (!mongoose.isValidObjectId(req.params.id)) {
+    console.log("invalid object id");
     return res.status(400).send("Invalid user Id");
   }
 
   const user = await User.findByIdAndUpdate(
     req.params.id,
     {
-      name: req.body.name,
-      password: req.body.password,
-      email: req.body.email,
-      type: req.body.type,
+      isAccepted: req.body.isAccepted,
     },
     { new: true }
   );
   if (!user) {
+    console.log("Updating error");
     return res.status(404).send("the user cannot be update");
   }
-  res.send(user);
+  res.send({ user: user, success: true });
 };
 
 const deleteUser = async (req, res) => {
@@ -162,9 +162,31 @@ const deleteUser = async (req, res) => {
     });
 };
 
+const getPendingWalletUsers = async (req, res) => {
+  const pendingList = await User.find({
+    $and: [{ role: "wallet_owner" }, { isAccepted: "0" }],
+  });
+  if (!pendingList) {
+    res.status(500).json({ success: false });
+  }
+  res.send(pendingList);
+};
+
+const getPendingBanks = async (req, res) => {
+  const pendingList = await User.find({
+    $and: [{ role: "bank" }, { isAccepted: "0" }],
+  });
+  if (!pendingList) {
+    res.status(500).json({ success: false });
+  }
+  res.send(pendingList);
+};
+
 module.exports = {
   getUsers,
   addUser,
   updateUser,
   deleteUser,
+  getPendingWalletUsers,
+  getPendingBanks,
 };

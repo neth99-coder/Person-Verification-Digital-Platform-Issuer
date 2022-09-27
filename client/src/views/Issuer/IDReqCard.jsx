@@ -11,10 +11,10 @@ import {
   MDBTypography,
   MDBIcon,
 } from "mdb-react-ui-kit";
-
+import { Link } from "react-router-dom";
 import userimg from "../../assets/images/user-image.jpg";
 
-export default function IDReqCard() {
+export default function IDReqCard(props) {
   return (
     <div className="reqCard m-2">
       <MDBCard style={{ borderRadius: "15px" }}>
@@ -27,17 +27,21 @@ export default function IDReqCard() {
               style={{ width: "100px" }}
             />
           </div>
-          <MDBTypography tag="h4">Julie L. Arsenault</MDBTypography>
-          <MDBCardText className="text-muted mb-4">wallet owner</MDBCardText>
+          <MDBTypography tag="h4">
+            {props.user.first_name + " " + props.user.last_name}
+          </MDBTypography>
+          <MDBCardText className="text-muted mb-4">Wallet Owner</MDBCardText>
 
           <MDBBtn
             rounded
             size="lg"
-            onClick={() => {
-              window.location.href = "/idreq";
-            }}
+            // onClick={() => {
+            //   window.location.href = "/idreq";
+            // }}
           >
-            view
+            <Link to={`../id-requests/${props.user.nic}`} state={{ obj: props.user }}>
+              View
+            </Link>
           </MDBBtn>
         </MDBCardBody>
       </MDBCard>

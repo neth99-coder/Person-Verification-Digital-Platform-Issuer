@@ -9,8 +9,38 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 import bg from "../../assets/images/idaccept.jpg";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { saveAs } from 'file-saver'
+import Axios from "axios";
 
 export default function IDReqViewPage() {
+  let location = useLocation();
+  let {obj} = location.state;
+  const navigate = useNavigate();
+
+  const handleClick = async(e)=>{
+
+    //console.log(e.target.name === 'accept')
+    (e.target.name === 'accept') ? obj.isAccepted = '1': obj.isAccepted = '-1';
+
+    await Axios.put("http://localhost:3001/api/v1/user/updateUser/" + obj._id, obj, {
+      headers: {
+        // 'x-auth-token': authService.getUserToken(),
+      },
+    }).then((res) => {
+      if (!res.data.success) {
+         console.log(res.data.error)
+        alert("Error occured !!");
+      } else {
+        alert("Succefully Updated")
+         //console.log("success");
+        navigate("/id-requests"); 
+      }
+    })
+  }
+
+
+  
   return (
     <div>
       <div>
@@ -25,7 +55,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted ">
-                        Bank Of Ceylon
+                        {obj.name}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -45,7 +75,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        WRMV+266, 01 Bank of Ceylon Mawatha, Colombo 00100
+                        {obj.address}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -65,7 +95,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        (011) 2523321
+                        {obj.contact_number}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -76,7 +106,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        boc@gmail.com
+                        {obj.email}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -87,7 +117,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        Bank Account Creation
+                        {obj.services.map((cur)=>{return (cur + ", ")})}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -97,7 +127,20 @@ export default function IDReqViewPage() {
                       <MDBCardText>Proof of Registration</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted"></MDBCardText>
+                      <MDBCardText className="text-muted">
+                      <button
+            className="btn btn-primary btn-outline"
+            onClick={() => {
+              saveAs(
+                `http://localhost:3001/reg/${obj.cc_photo_id}`,
+                'cc_copy.pdf',
+              )
+            }}
+          >
+            {' '}
+            Download
+          </button>  
+                      </MDBCardText>
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -110,10 +153,10 @@ export default function IDReqViewPage() {
                     margin: "20px",
                   }}
                 >
-                  <button type="button" class="btn btn-primary btn-lg ms-2">
+                  <button type="button" class="btn btn-primary btn-lg ms-2" onClick={handleClick} name="accept">
                     Accept
                   </button>
-                  <button type="button" class="btn btn-warning btn-lg ms-2">
+                  <button type="button" class="btn btn-warning btn-lg ms-2" onClick={handleClick} name="reject">
                     Reject
                   </button>
                 </div>

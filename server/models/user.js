@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
     required: function () {
       return this.role == "wallet_owner";
     },
-    enum: ["Single", "Married", "Divorced"],
+    enum: ["Single", "Married", "Divorced", "Widowed"],
   },
   nationality: {
     type: String,

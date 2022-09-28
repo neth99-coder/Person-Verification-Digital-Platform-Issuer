@@ -27,7 +27,7 @@ export default function IDListPage() {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
       }}
     >
       {/* <IDReq />
@@ -36,9 +36,11 @@ export default function IDListPage() {
       <IDReq />
       <IDReq />
       <IDReq /> */}
-      {requestList?.map((cur_request,index)=>{
-        return <IDReq key={index} user={cur_request}/>
+      {requestList.length == 0 ? <h2>No Requests</h2> :requestList?.map((cur_request, index) => {
+        return <IDReq key={index} user={cur_request} />
       })}
+
+      
 
     </div>
   );

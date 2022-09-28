@@ -1,4 +1,5 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MDBBtn,
   MDBContainer,
@@ -17,15 +18,136 @@ import {
   MDBModalFooter,
   MDBInput,
 } from "mdb-react-ui-kit";
+import axios from "axios";
 
 import bg from "../../assets/images/2154438.jpg";
 
 function VerifierDashboard() {
   const [basicModal, setBasicModal] = useState(false);
   const [OptionBox, setOptionBox] = useState(false);
+  const [verifier_profile, setVerifierProfile] = useState([]);
+  const [subscribedServices, setSubscribedServices] = useState([]);
+  const [account, setAccount] = useState(false);
+  const [loan, setLoan] = useState(false);
+  const [card, setCard] = useState(false);
+  const [validated, setValidated] = useState(false); //form validation
+  const navigate = useNavigate();
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [PasswordBox, setPasswordBox] = useState(false);
 
   const toggleShow = () => setBasicModal(!basicModal);
   const toggleOptions = () => setOptionBox(!OptionBox);
+  const togglePasswordBox = () => setPasswordBox(!PasswordBox);
+
+  const saveServiceChange = () => {
+    const services = [];
+    account && services.push("Bank Account Creation");
+    loan && services.push("Bank Loan Services");
+    card && services.push("Credit Card Services");
+
+    axios
+      .post("http://localhost:3001/api/v1/user/updateServices", {
+        email: verifier_profile.email,
+        services: services,
+      })
+      .then((res) => {
+        if (res.data.error) {
+          alert("Error occured !!");
+        } else {
+          alert("success");
+          // console.log(res.data)
+          window.location.reload(false);
+        }
+      });
+  };
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    if (name == "Bank Account Creation") {
+      setAccount(!account);
+    } else if (name == "Bank Loan Services") {
+      setLoan(!loan);
+    } else if (name == "Credit Card Services") {
+      setCard(!card);
+    } else if (name === "oldPassword") {
+      setOldPassword(value);
+    } else if (name === "newPassword") {
+      setNewPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+    }
+  };
+
+  function checkPassword(str) {
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(str);
+  }
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
+      alert("Please fill all the fields");
+    } else if (newPassword !== confirmPassword) {
+      alert("New Password and Confirm Password do not match");
+    } else if (newPassword === oldPassword) {
+      alert("New Password cannot be same as Old Password");
+    } else if (!checkPassword(newPassword)) {
+      alert(
+        "password must contain atleast one uppercase, one lowercase, one number and one special character and length must be less than 8"
+      );
+    } else {
+      axios
+        .post("http://localhost:3001/api/v1/user/updatePassword", {
+          email: verifier_profile.email,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        })
+        .then((res) => {
+          if (res.data.message) {
+            alert("password incorrect!!");
+          } else if (!res.data.success) {
+            alert("error");
+          } else if (res.data.success) {
+            alert("success");
+            window.location.reload(false);
+          }
+        });
+    }
+  };
+
+  //TODO
+  //get email from token
+  useEffect(() => {
+    const verifier_email = "supun.19@cse.mrt.ac.lk";
+
+    const getVerifier = async () => {
+      await axios
+        .get("http://localhost:3001/api/v1/user/getUser", {
+          params: {
+            email: verifier_email,
+          },
+        })
+        .then((res) => {
+          setVerifierProfile(res.data);
+          // setAvailable([
+          //   "Bank Account Creation",
+          //   "Bank Loan Services",
+          //   "Credit Card Services",
+          // ].filter((x) => !res.data.services.includes(x)));
+          setSubscribedServices(res.data.services);
+          res.data.services.includes("Bank Account Creation") && setAccount(true);
+          res.data.services.includes("Bank Loan Services") && setLoan(true);
+          res.data.services.includes("Credit Card Services") && setCard(true);
+        });
+    };
+    getVerifier();
+  }, []);
 
   return (
     <MDBContainer fluid className="p-4">
@@ -76,23 +198,45 @@ function VerifierDashboard() {
               <MDBBtn
                 className="btn-close"
                 color="none"
-                onClick={toggleShow}
+                onClick={() => {
+                  toggleOptions();
+                  console.log(subscribedServices);
+                }}
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <MDBInput
-                label="New Service"
-                id="form6"
-                type="text"
-                style={{ width: "250px" }}
-              />
+              {[
+                "Bank Account Creation",
+                "Bank Loan Services",
+                "Credit Card Services",
+              ].map((item, i) => (
+                <div>
+                  <input
+                    type="checkbox"
+                    id={i}
+                    name={item}
+                    style={{ float: "right" }}
+                    checked={
+                      item == "Bank Account Creation"
+                        ? account
+                        : item == "Bank Loan Services"
+                          ? loan
+                          : card
+                    }
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                  />
+                  <label>{item}</label>
+                </div>
+              ))}
             </MDBModalBody>
 
             <MDBModalFooter>
               <MDBBtn color="secondary" onClick={toggleOptions}>
                 Close
               </MDBBtn>
-              <MDBBtn>Save changes</MDBBtn>
+              <MDBBtn onClick={saveServiceChange}>Save changes</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
@@ -117,19 +261,11 @@ function VerifierDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted ">
-                        Bank Of Ceylon
+                        {verifier_profile.name}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
-                  <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Type </MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">Bank</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
+
                   <hr />
                   <MDBRow>
                     <MDBCol sm="3">
@@ -137,27 +273,19 @@ function VerifierDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        WRMV+266, 01 Bank of Ceylon Mawatha, Colombo 00100
+                        {verifier_profile.address}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
                   <hr />
-                  <MDBRow>
-                    <MDBCol sm="3">
-                      <MDBCardText>Postal Code</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                      <MDBCardText className="text-muted">00130</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                  <hr />
+
                   <MDBRow>
                     <MDBCol sm="3">
                       <MDBCardText>Contact Number</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        (011) 2523321
+                        {verifier_profile.contact_number}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -168,7 +296,7 @@ function VerifierDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        boc@gmail.com
+                        {verifier_profile.email}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -178,9 +306,9 @@ function VerifierDashboard() {
                       <MDBCardText>Required Services</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                        Bank Account Creation
-                      </MDBCardText>
+                      {subscribedServices.map((x) => (
+                        <MDBCardText className="text-muted">{x}</MDBCardText>
+                      ))}
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -189,8 +317,100 @@ function VerifierDashboard() {
             </MDBModalBody>
 
             <MDBModalFooter>
+              <MDBBtn
+                color="secondary"
+                onClick={() => {
+                  toggleShow();
+                  togglePasswordBox();
+                }}
+              >
+                Change Password
+              </MDBBtn>
               <MDBBtn color="secondary" onClick={toggleShow}>
                 Close
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+      <MDBModal show={PasswordBox} setShow={setPasswordBox} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Change Password</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={() => {
+                  togglePasswordBox();
+                }}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <div className="order-2 order-lg-1 d-flex flex-column align-items-center">
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="Old Password"
+                    id="oldPassword"
+                    type="password"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="oldPassword"
+                    onChange={handleChange}
+                    value={oldPassword}
+                    required
+                  />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="New Password"
+                    id="newPassword"
+                    type="password"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="newPassword"
+                    onChange={handleChange}
+                    value={newPassword}
+                    required
+                  />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="Confirm Password"
+                    id="confirmPassword"
+                    type="password"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    value={confirmPassword}
+                    required
+                  />
+                </div>
+                <p style={{ color: "blue" }}>
+                  password must contain atleast one uppercase, one lowercase,
+                  one number and one special character and length must be
+                  minimum 8
+                </p>
+              </div>
+            </MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={togglePasswordBox}>
+                Close
+              </MDBBtn>
+              <MDBBtn type="submit" onClick={handlePasswordSubmit}>
+                Save changes
               </MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
@@ -199,5 +419,4 @@ function VerifierDashboard() {
     </MDBContainer>
   );
 }
-
 export default VerifierDashboard;

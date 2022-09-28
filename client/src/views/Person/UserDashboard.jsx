@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -15,14 +15,96 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
+  MDBInput,
 } from "mdb-react-ui-kit";
+import axios from "axios";
 
 import bg from "../../assets/images/2154438.jpg";
 
 function UserDashboard() {
   const [basicModal, setBasicModal] = useState(false);
+  const [user_profile, setUserProfile] = useState([]);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [PasswordBox, setPasswordBox] = useState(false);
 
   const toggleShow = () => setBasicModal(!basicModal);
+  const togglePasswordBox = () => setPasswordBox(!PasswordBox);
+
+  let User;
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    if (name === "oldPassword") {
+      setOldPassword(value);
+    } else if (name === "newPassword") {
+      setNewPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+    }
+  };
+
+
+  function checkPassword(str) {
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(str);
+  }
+
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
+      alert("Please fill all the fields");
+    } else if (newPassword !== confirmPassword) {
+      alert("New Password and Confirm Password do not match");
+    } else if (newPassword === oldPassword) {
+      alert("New Password cannot be same as Old Password");
+    } else if (!checkPassword(newPassword)) {
+      alert("password must contain atleast one uppercase, one lowercase, one number and one special character and length must be less than 8");
+    } else {
+      axios.post("http://localhost:3001/api/v1/user/updatePassword", {
+
+        email: user_profile.email,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+
+      }).then((res) => {
+        if (res.data.message) {
+          alert("password incorrect!!");
+        } else
+          if (!res.data.success) {
+            alert("error")
+          } else if (res.data.success) {
+            alert("success");
+            window.location.reload(false);
+          }
+
+      });
+    }
+  }
+
+  //TODO
+  //get email from token
+  useEffect(() => {
+    const user_email = "physickness@gmail.com";
+
+    function getUser() {
+      axios
+        .get("http://localhost:3001/api/v1/user/getUser", {
+          params: {
+            email: user_email,
+          },
+        })
+        .then((res) => {
+          setUserProfile(res.data);
+        });
+    }
+    getUser();
+  }, []);
 
   return (
     <MDBContainer fluid className="p-4">
@@ -89,19 +171,23 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted ">
-                        Marshall
+                        {user_profile.first_name}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
+
                   <hr />
                   <MDBRow>
                     <MDBCol sm="3">
                       <MDBCardText>Last Name</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">Bruce</MDBCardText>
+                      <MDBCardText className="text-muted ">
+                        {user_profile.last_name}
+                      </MDBCardText>
                     </MDBCol>
                   </MDBRow>
+
                   <hr />
                   <MDBRow>
                     <MDBCol sm="3">
@@ -109,7 +195,7 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        200000501646
+                        {user_profile.nic}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -120,7 +206,7 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        2000-01-05
+                        {user_profile.dob}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -131,7 +217,7 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        (098) 765-4321
+                        {user_profile.contact_number}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -142,7 +228,7 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        Bay Area, San Francisco, CA
+                        {user_profile.address}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -153,7 +239,7 @@ function UserDashboard() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        test@gmail.com
+                        {user_profile.email}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -163,9 +249,95 @@ function UserDashboard() {
             </MDBModalBody>
 
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={toggleShow}>
+              <MDBBtn
+                color="secondary"
+                onClick={() => {
+                  toggleShow();
+                  togglePasswordBox();
+                }}
+              >
+                Change Password
+              </MDBBtn>
+              <MDBBtn color="secondary" onClick={togglePasswordBox}>
                 Close
               </MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+      <MDBModal show={PasswordBox} setShow={setPasswordBox} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Change Password</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={() => {
+                  togglePasswordBox();
+                }}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <div className="order-2 order-lg-1 d-flex flex-column align-items-center">
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="Old Password"
+                    id="oldPassword"
+                    type="password"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="oldPassword"
+                    onChange={handleChange}
+                    value={oldPassword}
+                    required
+                  />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="New Password"
+                    id="newPassword"
+                    type="password"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="newPassword"
+                    onChange={handleChange}
+                    value={newPassword}
+                    required
+                  />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="Confirm Password"
+                    id="confirmPassword"
+                    type="password"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    value={confirmPassword}
+                    required
+                  />
+                </div>
+                <p style={{ color: "blue" }}>password must contain atleast one uppercase, one lowercase, one number and one special character and length must be minimum  8</p>
+              </div>
+            </MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={togglePasswordBox}>
+                Close
+              </MDBBtn>
+              <MDBBtn type="submit" onClick={handlePasswordSubmit}>Save changes</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

@@ -133,7 +133,7 @@ function VerReg() {
                     label="Name of Organization"
                     id="form1"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="name"
                     onChange={handleChange}
                     value={bank.first_name}
@@ -155,7 +155,7 @@ function VerReg() {
                     label="Address"
                     id="form3"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px"}}
                     name="address"
                     onChange={handleChange}
                     value={bank.address}
@@ -176,7 +176,7 @@ function VerReg() {
                     label="Contact Number"
                     id="form5"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="contact_number"
                     onChange={handleChange}
                     value={bank.contact_number}
@@ -188,7 +188,7 @@ function VerReg() {
                     label="E-mail"
                     id="form6"
                     type="email"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="email"
                     onChange={handleChange}
                     value={bank.email}
@@ -198,7 +198,7 @@ function VerReg() {
 
                 <button
                   type="button"
-                  class="btn btn-warning btn-lg ms-2"
+                  class="btn btn-warning ms-2"
                   onClick={() => {
                     document.querySelector(".firstPage").style.display = "none";
                     document.querySelector(".secondPage").style.display =
@@ -300,7 +300,7 @@ function VerReg() {
                     type="file"
                     class="form-control"
                     id="bankDoc"
-                    style={{ width: "300px" }}
+                    style={{display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="cc_photo_id"
                     onChange={(e) => {
                       setBank((prev_val) => {
@@ -317,7 +317,7 @@ function VerReg() {
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <button
                     type="button"
-                    class="btn btn-warning btn-lg ms-2"
+                    class="btn btn-warning ms-2"
                     onClick={() => {
                       document.querySelector(".firstPage").style.display =
                         "block";
@@ -327,7 +327,7 @@ function VerReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" class="btn btn-primary btn-lg ms-2">
+                  <button type="submit" class="btn btn-primary ms-2">
                     Submit
                   </button>
                 </div>

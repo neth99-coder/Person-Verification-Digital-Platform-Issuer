@@ -42,7 +42,7 @@ function UsrReg() {
                   label="First Name"
                   id="form1"
                   type="text"
-                  style={{ width: "250px" }}
+                  style={{ maxWidth: "250px" }}
                 />
               </div>
 

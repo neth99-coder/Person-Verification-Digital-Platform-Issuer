@@ -54,9 +54,13 @@ function UsrReg() {
       setPerson((prev_val) => {
         return { ...prev_val, last_name: value };
       });
-    } else if (name === "last_name") {
+    } else if (name === "status") {
       setPerson((prev_val) => {
-        return { ...prev_val, last_name: value };
+        return { ...prev_val, status: value };
+      });
+    } else if (name === "nationality") {
+      setPerson((prev_val) => {
+        return { ...prev_val, nationality: value };
       });
     } else if (name === "nic") {
       setPerson((prev_val) => {
@@ -105,9 +109,10 @@ function UsrReg() {
     formData.append("password", person.password);
     formData.append("address", person.address);
     formData.append("contact_number", person.contact_number);
-    formData.append("role", person.role);  
+    formData.append("role", person.role);
     formData.append("isAccepted", person.isAccepted);
- 
+
+    console.log(...formData);
 
     Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
       headers: {
@@ -155,7 +160,7 @@ function UsrReg() {
                     label="First Name"
                     id="form1"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="f_name"
                     onChange={handleChange}
                     value={person.first_name}
@@ -168,12 +173,35 @@ function UsrReg() {
                     label="Last Name"
                     id="form2"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="last_name"
                     onChange={handleChange}
                     value={person.last_name}
                     required
                   />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <div style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}>
+                    <label className="mb-1">Marital Status</label>
+                    <Form.Select value={person.status} onChange={handleChange} name="status">
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                    </Form.Select>
+                  </div>
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <div style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}>
+                    <label className="mb-1">Nationality</label>
+                    <Form.Select value={person.nationality} onChange={handleChange} name="nationality">
+                      <option value="Sinhalese">Sinhalese</option>
+                      <option value="Tamils">Tamil</option>
+                      <option value="Moor">Moor</option>
+                      <option value="Burgher">Burgher</option>
+                      <option value="Malay">Malay</option>
+                      <option value="Vedda">Vedda</option>
+                    </Form.Select>
+                  </div>
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
@@ -181,7 +209,7 @@ function UsrReg() {
                     label="NIC Number"
                     id="form3"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="nic"
                     onChange={handleChange}
                     value={person.nic}
@@ -194,7 +222,7 @@ function UsrReg() {
                     label="DOB"
                     id="form4"
                     type="date"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="dob"
                     onChange={handleChange}
                     value={person.dob}
@@ -207,7 +235,7 @@ function UsrReg() {
                     label="Phone Number"
                     id="form5"
                     type="text"
-                    style={{ width: "250px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="contact_number"
                     onChange={handleChange}
                     value={person.contact_number}
@@ -217,7 +245,7 @@ function UsrReg() {
 
                 <button
                   type="button"
-                  class="btn btn-warning btn-lg ms-2"
+                  class="btn btn-warning ms-2"
                   onClick={() => {
                     document.querySelector(".firstPage").style.display = "none";
                     document.querySelector(".secondPage").style.display =
@@ -262,7 +290,7 @@ function UsrReg() {
                     label="Address"
                     id="form6"
                     type="text"
-                    style={{ width: "300px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="address"
                     onChange={handleChange}
                     value={person.address}
@@ -275,7 +303,7 @@ function UsrReg() {
                     type="file"
                     class="form-control"
                     id="customFile1"
-                    style={{ width: "300px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="nic_photo_id"
                     onChange={(e) => {
                       setPerson((prev_val) => {
@@ -292,7 +320,7 @@ function UsrReg() {
                     type="file"
                     class="form-control"
                     id="customFile2"
-                    style={{ width: "300px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="bc_photo_id"
                     onChange={(e) => {
                       setPerson((prev_val) => {
@@ -309,7 +337,7 @@ function UsrReg() {
                     label="email"
                     id="form7"
                     type="email"
-                    style={{ width: "300px" }}
+                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
                     name="email"
                     onChange={handleChange}
                     value={person.email}
@@ -320,7 +348,7 @@ function UsrReg() {
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <button
                     type="button"
-                    class="btn btn-warning btn-lg ms-2"
+                    class="btn btn-warning  ms-2"
                     onClick={() => {
                       document.querySelector(".firstPage").style.display =
                         "block";
@@ -330,7 +358,7 @@ function UsrReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" class="btn btn-primary btn-lg ms-2">
+                  <button type="submit" class="btn btn-primary  ms-2">
                     Submit
                   </button>
                 </div>

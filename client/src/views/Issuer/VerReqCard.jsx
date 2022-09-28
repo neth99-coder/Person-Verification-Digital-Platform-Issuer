@@ -7,14 +7,14 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-  MDBBtn, 
+  MDBBtn,
   MDBTypography,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import { Link } from "react-router-dom";
+
 import bankimg from "../../assets/images/bank.jpg";
 
-export default function VerReqCard(props) {
+export default function VerReqCard() {
   return (
     <div className="reqCard m-2">
       <MDBCard style={{ borderRadius: "15px" }}>
@@ -27,19 +27,17 @@ export default function VerReqCard(props) {
               style={{ width: "100px" }}
             />
           </div>
-          <MDBTypography tag="h4">{props.name} </MDBTypography>
+          <MDBTypography tag="h4">Julie L. Arsenault</MDBTypography>
           <MDBCardText className="text-muted mb-4">verifier</MDBCardText>
 
           <MDBBtn
             rounded
             size="lg"
-            // onClick={() => {
-            //   window.location.href = "/verreq";
-            // }}
+            onClick={() => {
+              window.location.href = "/verreq";
+            }}
           >
-            <Link to={`../ver-requests/${props.user.nic}`} state={{ obj: props.user }}>
-              View
-            </Link>
+            view
           </MDBBtn>
         </MDBCardBody>
       </MDBCard>

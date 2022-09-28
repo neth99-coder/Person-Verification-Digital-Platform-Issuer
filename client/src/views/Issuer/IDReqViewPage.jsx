@@ -9,37 +9,8 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 import bg from "../../assets/images/idaccept.jpg";
-import { useLocation, useNavigate } from 'react-router-dom';
-import { saveAs } from 'file-saver'
-import Axios from "axios";
+
 export default function IDReqViewPage() {
-
-  let location = useLocation();
-  let {obj} = location.state;
-  const navigate = useNavigate();
-
-  const handleClick = async(e)=>{
-
-    //console.log(e.target.name === 'accept')
-    (e.target.name === 'accept') ? obj.isAccepted = '1': obj.isAccepted = '-1';
-
-    await Axios.put("http://localhost:3001/api/v1/user/updateUser/" + obj._id, obj, {
-      headers: {
-        // 'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
-      if (!res.data.success) {
-         console.log(res.data.error)
-        alert("Error occured !!");
-      } else {
-        alert("Succefully Updated")
-         //console.log("success");
-        navigate("/id-requests"); 
-      }
-    })
-  }
-
-
   return (
     <div>
       <div>
@@ -54,7 +25,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted ">
-                        {obj.first_name}
+                        Marshall
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -64,7 +35,7 @@ export default function IDReqViewPage() {
                       <MDBCardText>Last Name</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{obj.last_name}</MDBCardText>
+                      <MDBCardText className="text-muted">Bruce</MDBCardText>
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -74,7 +45,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.nic}
+                        200000501646
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -85,7 +56,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.dob.split("T")[0]}
+                        2000-01-05
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -96,7 +67,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.contact_number}
+                        (098) 765-4321
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -107,7 +78,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.address}
+                        Bay Area, San Francisco, CA
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -118,7 +89,7 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.email}
+                        test@gmail.com
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -128,18 +99,8 @@ export default function IDReqViewPage() {
                       <MDBCardText>NIC copy</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                    <button
-            className="btn btn-primary btn-outline"
-            onClick={() => {
-              saveAs(
-                `http://localhost:3001/reg/${obj.nic_photo_id}`,
-                'nic_copy.pdf',
-              )
-            }}
-          >
-            {' '}
-            Download
-          </button></MDBCol>
+                      <MDBCardText className="text-muted"></MDBCardText>
+                    </MDBCol>
                   </MDBRow>
                   <hr />
                   <MDBRow>
@@ -147,20 +108,7 @@ export default function IDReqViewPage() {
                       <MDBCardText>Birth Certificate Copy</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">
-                      <button
-            className="btn btn-primary btn-outline"
-            onClick={() => {
-              saveAs(
-                `http://localhost:3001/reg/${obj.bc_photo_id}`,
-                'bc_copy.pdf',
-              )
-            }}
-          >
-            {' '}
-            Download
-          </button>
-                      </MDBCardText>
+                      <MDBCardText className="text-muted"></MDBCardText>
                     </MDBCol>
                   </MDBRow>
                 </MDBCardBody>
@@ -172,10 +120,10 @@ export default function IDReqViewPage() {
                     margin: "20px",
                   }}
                 >
-                  <button type="button" class="btn btn-primary btn-lg ms-2" onClick={handleClick} name="accept">
+                  <button type="button" class="btn btn-primary btn-lg ms-2">
                     Accept
                   </button>
-                  <button type="button" class="btn btn-warning btn-lg ms-2" onClick={handleClick} name="reject">
+                  <button type="button" class="btn btn-warning btn-lg ms-2">
                     Reject
                   </button>
                 </div>

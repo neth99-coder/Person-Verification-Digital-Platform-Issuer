@@ -68,16 +68,10 @@ const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: function () {
-      return this.role == "bank";
+      return this.role != "wallet_owner";
     },
     minlength: 2,
     maxlength: 50,
-  },
-  services:{
-    type: [{type: String}],
-    required:function () {
-      return this.role == "bank";
-    },
   },
   email: {
     type: String,

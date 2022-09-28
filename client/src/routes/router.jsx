@@ -18,8 +18,8 @@ export default function AppRouter() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/id-requests" element={<IDListPage />}></Route>
         <Route path="/ver-requests" element={<VerListPage />}></Route>
-        <Route path="/id-requests/:id" element={<IDReqViewPage />}></Route>
-        <Route path="/ver-requests/:id" element={<VerReqViewPage />}></Route>
+        <Route path="/idreq" element={<IDReqViewPage />}></Route>
+        <Route path="/verreq" element={<VerReqViewPage />}></Route>
 
         <Route path="/register-user" element={<UsrReg />}></Route>
         <Route path="/register-veri" element={<VerReg />}></Route>

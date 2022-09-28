@@ -7,6 +7,62 @@ var generator = require("generate-password");
 const bcrypt = require("bcrypt");
 const { has } = require("config");
 
+
+const updatePassword = async (req, res) => {
+  console.log(req.body);
+  const user =  await User.findOne({ email: req.body.email });
+  console.log(user);
+  if (!user) {
+    res.status(500).json({ success: false });
+    return;
+  }else{
+    bcrypt.compare(req.body.oldPassword, user.password, function(err, result) {
+      if (err){
+        res.status(500).json({ success: false });
+      }
+      if (!result) {
+        res.send({success: false, message: 'passwords do not match'});
+      } else {
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(req.body.newPassword, salt, (err, hash) => {
+            if (err){
+              res.status(500).json({ success: false });
+            }else{
+              user.password = hash;
+              user.save();
+              res.send({ success: true });
+            }
+          });
+      });
+      }
+    });
+  }
+  
+};
+
+
+const updateServices = (req, res) => {
+  console.log(req.body);
+  const user =  User.findOneAndUpdate(
+    { email: req.body.email },
+    { services: req.body.services },
+    function (err, doc) {
+      if (err) return res.send(500, { error: err });
+      return res.send("Succesfully saved.");
+    }
+  );
+};
+
+const getUser = async (req, res) => {
+  const user = await User.findOne({ email: req.query.email });
+  console.log(user);
+  if (!user) {
+    res.status(500).json({ success: false });
+    return;
+  }
+  res.send(user);
+};
+
 const getUsers = async (req, res) => {
   const userList = await User.find();
   if (!userList) {
@@ -133,7 +189,7 @@ const updateUser = async (req, res) => {
     return res.status(400).send("Invalid user Id");
   }
 
-var hashed_password = '';
+  var hashed_password = "";
   await bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(password, salt, function (err, hash) {
       User.findByIdAndUpdate(
@@ -142,62 +198,59 @@ var hashed_password = '';
           isAccepted: req.body.isAccepted,
           password: hash,
         },
-        { new: true }  
-      ).exec().then((user)=>{
-        if (!user) {  
-          console.log("Updating error");
-          return res.status(404).send("the user cannot be update");
-        }else{
-          let mailOptions = {};
-          if (req.body.isAccepted === "1") {
-            if (req.body.role === "wallet_owner") {
-              mailOptions = {
-                from: "personverificationdigitalplatform1@hotmail.com",
-                to: req.body.email,
-                subject: "Temporary Password For Person Verification Digital Platform",
-                text: "Password: " + password,
-              };
-            }else{
-              mailOptions = {
-                from: "personverificationdigitalplatform1@hotmail.com",
-                to: req.body.email,
-                subject: "Temporary Password For Person Verification Digital Platform",
-                text: "Password: " + password,
-              };
-              //TODO: QR Code
-            }
-        
-            //console.log(password);
-            
-          }else{
-            mailOptions = {
-              from: "personverificationdigitalplatform1@hotmail.com",
-              to: req.body.email,
-              subject: "Request Rejection For Person Verification Digital Platform",
-              text: "Your registration request has been rejected" 
-            };           
-          }
-          transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-              console.log(error);
-              throw err;
-            } else {
-              console.log("Email sent: " + info.response);
-              return resolve("Email Sent");   
-            }
-          });
-          res.send({ user: user, success: true });
-        }
-      })
-      
-    })
-  })
-  
-  
-  
- 
-  
+        { new: true }
+      )
+        .exec()
+        .then((user) => {
+          if (!user) {
+            console.log("Updating error");
+            return res.status(404).send("the user cannot be update");
+          } else {
+            let mailOptions = {};
+            if (req.body.isAccepted === "1") {
+              if (req.body.role === "wallet_owner") {
+                mailOptions = {
+                  from: "personverificationdigitalplatform1@hotmail.com",
+                  to: req.body.email,
+                  subject:
+                    "Temporary Password For Person Verification Digital Platform",
+                  text: "Password: " + password,
+                };
+              } else {
+                mailOptions = {
+                  from: "personverificationdigitalplatform1@hotmail.com",
+                  to: req.body.email,
+                  subject:
+                    "Temporary Password For Person Verification Digital Platform",
+                  text: "Password: " + password,
+                };
+                //TODO: QR Code
+              }
 
+              //console.log(password);
+            } else {
+              mailOptions = {
+                from: "personverificationdigitalplatform1@hotmail.com",
+                to: req.body.email,
+                subject:
+                  "Request Rejection For Person Verification Digital Platform",
+                text: "Your registration request has been rejected",
+              };
+            }
+            transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                console.log(error);
+                throw err;
+              } else {
+                console.log("Email sent: " + info.response);
+                return resolve("Email Sent");
+              }
+            });
+            res.send({ user: user, success: true });
+          }
+        });
+    });
+  });
 };
 
 const deleteUser = async (req, res) => {
@@ -244,6 +297,9 @@ const getPendingBanks = async (req, res) => {
 };
 
 module.exports = {
+  updatePassword,
+  updateServices,
+  getUser,
   getUsers,
   addUser,
   updateUser,

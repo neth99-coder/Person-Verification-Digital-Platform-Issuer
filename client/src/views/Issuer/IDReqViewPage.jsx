@@ -15,13 +15,13 @@ import Axios from "axios";
 export default function IDReqViewPage() {
 
   let location = useLocation();
-  let {obj} = location.state;
+  let { obj } = location.state;
   const navigate = useNavigate();
 
-  const handleClick = async(e)=>{
+  const handleClick = async (e) => {
 
     //console.log(e.target.name === 'accept')
-    (e.target.name === 'accept') ? obj.isAccepted = '1': obj.isAccepted = '-1';
+    (e.target.name === 'accept') ? obj.isAccepted = '1' : obj.isAccepted = '-1';
 
     await Axios.put("http://localhost:3001/api/v1/user/updateUser/" + obj._id, obj, {
       headers: {
@@ -29,12 +29,12 @@ export default function IDReqViewPage() {
       },
     }).then((res) => {
       if (!res.data.success) {
-         console.log(res.data.error)
+        console.log(res.data.error)
         alert("Error occured !!");
       } else {
         alert("Succefully Updated")
-         //console.log("success");
-        navigate("/id-requests"); 
+        //console.log("success");
+        navigate("/id-requests");
       }
     })
   }
@@ -128,18 +128,18 @@ export default function IDReqViewPage() {
                       <MDBCardText>NIC copy</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                    <button
-            className="btn btn-primary btn-outline"
-            onClick={() => {
-              saveAs(
-                `http://localhost:3001/reg/${obj.nic_photo_id}`,
-                'nic_copy.pdf',
-              )
-            }}
-          >
-            {' '}
-            Download
-          </button></MDBCol>
+                      <button
+                        className="btn  btn-outline-dark btn-sm"
+                        onClick={() => {
+                          saveAs(
+                            `http://localhost:3001/reg/${obj.nic_photo_id}`,
+                            'nic_copy.pdf',
+                          )
+                        }}
+                      >
+                        {' '}
+                        Download
+                      </button></MDBCol>
                   </MDBRow>
                   <hr />
                   <MDBRow>
@@ -148,18 +148,18 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                      <button
-            className="btn btn-primary btn-outline"
-            onClick={() => {
-              saveAs(
-                `http://localhost:3001/reg/${obj.bc_photo_id}`,
-                'bc_copy.pdf',
-              )
-            }}
-          >
-            {' '}
-            Download
-          </button>
+                        <button
+                          className="btn  btn-outline-dark btn-sm"
+                          onClick={() => {
+                            saveAs(
+                              `http://localhost:3001/reg/${obj.bc_photo_id}`,
+                              'bc_copy.pdf',
+                            )
+                          }}
+                        >
+                          {' '}
+                          Download
+                        </button>
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -172,10 +172,10 @@ export default function IDReqViewPage() {
                     margin: "20px",
                   }}
                 >
-                  <button type="button" class="btn btn-primary btn-lg ms-2" onClick={handleClick} name="accept">
+                  <button type="button" class="btn btn-primary  ms-2" onClick={handleClick} name="accept">
                     Accept
                   </button>
-                  <button type="button" class="btn btn-warning btn-lg ms-2" onClick={handleClick} name="reject">
+                  <button type="button" class="btn btn-warning  ms-2" onClick={handleClick} name="reject">
                     Reject
                   </button>
                 </div>

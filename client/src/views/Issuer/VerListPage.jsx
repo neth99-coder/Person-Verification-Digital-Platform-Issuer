@@ -24,10 +24,8 @@ export default function VerListPage() {
         setRequestList(res.data);
       });
     };
-    getRequests()
+    getRequests();
   }, []);
-
-
 
   return (
     <div
@@ -37,16 +35,21 @@ export default function VerListPage() {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
       }}
     >
       {/* <VerRequest />
       <VerRequest />
       <VerRequest />
       <VerRequest /> */}
-            {requestList?.map((cur_request,index)=>{
-        return <VerRequest key={index} user={cur_request}/>
-      })}
+
+      {requestList.length == 0 ? (
+        <h2>No Requests</h2>
+      ) : (
+        requestList?.map((cur_request, index) => {
+          return <VerRequest key={index} user={cur_request} />;
+        })
+      )}
     </div>
   );
 }

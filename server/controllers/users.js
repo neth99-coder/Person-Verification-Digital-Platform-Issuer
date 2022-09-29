@@ -1,5 +1,4 @@
 const { User } = require("../models/user");
-const { Type } = require("../models/type");
 const mongoose = require("mongoose");
 const express = require("express");
 const transporter = require("../helpers/transporter");

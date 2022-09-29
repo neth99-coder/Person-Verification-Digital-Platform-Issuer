@@ -13,7 +13,7 @@ const Input = ({ name, label, error, id, ...rest }) => {
       {(id === null || id === undefined) && (
         <input {...rest} name={name} id={name} className={inputClasses} />
       )}
-      {error && <div className="invalid-feedback">{error}</div>}
+      {error && <div className="invalid-feedback"></div>}
     </div>
   );
 };

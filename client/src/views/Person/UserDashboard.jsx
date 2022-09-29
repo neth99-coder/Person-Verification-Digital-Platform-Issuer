@@ -18,6 +18,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import axios from "axios";
+import authService from "../../services/authService";
 
 import bg from "../../assets/images/2154438.jpg";
 
@@ -48,12 +49,10 @@ function UserDashboard() {
     }
   };
 
-
   function checkPassword(str) {
     var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     return re.test(str);
   }
-
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
@@ -64,39 +63,41 @@ function UserDashboard() {
     } else if (newPassword === oldPassword) {
       alert("New Password cannot be same as Old Password");
     } else if (!checkPassword(newPassword)) {
-      alert("password must contain atleast one uppercase, one lowercase, one number and one special character and length must be less than 8");
+      alert(
+        "password must contain atleast one uppercase, one lowercase, one number and one special character and length must be less than 8"
+      );
     } else {
-      axios.post("http://localhost:3001/api/v1/user/updatePassword", {
-
-        email: user_profile.email,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-
-      }).then((res) => {
-        if (res.data.message) {
-          alert("password incorrect!!");
-        } else
-          if (!res.data.success) {
-            alert("error")
+      axios
+        .post("http://localhost:3001/api/v1/user/updatePassword", {
+          email: user_profile.email,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        })
+        .then((res) => {
+          if (res.data.message) {
+            alert("password incorrect!!");
+          } else if (!res.data.success) {
+            alert("error");
           } else if (res.data.success) {
             alert("success");
             window.location.reload(false);
           }
-
-      });
+        });
     }
-  }
+  };
 
   //TODO
   //get email from token
+  let { email } = authService.getCurrentUser();
   useEffect(() => {
-    const user_email = "physickness@gmail.com";
+    // setUserEmail(email);
+    // const user_email = email;
 
     function getUser() {
       axios
         .get("http://localhost:3001/api/v1/user/getUser", {
           params: {
-            email: user_email,
+            email: email,
           },
         })
         .then((res) => {
@@ -329,7 +330,11 @@ function UserDashboard() {
                     required
                   />
                 </div>
-                <p style={{ color: "blue" }}>password must contain atleast one uppercase, one lowercase, one number and one special character and length must be minimum  8</p>
+                <p style={{ color: "blue" }}>
+                  password must contain atleast one uppercase, one lowercase,
+                  one number and one special character and length must be
+                  minimum 8
+                </p>
               </div>
             </MDBModalBody>
 
@@ -337,7 +342,9 @@ function UserDashboard() {
               <MDBBtn color="secondary" onClick={togglePasswordBox}>
                 Close
               </MDBBtn>
-              <MDBBtn type="submit" onClick={handlePasswordSubmit}>Save changes</MDBBtn>
+              <MDBBtn type="submit" onClick={handlePasswordSubmit}>
+                Save changes
+              </MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

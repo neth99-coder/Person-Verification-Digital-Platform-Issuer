@@ -7,43 +7,40 @@ var generator = require("generate-password");
 const bcrypt = require("bcrypt");
 const { has } = require("config");
 
-
 const updatePassword = async (req, res) => {
   console.log(req.body);
-  const user =  await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email: req.body.email });
   console.log(user);
   if (!user) {
     res.status(500).json({ success: false });
     return;
-  }else{
-    bcrypt.compare(req.body.oldPassword, user.password, function(err, result) {
-      if (err){
+  } else {
+    bcrypt.compare(req.body.oldPassword, user.password, function (err, result) {
+      if (err) {
         res.status(500).json({ success: false });
       }
       if (!result) {
-        res.send({success: false, message: 'passwords do not match'});
+        res.send({ success: false, message: "passwords do not match" });
       } else {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(req.body.newPassword, salt, (err, hash) => {
-            if (err){
+            if (err) {
               res.status(500).json({ success: false });
-            }else{
+            } else {
               user.password = hash;
               user.save();
               res.send({ success: true });
             }
           });
-      });
+        });
       }
     });
   }
-  
 };
-
 
 const updateServices = (req, res) => {
   console.log(req.body);
-  const user =  User.findOneAndUpdate(
+  const user = User.findOneAndUpdate(
     { email: req.body.email },
     { services: req.body.services },
     function (err, doc) {
@@ -135,7 +132,7 @@ const addUser = async (req, res) => {
         nic_photo_id: "nic_" + req.body.nic + "." + nic_type,
         bc_photo_id: "bc_" + req.body.nic + "." + bc_type,
         email: req.body.email,
-        password: req.body.password,
+        // password: req.body.password,
         address: req.body.address,
         contact_number: req.body.contact_number,
         role: req.body.role,
@@ -144,7 +141,7 @@ const addUser = async (req, res) => {
     } else {
       user = new User({
         email: req.body.email,
-        password: req.body.password,
+        // password: req.body.password,
         address: req.body.address,
         contact_number: req.body.contact_number,
         role: req.body.role,

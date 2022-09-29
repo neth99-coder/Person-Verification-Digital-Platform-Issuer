@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+import logo from "../../assets/images/logo.png";
+
 function Home(props) {
   //   const [products, setProducts] = useState([]);
   //   useEffect(() => {
@@ -36,7 +38,7 @@ function Home(props) {
           <img
             className="img-fluid p-3"
             style={{ objectFit: "cover" }}
-            src="https://img.freepik.com/free-vector/qr-code-person-holding-smartphone_23-2148620753.jpg?size=338&ext=jpg&ga=GA1.2.1101288580.1663340965"
+            src={logo}
             alt="titleImg"
           />
         </div>

@@ -19,6 +19,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import axios from "axios";
+import authService from "../../services/authService";
 
 import bg from "../../assets/images/2154438.jpg";
 
@@ -123,14 +124,14 @@ function VerifierDashboard() {
 
   //TODO
   //get email from token
-  useEffect(() => {
-    const verifier_email = "supun.19@cse.mrt.ac.lk";
+  let { email } = authService.getCurrentUser();
 
+  useEffect(() => {
     const getVerifier = async () => {
       await axios
         .get("http://localhost:3001/api/v1/user/getUser", {
           params: {
-            email: verifier_email,
+            email: email,
           },
         })
         .then((res) => {
@@ -141,7 +142,8 @@ function VerifierDashboard() {
           //   "Credit Card Services",
           // ].filter((x) => !res.data.services.includes(x)));
           setSubscribedServices(res.data.services);
-          res.data.services.includes("Bank Account Creation") && setAccount(true);
+          res.data.services.includes("Bank Account Creation") &&
+            setAccount(true);
           res.data.services.includes("Bank Loan Services") && setLoan(true);
           res.data.services.includes("Credit Card Services") && setCard(true);
         });
@@ -220,8 +222,8 @@ function VerifierDashboard() {
                       item == "Bank Account Creation"
                         ? account
                         : item == "Bank Loan Services"
-                          ? loan
-                          : card
+                        ? loan
+                        : card
                     }
                     onChange={(e) => {
                       handleChange(e);

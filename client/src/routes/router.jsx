@@ -12,7 +12,7 @@ import UserDashboard from "../views/Person/UserDashboard";
 import VerifierDashboard from "../views/Bank/VerifierDashboard";
 import { useState } from "react";
 import { useEffect } from "react";
-import authService, { getCurrentUser } from "../services/authService";
+import { getCurrentUser } from "../services/authService";
 import Login from "../components/login";
 import Logout from "../components/logout";
 import NavBar from "../components/navBar";
@@ -21,11 +21,14 @@ import { getTheme, saveTheme } from "../utils/theme";
 import ROLE from "../utils/roles.json";
 import ProtectedRoute from "../components/common/protectedRoute";
 import NotFound from "../components/notFound";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import ContactUs from "../components/ContactUs";
 
 export default function AppRouter() {
   const [theme, setTheme] = useState(getTheme());
   const [user, setUser] = useState();
-  let userRole = authService.getRoles();
 
   useEffect(() => {
     setUser(getCurrentUser);
@@ -41,6 +44,7 @@ export default function AppRouter() {
           saveTheme(theme);
         }}
       />
+      <ToastContainer />
       <Routes>
         <Route path="/issuer">
           <Route
@@ -126,7 +130,7 @@ export default function AppRouter() {
             />
           }
         ></Route>
-
+        <Route path="/contact-us" element={<ContactUs />}></Route>
         <Route path="/" element={<Home />}></Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

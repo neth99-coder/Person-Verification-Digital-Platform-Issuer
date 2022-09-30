@@ -4,7 +4,7 @@ const Select = ({ name, label, error, options, ...rest }) => {
   const inputClasses = error ? "form-control is-invalid" : "form-control";
 
   return (
-    <div className="form-group">
+    <div className="form-group mb-3">
       <label htmlFor={name}>{label}</label>
       <select className={inputClasses} name={name} id={name} {...rest}>
         {options.map((option) => (
@@ -13,7 +13,7 @@ const Select = ({ name, label, error, options, ...rest }) => {
           </option>
         ))}
       </select>
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };

@@ -40,7 +40,10 @@ function IssuerDashboard() {
         <MDBCol md="6">
           <MDBCard className="my-5">
             <MDBCardBody className="p-5 pb-0">
-              <MDBCard background="primary" className="text-white mb-6">
+              <MDBCard
+                background="primary"
+                className="text-white mb-6 hover-focus"
+              >
                 <MDBCardBody
                   onClick={() => {
                     window.location.href = "/issuer/id-requests";
@@ -51,7 +54,10 @@ function IssuerDashboard() {
                   </MDBCardTitle>
                 </MDBCardBody>
               </MDBCard>
-              <MDBCard background="primary" className="text-white mb-6">
+              <MDBCard
+                background="primary"
+                className="text-white mb-6 hover-focus"
+              >
                 <MDBCardBody
                   onClick={() => {
                     window.location.href = "/issuer/ver-requests";

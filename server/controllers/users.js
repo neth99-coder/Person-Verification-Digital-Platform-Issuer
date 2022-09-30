@@ -206,7 +206,7 @@ const updateUser = async (req, res) => {
             if (req.body.isAccepted === "1") {
               if (req.body.role === "wallet_owner") {
                 mailOptions = {
-                  from: "personverificationdigitalplatform1@hotmail.com",
+                  from: process.env.TRANSPORTER_USERNAME,
                   to: req.body.email,
                   subject:
                     "Temporary Password For Person Verification Digital Platform",
@@ -214,7 +214,7 @@ const updateUser = async (req, res) => {
                 };
               } else {
                 mailOptions = {
-                  from: "personverificationdigitalplatform1@hotmail.com",
+                  from: process.env.TRANSPORTER_USERNAME,
                   to: req.body.email,
                   subject:
                     "Temporary Password For Person Verification Digital Platform",
@@ -226,7 +226,7 @@ const updateUser = async (req, res) => {
               //console.log(password);
             } else {
               mailOptions = {
-                from: "personverificationdigitalplatform1@hotmail.com",
+                from: process.env.TRANSPORTER_USERNAME,
                 to: req.body.email,
                 subject:
                   "Request Rejection For Person Verification Digital Platform",

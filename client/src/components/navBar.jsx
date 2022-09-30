@@ -10,20 +10,59 @@ export default function NavBar({ theme, toggleTheme, user }) {
   const nextTheme = theme ? "light" : "dark";
   const isAdmin = user && user.role === "admin";
   const isBank = user && user.role === "bank";
+  const isWalletOwner = user && user.role === "wallet_owner";
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-custom mb-5">
         <div className="container-fluid">
-          <div className="navbar-brand hover-focus">
-            <img
-              src={logo}
-              alt="icon1"
-              height="24"
-              className="d-inline-block align-text-top"
-            />
+          {!user && (
+            <a className="navbar-brand hover-focus" href="/">
+              <img
+                src={logo}
+                alt="icon1"
+                height="24"
+                className="d-inline-block align-text-top"
+              />
 
-            <span className="ms-2">{process.env.REACT_APP_SITE_NAME}</span>
-          </div>
+              <span className="ms-2">{process.env.REACT_APP_SITE_NAME}</span>
+            </a>
+          )}
+          {isAdmin && (
+            <a className="navbar-brand hover-focus" href="/issuer">
+              <img
+                src={logo}
+                alt="icon1"
+                height="24"
+                className="d-inline-block align-text-top"
+              />
+
+              <span className="ms-2">{process.env.REACT_APP_SITE_NAME}</span>
+            </a>
+          )}
+          {isBank && (
+            <a className="navbar-brand hover-focus" href="/bank">
+              <img
+                src={logo}
+                alt="icon1"
+                height="24"
+                className="d-inline-block align-text-top"
+              />
+
+              <span className="ms-2">{process.env.REACT_APP_SITE_NAME}</span>
+            </a>
+          )}
+          {isWalletOwner && (
+            <a className="navbar-brand hover-focus" href="/wallet_owner">
+              <img
+                src={logo}
+                alt="icon1"
+                height="24"
+                className="d-inline-block align-text-top"
+              />
+
+              <span className="ms-2">{process.env.REACT_APP_SITE_NAME}</span>
+            </a>
+          )}
           <button
             className="navbar-toggler"
             type="button"

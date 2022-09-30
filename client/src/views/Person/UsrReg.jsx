@@ -21,6 +21,14 @@ import { HiHome } from "react-icons/fa";
 import { Button } from "bootstrap";
 import { useState } from "react";
 
+function formatDate(n){
+  if(n< 10){
+      return "0" + n;
+  }else{
+      return n;
+  }
+}
+
 function UsrReg() {
   const [person, setPerson] = useState({
     first_name: "",
@@ -263,6 +271,8 @@ function UsrReg() {
                     onChange={handleChange}
                     value={person.dob}
                     required
+                    min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                    max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                   />
                 </div>
 

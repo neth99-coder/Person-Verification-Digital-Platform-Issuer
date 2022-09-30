@@ -12,6 +12,7 @@ import bg from "../../assets/images/idaccept.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import Axios from "axios";
+import { toast } from "react-toastify";
 export default function IDReqViewPage() {
   let location = useLocation();
   let { obj } = location.state;
@@ -37,6 +38,7 @@ export default function IDReqViewPage() {
         alert("Error occured !!");
       } else {
         alert("Succefully Updated");
+        toast.success("Succefully Updated", { theme: "dark" });
         //console.log("success");
         navigate("/issuer/id-requests");
       }

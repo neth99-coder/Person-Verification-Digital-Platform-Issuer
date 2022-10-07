@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
     required: function () {
       return this.role == "wallet_owner";
     },
-    enum: ["Single", "Married", "Divorced"],
+    enum: ["Single", "Married", "Divorced", "Widowed"],
   },
   nationality: {
     type: String,
@@ -73,9 +73,9 @@ const userSchema = mongoose.Schema({
     minlength: 2,
     maxlength: 50,
   },
-  services:{
-    type: [{type: String}],
-    required:function () {
+  services: {
+    type: [{ type: String }],
+    required: function () {
       return this.role == "bank";
     },
   },
@@ -90,6 +90,9 @@ const userSchema = mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 1024,
+    required: function () {
+      return this.isAccepted == "1";
+    },
   },
   address: {
     type: String,

@@ -9,36 +9,41 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 import bg from "../../assets/images/idaccept.jpg";
-import { useLocation, useNavigate } from 'react-router-dom';
-import { saveAs } from 'file-saver'
+import { useLocation, useNavigate } from "react-router-dom";
+import { saveAs } from "file-saver";
 import Axios from "axios";
+import { toast } from "react-toastify";
 export default function IDReqViewPage() {
-
   let location = useLocation();
   let { obj } = location.state;
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
-
     //console.log(e.target.name === 'accept')
-    (e.target.name === 'accept') ? obj.isAccepted = '1' : obj.isAccepted = '-1';
+    e.target.name === "accept"
+      ? (obj.isAccepted = "1")
+      : (obj.isAccepted = "-1");
 
-    await Axios.put("http://localhost:3001/api/v1/user/updateUser/" + obj._id, obj, {
-      headers: {
-        // 'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
+    await Axios.put(
+      "http://localhost:3001/api/v1/user/updateUser/" + obj._id,
+      obj,
+      {
+        headers: {
+          // 'x-auth-token': authService.getUserToken(),
+        },
+      }
+    ).then((res) => {
       if (!res.data.success) {
-        console.log(res.data.error)
+        console.log(res.data.error);
         alert("Error occured !!");
       } else {
-        alert("Succefully Updated")
+        alert("Succefully Updated");
+        toast.success("Succefully Updated", { theme: "dark" });
         //console.log("success");
-        navigate("/id-requests");
+        navigate("/issuer/id-requests");
       }
-    })
-  }
-
+    });
+  };
 
   return (
     <div>
@@ -64,7 +69,9 @@ export default function IDReqViewPage() {
                       <MDBCardText>Last Name</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                      <MDBCardText className="text-muted">{obj.last_name}</MDBCardText>
+                      <MDBCardText className="text-muted">
+                        {obj.last_name}
+                      </MDBCardText>
                     </MDBCol>
                   </MDBRow>
                   <hr />
@@ -133,13 +140,14 @@ export default function IDReqViewPage() {
                         onClick={() => {
                           saveAs(
                             `http://localhost:3001/reg/${obj.nic_photo_id}`,
-                            'nic_copy.pdf',
-                          )
+                            "nic_copy.pdf"
+                          );
                         }}
                       >
-                        {' '}
+                        {" "}
                         Download
-                      </button></MDBCol>
+                      </button>
+                    </MDBCol>
                   </MDBRow>
                   <hr />
                   <MDBRow>
@@ -153,11 +161,11 @@ export default function IDReqViewPage() {
                           onClick={() => {
                             saveAs(
                               `http://localhost:3001/reg/${obj.bc_photo_id}`,
-                              'bc_copy.pdf',
-                            )
+                              "bc_copy.pdf"
+                            );
                           }}
                         >
-                          {' '}
+                          {" "}
                           Download
                         </button>
                       </MDBCardText>
@@ -172,10 +180,20 @@ export default function IDReqViewPage() {
                     margin: "20px",
                   }}
                 >
-                  <button type="button" class="btn btn-primary  ms-2" onClick={handleClick} name="accept">
+                  <button
+                    type="button"
+                    class="btn btn-primary  ms-2"
+                    onClick={handleClick}
+                    name="accept"
+                  >
                     Accept
                   </button>
-                  <button type="button" class="btn btn-warning  ms-2" onClick={handleClick} name="reject">
+                  <button
+                    type="button"
+                    class="btn btn-warning  ms-2"
+                    onClick={handleClick}
+                    name="reject"
+                  >
                     Reject
                   </button>
                 </div>

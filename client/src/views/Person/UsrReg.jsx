@@ -21,6 +21,14 @@ import { HiHome } from "react-icons/fa";
 import { Button } from "bootstrap";
 import { useState } from "react";
 
+function formatDate(n){
+  if(n< 10){
+      return "0" + n;
+  }else{
+      return n;
+  }
+}
+
 function UsrReg() {
   const [person, setPerson] = useState({
     first_name: "",
@@ -32,7 +40,7 @@ function UsrReg() {
     nic_photo_id: "",
     bc_photo_id: "",
     email: "",
-    password: "XXXXX",
+    // password: "XXXXX",
     address: "",
     contact_number: "",
     role: "wallet_owner",
@@ -106,7 +114,7 @@ function UsrReg() {
     formData.append("nic_photo_id", person.nic_photo_id);
     formData.append("bc_photo_id", person.bc_photo_id);
     formData.append("email", person.email);
-    formData.append("password", person.password);
+    // formData.append("password", person.password);
     formData.append("address", person.address);
     formData.append("contact_number", person.contact_number);
     formData.append("role", person.role);
@@ -116,7 +124,7 @@ function UsrReg() {
 
     Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         // 'x-auth-token': authService.getUserToken(),
       },
     }).then((res) => {
@@ -124,7 +132,7 @@ function UsrReg() {
         alert("Error occured !!");
       } else {
         //console.log("success");
-        navigate('/');
+        navigate("/");
       }
     });
   }
@@ -160,7 +168,11 @@ function UsrReg() {
                     label="First Name"
                     id="form1"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="f_name"
                     onChange={handleChange}
                     value={person.first_name}
@@ -173,7 +185,11 @@ function UsrReg() {
                     label="Last Name"
                     id="form2"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="last_name"
                     onChange={handleChange}
                     value={person.last_name}
@@ -181,9 +197,19 @@ function UsrReg() {
                   />
                 </div>
                 <div className="d-flex flex-row align-items-center mb-4">
-                  <div style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
                     <label className="mb-1">Marital Status</label>
-                    <Form.Select value={person.status} onChange={handleChange} name="status">
+                    <Form.Select
+                      value={person.status}
+                      onChange={handleChange}
+                      name="status"
+                    >
                       <option value="Single">Single</option>
                       <option value="Married">Married</option>
                       <option value="Divorced">Divorced</option>
@@ -191,9 +217,19 @@ function UsrReg() {
                   </div>
                 </div>
                 <div className="d-flex flex-row align-items-center mb-4">
-                  <div style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
                     <label className="mb-1">Nationality</label>
-                    <Form.Select value={person.nationality} onChange={handleChange} name="nationality">
+                    <Form.Select
+                      value={person.nationality}
+                      onChange={handleChange}
+                      name="nationality"
+                    >
                       <option value="Sinhalese">Sinhalese</option>
                       <option value="Tamils">Tamil</option>
                       <option value="Moor">Moor</option>
@@ -209,7 +245,11 @@ function UsrReg() {
                     label="NIC Number"
                     id="form3"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="nic"
                     onChange={handleChange}
                     value={person.nic}
@@ -222,11 +262,17 @@ function UsrReg() {
                     label="DOB"
                     id="form4"
                     type="date"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="dob"
                     onChange={handleChange}
                     value={person.dob}
                     required
+                    min={(new Date().getFullYear()-80)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
+                    max={(new Date().getFullYear()-16)+ "-" + formatDate(new Date().getMonth() +1) +"-" + formatDate(new Date().getDate())}
                   />
                 </div>
 
@@ -235,7 +281,11 @@ function UsrReg() {
                     label="Phone Number"
                     id="form5"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="contact_number"
                     onChange={handleChange}
                     value={person.contact_number}
@@ -290,7 +340,11 @@ function UsrReg() {
                     label="Address"
                     id="form6"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="address"
                     onChange={handleChange}
                     value={person.address}
@@ -303,7 +357,11 @@ function UsrReg() {
                     type="file"
                     class="form-control"
                     id="customFile1"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="nic_photo_id"
                     onChange={(e) => {
                       setPerson((prev_val) => {
@@ -320,7 +378,11 @@ function UsrReg() {
                     type="file"
                     class="form-control"
                     id="customFile2"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="bc_photo_id"
                     onChange={(e) => {
                       setPerson((prev_val) => {
@@ -337,7 +399,11 @@ function UsrReg() {
                     label="email"
                     id="form7"
                     type="email"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="email"
                     onChange={handleChange}
                     value={person.email}

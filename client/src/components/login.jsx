@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Redirect } from "react-router-dom";
 import Joi from "joi-browser";
 import Form from "./common/form";
 import auth from "../services/authService";
+import { BsWindowSidebar } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 class LoginBody extends Form {
   state = {
@@ -18,15 +20,26 @@ class LoginBody extends Form {
   doSubmit = async () => {
     try {
       const { data } = this.state;
-      // await auth.login(data.username, data.password)
+      await auth.loginUser(data.username, data.password);
 
       this.props.setUser(auth.getCurrentUser());
-      this.props.navigate("/");
+      let userRole = auth.getCurrentUser().role;
+      console.log(userRole);
+      if (userRole === "admin") {
+        this.props.navigate("/issuer");
+      }
+      if (userRole === "wallet_owner") {
+        this.props.navigate("/wallet_owner");
+      }
+      if (userRole === "bank") {
+        this.props.navigate("/bank");
+      }
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
         this.setState({ errors });
+        toast.error("Email or Password Invalid", { theme: "dark" });
       }
     }
   };

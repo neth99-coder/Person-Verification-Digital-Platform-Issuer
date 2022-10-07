@@ -2,12 +2,12 @@ import jwtDecode from "jwt-decode";
 
 import http from "./httpService";
 
-const apiEndpoint = process.env.REACT_APP_API_URL + "/auth";
+const apiEndpoint = "http://localhost:3001/api/v1/auth";
 const tokenKey = "token";
 
 http.setJwt(getJwt());
 
-export async function loginCustomer(email, password) {
+export async function loginUser(email, password) {
   const { data: jwt } = await http.post(apiEndpoint + "", {
     email,
     password,
@@ -40,14 +40,25 @@ export function getCurrentUser() {
 }
 
 export function getRoles() {
-  return {
-    CUSTOMER: "customer",
-    ADMIN: "admin",
-  };
+  try {
+    const jwt = localStorage.getItem(tokenKey);
+    if (jwt) {
+      const { role } = jwtDecode(jwt);
+      return role;
+    }
+    return null;
+  } catch (ex) {
+    return null;
+  }
+  // return {
+  //   WALLET_OWNER: "wallet_owner",
+  //   ADMIN: "admin",
+  //   BANK: "bank",
+  // };
 }
 
 export default {
-  loginCustomer,
+  loginUser,
   loginUserWithJwt,
   logoutUser,
   getCurrentUser,

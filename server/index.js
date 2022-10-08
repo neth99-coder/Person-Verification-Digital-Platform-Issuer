@@ -1,13 +1,14 @@
 const express = require("express");
-require("dotenv").config();
-
 const app = express();
+
+require("dotenv").config();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 
 //routers
+
 const auth = require("./routes/auth");
 const user = require("./routes/users");
 

@@ -28,7 +28,7 @@ const updatePassword = async (req, res) => {
             } else {
               user.password = hash;
               user.save();
-              res.send({ success: true });
+              res.status(200).send({ success: true });
             }
           });
         });
@@ -44,7 +44,7 @@ const updateServices = (req, res) => {
     { services: req.body.services },
     function (err, doc) {
       if (err) return res.send(500, { error: err });
-      return res.send("Succesfully saved.");
+      return res.status(200).send("Succesfully saved.");
     }
   );
 };
@@ -56,7 +56,7 @@ const getUser = async (req, res) => {
     res.status(500).json({ success: false });
     return;
   }
-  res.send(user);
+  res.status(200).send(user);
 };
 
 const getUsers = async (req, res) => {
@@ -64,10 +64,11 @@ const getUsers = async (req, res) => {
   if (!userList) {
     res.status(500).json({ success: false });
   }
-  res.send(userList);
+  res.status(200).send(userList);
 };
 
 const addUser = async (req, res) => {
+  // console.log(req.body);
   const doesExist = await User.findOne({ email: req.body.email });
 
   if (!doesExist) {
@@ -279,7 +280,7 @@ const getPendingWalletUsers = async (req, res) => {
   if (!pendingList) {
     res.status(500).json({ success: false });
   }
-  res.send(pendingList);
+  res.status(200).send(pendingList);
 };
 
 const getPendingBanks = async (req, res) => {

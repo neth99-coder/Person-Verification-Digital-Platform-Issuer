@@ -48,7 +48,7 @@ function UsrReg() {
   });
 
   const [validated, setValidated] = useState(false); //form validation
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   function handleChange(e) {
     const value = e.target.value;
@@ -98,43 +98,55 @@ function UsrReg() {
     const form = e.currentTarget;
     //form validation
     if (form.checkValidity() === false) {
+      console.log("Empty")
+      setValidated(true);
       e.stopPropagation();
+      
+    }else{
+      setValidated(true);
+      //console.log(person)
+  
+      const formData = new FormData();
+  
+      formData.append("first_name", person.first_name);
+      formData.append("last_name", person.last_name);
+      formData.append("status", person.status);
+      formData.append("nationality", person.nationality);
+      formData.append("nic", person.nic);
+      formData.append("dob", person.dob);
+      formData.append("nic_photo_id", person.nic_photo_id);
+      formData.append("bc_photo_id", person.bc_photo_id);
+      formData.append("email", person.email);
+      // formData.append("password", person.password);
+      formData.append("address", person.address);
+      formData.append("contact_number", person.contact_number);
+      formData.append("role", person.role);
+      formData.append("isAccepted", person.isAccepted);
+  
+      console.log(...formData);
+  
+      Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // 'x-auth-token': authService.getUserToken(),
+        },
+      }).then((res) => {
+        if (!res.data.success) {
+          alert("Error occured !!");
+        } else {
+          //console.log("success");
+          // navigate("/");
+          window.location.href = '/'
+        }
+      });
     }
-    setValidated(true);
-    //console.log(person)
+    
+  }
 
-    const formData = new FormData();
-
-    formData.append("first_name", person.first_name);
-    formData.append("last_name", person.last_name);
-    formData.append("status", person.status);
-    formData.append("nationality", person.nationality);
-    formData.append("nic", person.nic);
-    formData.append("dob", person.dob);
-    formData.append("nic_photo_id", person.nic_photo_id);
-    formData.append("bc_photo_id", person.bc_photo_id);
-    formData.append("email", person.email);
-    // formData.append("password", person.password);
-    formData.append("address", person.address);
-    formData.append("contact_number", person.contact_number);
-    formData.append("role", person.role);
-    formData.append("isAccepted", person.isAccepted);
-
-    console.log(...formData);
-
-    Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        // 'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
-      if (!res.data.success) {
-        alert("Error occured !!");
-      } else {
-        //console.log("success");
-        navigate("/");
-      }
-    });
+  function goToNextPage(){
+    document.querySelector(".firstPage").style.display = "none";
+    document.querySelector(".secondPage").style.display =
+      "block";
   }
 
   return (
@@ -157,7 +169,7 @@ function UsrReg() {
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
                 <h2
-                  classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
                   style={{ color: "blue", marginBottom: "20px" }}
                 >
                   Register as a User
@@ -177,6 +189,8 @@ function UsrReg() {
                     onChange={handleChange}
                     value={person.first_name}
                     required
+                    minLength='2'
+                    maxLength='50'
                   />
                 </div>
 
@@ -194,6 +208,8 @@ function UsrReg() {
                     onChange={handleChange}
                     value={person.last_name}
                     required
+                    minLength='2'
+                    maxLength='50'
                   />
                 </div>
                 <div className="d-flex flex-row align-items-center mb-4">
@@ -295,12 +311,8 @@ function UsrReg() {
 
                 <button
                   type="button"
-                  class="btn btn-warning ms-2"
-                  onClick={() => {
-                    document.querySelector(".firstPage").style.display = "none";
-                    document.querySelector(".secondPage").style.display =
-                      "block";
-                  }}
+                  className="btn btn-warning ms-2"
+                  onClick={goToNextPage}
                 >
                   Next Page
                 </button>
@@ -329,7 +341,7 @@ function UsrReg() {
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
                 <p
-                  classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
                   style={{ color: "red" }}
                 >
                   * Do not submit forged documents *
@@ -349,13 +361,15 @@ function UsrReg() {
                     onChange={handleChange}
                     value={person.address}
                     required
+                    minLength='5'
+                    maxLength='1024'
                   />
                 </div>
 
                 <div className="d-flex flex-column align-items-center mb-4">
                   <MDBInput
                     type="file"
-                    class="form-control"
+                    className="form-control"
                     id="customFile1"
                     style={{
                       display: "inline-block",
@@ -376,7 +390,7 @@ function UsrReg() {
                 <div className="d-flex flex-column align-items-center mb-4">
                   <MDBInput
                     type="file"
-                    class="form-control"
+                    className="form-control"
                     id="customFile2"
                     style={{
                       display: "inline-block",
@@ -408,13 +422,15 @@ function UsrReg() {
                     onChange={handleChange}
                     value={person.email}
                     required
+                    minLength='5'
+                    maxLength='255'
                   />
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <button
                     type="button"
-                    class="btn btn-warning  ms-2"
+                    className="btn btn-warning  ms-2"
                     onClick={() => {
                       document.querySelector(".firstPage").style.display =
                         "block";
@@ -424,7 +440,7 @@ function UsrReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" class="btn btn-primary  ms-2">
+                  <button type="submit" className="btn btn-primary  ms-2">
                     Submit
                   </button>
                 </div>

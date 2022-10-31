@@ -34,7 +34,7 @@ function VerReg() {
   });
 
   const [validated, setValidated] = useState(false); //form validation
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [account, setAccount] = useState(false);
   const [loan, setLoan] = useState(false);
   const [card, setCard] = useState(false);
@@ -67,40 +67,45 @@ function VerReg() {
     const form = e.currentTarget;
     //form validation
     if (form.checkValidity() === false) {
+      setValidated(true);
       e.stopPropagation();
     }
-    setValidated(true);
-    //console.log(person)
-
-    const formData = new FormData();
-    
-
-    formData.append("name", bank.name);
-    formData.append("cc_photo_id", bank.cc_photo_id);
-    formData.append("email", bank.email);
-    formData.append("password", bank.password);
-    formData.append("address", bank.address);
-    formData.append("contact_number", bank.contact_number);
-    formData.append("role", bank.role);
-    formData.append("isAccepted", bank.isAccepted);
-    formData.append("account", account);
-    formData.append('loan', loan);
-    formData.append('card', card);
-
-    Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        // 'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
-      if (!res.data.success) {
-        // console.log(res.data.error)
-        alert("Error occured !!");
-      } else {
-        // console.log("success");
-        navigate("/");
-      }
-    });
+    else{
+      setValidated(true);
+      //console.log(person)
+  
+      const formData = new FormData();
+      
+  
+      formData.append("name", bank.name);
+      formData.append("cc_photo_id", bank.cc_photo_id);
+      formData.append("email", bank.email);
+      formData.append("password", bank.password);
+      formData.append("address", bank.address);
+      formData.append("contact_number", bank.contact_number);
+      formData.append("role", bank.role);
+      formData.append("isAccepted", bank.isAccepted);
+      formData.append("account", account);
+      formData.append('loan', loan);
+      formData.append('card', card);
+  
+      Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // 'x-auth-token': authService.getUserToken(),
+        },
+      }).then((res) => {
+        if (!res.data.success) {
+          // console.log(res.data.error)
+          alert("Error occured !!");
+        } else {
+          // console.log("success");
+          //navigate("/");
+          window.location.href = '/'
+        }
+      });  
+    }
+   
   }
   return (
     <MDBContainer fluid>
@@ -137,6 +142,8 @@ function VerReg() {
                     name="name"
                     onChange={handleChange}
                     value={bank.first_name}
+                    minLength = '2'
+                    maxLength= '50'
                     required
                   />
                 </div>
@@ -160,6 +167,8 @@ function VerReg() {
                     onChange={handleChange}
                     value={bank.address}
                     required
+                    minLength='5'
+                    maxLength='1024'
                   />
                 </div>
 
@@ -193,6 +202,8 @@ function VerReg() {
                     onChange={handleChange}
                     value={bank.email}
                     required
+                    minLength='5'
+                    maxLength='255'
                   />
                 </div>
 

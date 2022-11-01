@@ -59,26 +59,38 @@ function VerifierDashboard() {
   const [web3Account, setWeb3Account] = useState([]);
   const [registered, setRegistered] = useState(true);
 
-  const saveServiceChange = () => {
-    const services = [];
-    account && services.push("Bank Account Creation");
-    loan && services.push("Bank Loan Services");
-    card && services.push("Credit Card Services");
+  //TODO: when open the modal and register -> add then update services
+  //TODO: when we update service in database -> update it in blockchain as well
 
-    axios
-      .post("http://localhost:3001/api/v1/user/updateServices", {
-        email: verifier_profile.email,
-        services: services,
-      })
-      .then((res) => {
-        if (res.data.error) {
-          alert("Error occured !!");
-        } else {
-          alert("success");
-          // console.log(res.data)
-          window.location.reload(false);
-        }
-      });
+  const saveServiceChange = () => {
+    if(web3Account !== undefined){
+      const services = [];
+      account && services.push("Bank Account Creation");
+      loan && services.push("Bank Loan Services");
+      card && services.push("Credit Card Services");
+  
+      axios
+        .post("http://localhost:3001/api/v1/user/updateServices", {
+          email: verifier_profile.email,
+          services: services,
+        })
+        .then(async (res) => {
+          if (res.data.error) {
+            alert("Error occured !!");
+          } else {
+            const { contract } = web3Api;
+            await contract.updateServices(account,loan, card,{
+              from: web3Account,
+            })
+            alert("success");
+            // console.log(res.data)
+            window.location.reload(false);
+          }
+        });
+    }else{
+      alert("Connect to metamask")
+    }
+    
   };
 
   const handleChange = (e) => {
@@ -193,25 +205,37 @@ function VerifierDashboard() {
   }, []);
 
   const getRegistered = async () => {
-    const { contract } = web3Api;
-    console.log("Hi");
-    const verifierExist = await contract.getVerifierExist({
-      from: web3Account,
-    });
-    console.log(verifierExist);
-
-    setRegistered(verifierExist);
-    toggleRegisterModal()
+    console.log(web3Account,"Console")
+    if(web3Account !== undefined){
+      const { contract } = web3Api;
+      console.log("Hi");
+      const verifierExist = await contract.getVerifierExist({
+        from: web3Account,
+      });
+      console.log(verifierExist);
+  
+      setRegistered(verifierExist);
+      toggleRegisterModal()
+    }else{
+      alert("Connect to metamask")
+    }
+    
   };
 
   const register = async ()=>{
-    console.log("B4")
-    const { contract } = web3Api;
-    await contract.addVerifier({
-      from: web3Account,
-    })
-    console.log("After")
-    window.location.reload(false)
+    if(web3Account !== undefined){
+      console.log("B4")
+      const { contract } = web3Api;
+      await contract.addVerifier(account,loan, card,{
+        from: web3Account,
+      })
+      
+      console.log("After")
+      window.location.reload(false)
+    }else{
+      alert("Connect to metamask")
+    }
+    
   }
 
   useEffect(() => {
@@ -228,12 +252,12 @@ function VerifierDashboard() {
     <MDBContainer fluid className="p-4">
       <p>
         {"Public Key: "}
-        {web3Account}
-        {registered}
+        {web3Account?web3Account:"0x..........."}
+        
       </p>
 
       <MDBBtn className="primary" onClick={getRegistered}>
-        Registeration Details
+        View verifiable ID Details
       </MDBBtn>
       <MDBRow>
         <MDBCol
@@ -510,7 +534,7 @@ function VerifierDashboard() {
 <MDBModalDialog>
   <MDBModalContent>
     <MDBModalHeader>
-      <MDBModalTitle>Registeration Details</MDBModalTitle>
+      <MDBModalTitle>Verifiable ID Details</MDBModalTitle>
       <MDBBtn
         className="btn-close"
         color="none"
@@ -522,8 +546,17 @@ function VerifierDashboard() {
         <MDBCardBody>
           <MDBRow>
            {!registered? <MDBBtn className="primary" onClick={register}>
-        Register
-      </MDBBtn>:"You have registered"}
+        Generate Verifiable ID
+      </MDBBtn>:<>
+      <p>You have registered for</p>
+      <br/>
+      <ul styles={{marginLeft:'10px'}}>
+        {account && <li>Bank Account Creation</li>}
+
+        {loan && <li>Bank Loan</li>}
+        {card && <li>Request for Card</li>}
+      </ul>
+      </>}
            </MDBRow>
         </MDBCardBody>
       </MDBCard>

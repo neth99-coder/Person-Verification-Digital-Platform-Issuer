@@ -22,10 +22,13 @@ import axios from "axios";
 import authService from "../../services/authService";
 
 import bg from "../../assets/images/2154438.jpg";
+import Web3 from "web3";
+import { loadContracts } from "./../../utils/load-contracts";
 
 function VerifierDashboard() {
   const [basicModal, setBasicModal] = useState(false);
   const [OptionBox, setOptionBox] = useState(false);
+  const [RegisterationModal, setRegistrationModal] = useState(false);
   const [verifier_profile, setVerifierProfile] = useState([]);
   const [subscribedServices, setSubscribedServices] = useState([]);
   const [account, setAccount] = useState(false);
@@ -43,6 +46,18 @@ function VerifierDashboard() {
   const toggleShow = () => setBasicModal(!basicModal);
   const toggleOptions = () => setOptionBox(!OptionBox);
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
+  const toggleRegisterModal = () => setRegistrationModal(!RegisterationModal)
+
+  //web3
+
+  const [web3Api, setWeb3Api] = useState({
+    provider: null,
+    web3: null,
+    contract: null,
+  });
+
+  const [web3Account, setWeb3Account] = useState([]);
+  const [registered, setRegistered] = useState(true);
 
   const saveServiceChange = () => {
     const services = [];
@@ -149,10 +164,77 @@ function VerifierDashboard() {
         });
     };
     getVerifier();
+
+    const loadProvider = async () => {
+      let provider = null;
+      let contract = null;
+
+      if (window.ethereum) {
+        provider = window.ethereum;
+
+        try {
+          await provider.request({ method: "eth_requestAccounts" });
+        } catch {
+          console.error("User accounts access denied");
+        }
+      } else if (window.web3) {
+        provider = window.web3.currentProvider;
+      } else {
+        window.alert(
+          "No ethereum browser detected !! Check out your Metamask."
+        );
+      }
+      contract = await loadContracts("AuthVerifier", provider);
+      setWeb3Api({ web3: new Web3(provider), provider, contract });
+      console.log(provider);
+      console.log(contract);
+    };
+    loadProvider();
   }, []);
+
+  const getRegistered = async () => {
+    const { contract } = web3Api;
+    console.log("Hi");
+    const verifierExist = await contract.getVerifierExist({
+      from: web3Account,
+    });
+    console.log(verifierExist);
+
+    setRegistered(verifierExist);
+    toggleRegisterModal()
+  };
+
+  const register = async ()=>{
+    console.log("B4")
+    const { contract } = web3Api;
+    await contract.addVerifier({
+      from: web3Account,
+    })
+    console.log("After")
+    window.location.reload(false)
+  }
+
+  useEffect(() => {
+    const getAccounts = async () => {
+      let accounts = await web3Api.web3.eth.getAccounts();
+      console.log(accounts[0]);
+      setWeb3Account(accounts[0]);
+    };
+
+    web3Api.web3 && getAccounts();
+  }, [web3Api.web3]);
 
   return (
     <MDBContainer fluid className="p-4">
+      <p>
+        {"Public Key: "}
+        {web3Account}
+        {registered}
+      </p>
+
+      <MDBBtn className="primary" onClick={getRegistered}>
+        Registeration Details
+      </MDBBtn>
       <MDBRow>
         <MDBCol
           md="6"
@@ -424,6 +506,38 @@ function VerifierDashboard() {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
+      <MDBModal show={RegisterationModal} setShow={setRegistrationModal} tabIndex="-1">
+<MDBModalDialog>
+  <MDBModalContent>
+    <MDBModalHeader>
+      <MDBModalTitle>Registeration Details</MDBModalTitle>
+      <MDBBtn
+        className="btn-close"
+        color="none"
+        onClick={toggleRegisterModal}
+      ></MDBBtn>
+    </MDBModalHeader>
+    <MDBModalBody>
+      <MDBCard>
+        <MDBCardBody>
+          <MDBRow>
+           {!registered? <MDBBtn className="primary" onClick={register}>
+        Register
+      </MDBBtn>:"You have registered"}
+           </MDBRow>
+        </MDBCardBody>
+      </MDBCard>
+    </MDBModalBody>
+
+    <MDBModalFooter>
+      
+      <MDBBtn color="secondary" onClick={toggleRegisterModal}>
+        Close
+      </MDBBtn>
+    </MDBModalFooter>
+  </MDBModalContent>
+</MDBModalDialog>
+</MDBModal>
     </MDBContainer>
   );
 }

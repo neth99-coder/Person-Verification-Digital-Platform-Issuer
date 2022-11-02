@@ -292,6 +292,25 @@ const getPendingBanks = async (req, res) => {
   res.send(pendingList);
 };
 
+const checkPassword = async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    res.status(500).json({ success: false });
+    return;
+  } else {
+    bcrypt.compare(req.body.password, user.password, function (err, result) {
+      if (err) {
+        res.status(500).json({ success: false });
+      }
+      if (!result) {
+        res.send({ success: false, message: "passwords do not match" });
+      } else {
+        res.send({ success: true });
+      }
+    });
+  }
+};
+
 module.exports = {
   updatePassword,
   updateServices,
@@ -302,4 +321,5 @@ module.exports = {
   deleteUser,
   getPendingWalletUsers,
   getPendingBanks,
+  checkPassword,
 };

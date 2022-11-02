@@ -11,5 +11,6 @@ router.get(`/getPendingBanks`, userController.getPendingBanks);
 router.post(`/addUser`, userController.addUser);
 router.put("/updateUser/:id", userController.updateUser);
 router.delete("/deleteUser/:id", userController.deleteUser);
+router.post(`/checkPassword`, userController.checkPassword);
 
 module.exports = router;

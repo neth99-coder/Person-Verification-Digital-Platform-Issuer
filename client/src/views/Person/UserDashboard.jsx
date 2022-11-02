@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import QRCode from "react-qr-code";
 import {
   MDBBtn,
   MDBContainer,
@@ -24,16 +25,21 @@ import bg from "../../assets/images/2154438.jpg";
 
 function UserDashboard() {
   const [basicModal, setBasicModal] = useState(false);
+  const [QR, setQR] = useState(false);
   const [user_profile, setUserProfile] = useState([]);
 
+  const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [PasswordBox, setPasswordBox] = useState(false);
+  const [PasswordBox2, setPasswordBox2] = useState(false);
 
   const toggleShow = () => setBasicModal(!basicModal);
+  const toggleQR = () => setQR(!QR);
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
+  const togglePasswordBox2 = () => setPasswordBox2(!PasswordBox2);
 
   let User;
   const handleChange = (e) => {
@@ -46,6 +52,8 @@ function UserDashboard() {
       setNewPassword(value);
     } else if (name === "confirmPassword") {
       setConfirmPassword(value);
+    } else if (name === "password") {
+      setPassword(value);
     }
   };
 
@@ -81,6 +89,30 @@ function UserDashboard() {
           } else if (res.data.success) {
             alert("success");
             window.location.reload(false);
+          }
+        });
+    }
+  };
+
+  const handleGenerateQR = (e) => {
+    e.preventDefault();
+    if (password === "") {
+      alert("Please fill the field");
+    } else {
+      axios
+        .post("http://localhost:3001/api/v1/user/checkPassword", {
+          email: user_profile.email,
+          password: password,
+        })
+        .then((res) => {
+          if (res.data.message) {
+            alert("password incorrect!");
+          } else if (!res.data.success) {
+            alert("error");
+          } else if (res.data.success) {
+            togglePasswordBox2();
+            toggleQR();
+            console.log(`${user_profile}`);
           }
         });
     }
@@ -144,11 +176,7 @@ function UserDashboard() {
                 background="primary"
                 className="text-white mb-6 hover-focus"
               >
-                <MDBCardBody
-                  onClick={() => {
-                    window.location.href = "/qr";
-                  }}
-                >
+                <MDBCardBody onClick={togglePasswordBox2}>
                   <MDBCardTitle style={{ textAlign: "center" }}>
                     Generate ID
                   </MDBCardTitle>
@@ -265,7 +293,7 @@ function UserDashboard() {
               >
                 Change Password
               </MDBBtn>
-              <MDBBtn color="secondary" onClick={togglePasswordBox}>
+              <MDBBtn color="secondary" onClick={toggleShow}>
                 Close
               </MDBBtn>
             </MDBModalFooter>
@@ -350,6 +378,95 @@ function UserDashboard() {
               </MDBBtn>
               <MDBBtn type="submit" onClick={handlePasswordSubmit}>
                 Save changes
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+      <MDBModal show={PasswordBox2} setShow={setPasswordBox2} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Enter Password</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={togglePasswordBox2}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <div className="order-2 order-lg-1 d-flex flex-column align-items-center">
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="password"
+                    id="password"
+                    type="password"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="password"
+                    onChange={handleChange}
+                    value={password}
+                    required
+                  />
+                </div>
+              </div>
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={togglePasswordBox2}>
+                Close
+              </MDBBtn>
+              <MDBBtn type="submit" onClick={handleGenerateQR}>
+                Generate QR
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+      <MDBModal show={QR} setShow={setQR} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Scan this QR code uing your mobile</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleQR}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <div className="order-2 order-lg-1 d-flex flex-column align-items-center">
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <div
+                    style={{
+                      background: "white",
+                      padding: "25px",
+                      "border-radius": "10px",
+                    }}
+                  >
+                    <QRCode
+                      bgColor="#FFFFFF"
+                      value={JSON.stringify({
+                        first_name: user_profile.first_name,
+                        last_name: user_profile.last_name,
+                        status: user_profile.status,
+                        nationanality: user_profile.nationanality,
+                        nic: user_profile.nic,
+                        dob: user_profile.dob,
+                        email: user_profile.email,
+                        address: user_profile.address,
+                        contact_number: user_profile.contact_number,
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            </MDBModalBody>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggleQR}>
+                Close
               </MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>

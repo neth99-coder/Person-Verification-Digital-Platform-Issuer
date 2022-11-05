@@ -20,6 +20,7 @@ import {
 } from "mdb-react-ui-kit";
 import axios from "axios";
 import authService from "../../services/authService";
+import styles from "./bank.module.css";
 
 import bg from "../../assets/images/2154438.jpg";
 import Web3 from "web3";
@@ -46,7 +47,7 @@ function VerifierDashboard() {
   const toggleShow = () => setBasicModal(!basicModal);
   const toggleOptions = () => setOptionBox(!OptionBox);
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
-  const toggleRegisterModal = () => setRegistrationModal(!RegisterationModal)
+  const toggleRegisterModal = () => setRegistrationModal(!RegisterationModal);
 
   //web3
 
@@ -63,12 +64,12 @@ function VerifierDashboard() {
   //TODO: when we update service in database -> update it in blockchain as well
 
   const saveServiceChange = () => {
-    if(web3Account !== undefined){
+    if (web3Account !== undefined) {
       const services = [];
       account && services.push("Bank Account Creation");
       loan && services.push("Bank Loan Services");
       card && services.push("Credit Card Services");
-  
+
       axios
         .post("http://localhost:3001/api/v1/user/updateServices", {
           email: verifier_profile.email,
@@ -79,18 +80,17 @@ function VerifierDashboard() {
             alert("Error occured !!");
           } else {
             const { contract } = web3Api;
-            await contract.updateServices(account,loan, card,{
+            await contract.updateServices(account, loan, card, {
               from: web3Account,
-            })
+            });
             alert("success");
             // console.log(res.data)
             window.location.reload(false);
           }
         });
-    }else{
-      alert("Connect to metamask")
+    } else {
+      alert("Connect to metamask");
     }
-    
   };
 
   const handleChange = (e) => {
@@ -198,45 +198,43 @@ function VerifierDashboard() {
       }
       contract = await loadContracts("AuthVerifier", provider);
       setWeb3Api({ web3: new Web3(provider), provider, contract });
-      console.log(provider);
-      console.log(contract);
+      console.log(provider, "PROVIDER");
+      console.log(contract, "Contract");
     };
     loadProvider();
   }, []);
 
   const getRegistered = async () => {
-    console.log(web3Account,"Console")
-    if(web3Account !== undefined){
+    console.log(web3Account, "Console");
+    if (web3Account !== undefined) {
       const { contract } = web3Api;
       console.log("Hi");
       const verifierExist = await contract.getVerifierExist({
         from: web3Account,
       });
       console.log(verifierExist);
-  
+
       setRegistered(verifierExist);
-      toggleRegisterModal()
-    }else{
-      alert("Connect to metamask")
+      toggleRegisterModal();
+    } else {
+      alert("Connect to metamask");
     }
-    
   };
 
-  const register = async ()=>{
-    if(web3Account !== undefined){
-      console.log("B4")
+  const register = async () => {
+    if (web3Account !== undefined) {
+      console.log("B4");
       const { contract } = web3Api;
-      await contract.addVerifier(account,loan, card,{
+      await contract.addVerifier(account, loan, card, {
         from: web3Account,
-      })
-      
-      console.log("After")
-      window.location.reload(false)
-    }else{
-      alert("Connect to metamask")
+      });
+
+      console.log("After");
+      window.location.reload(false);
+    } else {
+      alert("Connect to metamask");
     }
-    
-  }
+  };
 
   useEffect(() => {
     const getAccounts = async () => {
@@ -250,15 +248,6 @@ function VerifierDashboard() {
 
   return (
     <MDBContainer fluid className="p-4">
-      <p>
-        {"Public Key: "}
-        {web3Account?web3Account:"0x..........."}
-        
-      </p>
-
-      <MDBBtn className="primary" onClick={getRegistered}>
-        View verifiable ID Details
-      </MDBBtn>
       <MDBRow>
         <MDBCol
           md="6"
@@ -269,37 +258,53 @@ function VerifierDashboard() {
             <span className="text-primary">Digital Platform</span>
           </h1>
 
-          <p className="px-3" style={{ color: "hsl(217, 10%, 50.8%)" }}>
+          <p className="px-3" style={{ marginTop:"-10pt",color: "hsl(217, 10%, 50.8%)" }}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
             itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
             at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
             aliquid ipsum atque?
           </p>
+          <div className="px-3" >
+            <MDBCard className={styles['public-key']} style={{display:"inline",backgroundColor:"rgb(0,0,0,0.05)",padding:"0.7vw",width:"6vw"}}>
+              {"Public Key: "}
+              {web3Account ? web3Account : "0x..........."}
+            </MDBCard>
+
+            <MDBBtn className={styles['id-details']} style={{display:"inline",marginLeft:"10pt",padding:"9pt 10pt",fontSize:"10pt"}} onClick={getRegistered}>
+              View verifiable ID Details
+            </MDBBtn>
+          </div>
         </MDBCol>
 
         <MDBCol md="6">
           <MDBCard className="my-5">
             <MDBCardBody className="p-5 pb-0">
-              <MDBCard
-                background="primary"
-                className="text-white mb-6 hover-focus"
-              >
-                <MDBCardBody onClick={toggleShow}>
-                  <MDBCardTitle style={{ textAlign: "center" }}>
-                    View Profile
-                  </MDBCardTitle>
-                </MDBCardBody>
-              </MDBCard>
-              <MDBCard
-                background="primary"
-                className="text-white mb-6 hover-focus"
-              >
-                <MDBCardBody onClick={toggleOptions}>
-                  <MDBCardTitle style={{ textAlign: "center" }}>
-                    Add New Service
-                  </MDBCardTitle>
-                </MDBCardBody>
-              </MDBCard>
+              <div className="verifier-buttons" style={{ marginTop: "20pt" }}>
+                <MDBCard
+                  background="primary"
+                  className="text-white mb-6 hover-focus"
+                >
+                  <MDBCardBody onClick={toggleShow}>
+                    <MDBCardTitle
+                      style={{ textAlign: "center", cursor: "pointer" }}
+                    >
+                      View Profile
+                    </MDBCardTitle>
+                  </MDBCardBody>
+                </MDBCard>
+                <MDBCard
+                  background="primary"
+                  className="text-white mb-6 hover-focus"
+                >
+                  <MDBCardBody onClick={toggleOptions}>
+                    <MDBCardTitle
+                      style={{ textAlign: "center", cursor: "pointer" }}
+                    >
+                      Add New Service
+                    </MDBCardTitle>
+                  </MDBCardBody>
+                </MDBCard>
+              </div>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -530,47 +535,54 @@ function VerifierDashboard() {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
-      <MDBModal show={RegisterationModal} setShow={setRegistrationModal} tabIndex="-1">
-<MDBModalDialog>
-  <MDBModalContent>
-    <MDBModalHeader>
-      <MDBModalTitle>Verifiable ID Details</MDBModalTitle>
-      <MDBBtn
-        className="btn-close"
-        color="none"
-        onClick={toggleRegisterModal}
-      ></MDBBtn>
-    </MDBModalHeader>
-    <MDBModalBody>
-      <MDBCard>
-        <MDBCardBody>
-          <MDBRow>
-           {!registered? <MDBBtn className="primary" onClick={register}>
-        Generate Verifiable ID
-      </MDBBtn>:<>
-      <p>You have registered for</p>
-      <br/>
-      <ul styles={{marginLeft:'10px'}}>
-        {account && <li>Bank Account Creation</li>}
+      <MDBModal
+        show={RegisterationModal}
+        setShow={setRegistrationModal}
+        tabIndex="-1"
+      >
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Verifiable ID Details</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleRegisterModal}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <MDBCard>
+                <MDBCardBody style={{ paddingLeft: "30px" }}>
+                  <MDBRow>
+                    {!registered ? (
+                      <MDBBtn className="primary" onClick={register}>
+                        Generate Verifiable ID
+                      </MDBBtn>
+                    ) : (
+                      <>
+                        <p>You have registered for</p>
+                        <br />
+                        <ul styles={{ marginLeft: "10px" }}>
+                          {account && <li>Bank Account Creation</li>}
 
-        {loan && <li>Bank Loan</li>}
-        {card && <li>Request for Card</li>}
-      </ul>
-      </>}
-           </MDBRow>
-        </MDBCardBody>
-      </MDBCard>
-    </MDBModalBody>
+                          {loan && <li>Bank Loan</li>}
+                          {card && <li>Request for Card</li>}
+                        </ul>
+                      </>
+                    )}
+                  </MDBRow>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBModalBody>
 
-    <MDBModalFooter>
-      
-      <MDBBtn color="secondary" onClick={toggleRegisterModal}>
-        Close
-      </MDBBtn>
-    </MDBModalFooter>
-  </MDBModalContent>
-</MDBModalDialog>
-</MDBModal>
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggleRegisterModal}>
+                Close
+              </MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </MDBContainer>
   );
 }

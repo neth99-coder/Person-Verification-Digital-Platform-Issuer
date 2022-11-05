@@ -1,0 +1,25 @@
+@media screen and (max-width:1500px) {
+    .id-details{
+        margin-top: 30pt;
+    }
+    
+    .public-key{
+        line-height: 5vw;
+    }
+}
+
+@media screen and (max-width:800px) {
+    .public-key{
+        line-height: 4.5vw;
+        font-size: 10pt;
+    }
+
+    
+}
+
+@media screen and (max-width:380px) {
+    .public-key{
+        line-height: 12vw;
+    }
+}
+

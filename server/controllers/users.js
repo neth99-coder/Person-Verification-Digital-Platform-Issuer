@@ -74,10 +74,12 @@ const addUser = async (req, res) => {
     const nic = req.files.nic_photo_id;
     const bc = req.files.bc_photo_id;
     const cc = req.files.cc_photo_id;
+    const pp = req.files.photo_id;
 
     const nic_type = nic != null ? nic.mimetype.split("/")[1] : "";
     const bc_type = bc != null ? bc.mimetype.split("/")[1] : "";
     const cc_type = cc != null ? cc.mimetype.split("/")[1] : "";
+    const pp_type = pp != null ? pp.mimetype.split("/")[1] : "";
 
     const addedServices = [];
     req.body.account == "true" && addedServices.push("Bank Account Creation");
@@ -117,6 +119,30 @@ const addUser = async (req, res) => {
       );
     }
 
+    if (req.body.role == "wallet_owner") {
+      if (pp != null) {
+        pp.mv(
+          `${__dirname}/../public/reg/${"pp_" + req.body.nic + "." + pp_type}`,
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
+      }
+    } else {
+      if (pp != null) {
+        pp.mv(
+          `${__dirname}/../public/reg/${"pp_" + req.body.name + "." + pp_type}`,
+          (err) => {
+            if (err) {
+              console.error(err);
+            }
+          }
+        );
+      }
+    }
+
     //TODO: password ??????
 
     let user = null;
@@ -128,6 +154,7 @@ const addUser = async (req, res) => {
         nationality: req.body.nationality,
         nic: req.body.nic,
         dob: req.body.dob,
+        photo_id: "pp_" + req.body.nic + "." + pp_type,
         nic_photo_id: "nic_" + req.body.nic + "." + nic_type,
         bc_photo_id: "bc_" + req.body.nic + "." + bc_type,
         email: req.body.email,
@@ -145,6 +172,7 @@ const addUser = async (req, res) => {
         contact_number: req.body.contact_number,
         role: req.body.role,
         isAccepted: req.body.isAccepted,
+        photo_id: "pp_" + req.body.name + "." + pp_type,
         cc_photo_id: "cc_" + req.body.name + "." + cc_type,
         name: req.body.name,
         services: addedServices,

@@ -47,6 +47,12 @@ const userSchema = mongoose.Schema({
       return this.role == "wallet_owner";
     },
   },
+  photo_id: {
+    type: String,
+    required: function () {
+      return this.role != "admin";
+    },
+  },
   nic_photo_id: {
     type: String,
     required: function () {

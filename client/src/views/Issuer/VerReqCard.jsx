@@ -15,14 +15,15 @@ import { Link } from "react-router-dom";
 import bankimg from "../../assets/images/bank.jpg";
 
 export default function VerReqCard(props) {
-
   return (
     <div className="reqCard m-2">
-      <MDBCard style={{ borderRadius: "15px", height: "325px", width: "200px" }}>
+      <MDBCard
+        style={{ borderRadius: "15px", height: "325px", width: "200px" }}
+      >
         <MDBCardBody className="text-center">
           <div className="mt-3 mb-4">
             <MDBCardImage
-              src={bankimg}
+              src={`http://localhost:3001/reg/${props.user.photo_id}`}
               className="rounded-circle"
               fluid
               style={{ width: "100px" }}
@@ -33,11 +34,15 @@ export default function VerReqCard(props) {
 
           <MDBBtn
             rounded
-          // onClick={() => {
-          //   window.location.href = "/verreq";
-          // }}
+            // onClick={() => {
+            //   window.location.href = "/verreq";
+            // }}
           >
-            <Link to={`../ver-requests/${props.user.name}`} state={{ obj: props.user }} style={{ color: "white" }}>
+            <Link
+              to={`../ver-requests/${props.user.name}`}
+              state={{ obj: props.user }}
+              style={{ color: "white" }}
+            >
               View
             </Link>
           </MDBBtn>

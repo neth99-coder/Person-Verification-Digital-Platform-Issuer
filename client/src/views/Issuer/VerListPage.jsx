@@ -28,28 +28,35 @@ export default function VerListPage() {
   }, []);
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-evenly",
-      }}
-    >
-      {/* <VerRequest />
+    <div>
+      <div>
+        <div className="p-5 text-center">
+          <p className="mb-3 fs-1 fw-bold">VERIFIER REQUESTS</p>
+        </div>
+      </div>
+      <div
+        style={{
+          width: "100vw",
+          padding: "20px",
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-evenly",
+        }}
+      >
+        {/* <VerRequest />
       <VerRequest />
       <VerRequest />
       <VerRequest /> */}
 
-      {requestList.length == 0 ? (
-        <h2>No Requests</h2>
-      ) : (
-        requestList?.map((cur_request, index) => {
-          return <VerRequest key={index} user={cur_request} />;
-        })
-      )}
+        {requestList.length == 0 ? (
+          <h2>No Requests</h2>
+        ) : (
+          requestList?.map((cur_request, index) => {
+            return <VerRequest key={index} user={cur_request} />;
+          })
+        )}
+      </div>
     </div>
   );
 }

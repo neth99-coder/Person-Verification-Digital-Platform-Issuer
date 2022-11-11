@@ -47,10 +47,26 @@ export default function IDReqViewPage() {
 
   return (
     <div>
+      <div className="p-5 text-center">
+        <div className="p-5">
+          <img
+            src={`http://localhost:3001/reg/${obj.photo_id}`}
+            alt=""
+            style={{
+              width: "200px",
+              height: "200px",
+              borderRadius: "50%",
+            }}
+          />
+        </div>
+        <h1 className="mb-3 fs-1 fw-bold">
+          User Profile - {obj.first_name} {obj.last_name}
+        </h1>
+      </div>
       <div>
         <MDBContainer fluid>
           <MDBRow>
-            <MDBCol>
+            <MDBCol center>
               <MDBCard>
                 <MDBCardBody>
                   <MDBRow>
@@ -176,7 +192,7 @@ export default function IDReqViewPage() {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-evenly",
+                    justifyContent: "end",
                     margin: "20px",
                   }}
                 >
@@ -199,13 +215,13 @@ export default function IDReqViewPage() {
                 </div>
               </MDBCard>
             </MDBCol>
-            <MDBCol
+            {/* <MDBCol
               md="10"
               lg="6"
               className="order-1 order-lg-2 d-flex align-items-center"
             >
               <MDBCardImage src={bg} fluid />
-            </MDBCol>
+            </MDBCol> */}
           </MDBRow>
         </MDBContainer>
       </div>

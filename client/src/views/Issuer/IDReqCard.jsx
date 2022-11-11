@@ -23,7 +23,8 @@ export default function IDReqCard(props) {
         <MDBCardBody className="text-center">
           <div className="mt-3 mb-4">
             <MDBCardImage
-              src={userimg}
+              src={`http://localhost:3001/reg/${props.user.photo_id}`}
+              alt=""
               className="rounded-circle"
               fluid
               style={{ width: "100px" }}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Axios from "axios";
+import AddImage from "../../components/common/addImage";
 
 import {
   MDBBtn,
@@ -18,12 +19,14 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 
+import sbi from "../../assets/images/sample_bank.png";
 import bg2 from "../../assets/images/Tiny cartoon business people reading legal document.jpg";
 import bg3 from "../../assets/images/5869.jpg";
 
 function VerReg() {
   const [bank, setBank] = useState({
     name: "",
+    photo_id: "",
     cc_photo_id: "",
     email: "",
     password: "XXXXX",
@@ -33,6 +36,7 @@ function VerReg() {
     isAccepted: "0",
   });
 
+  const [sampleImg, setSampleImg] = useState(sbi);
   const [validated, setValidated] = useState(false); //form validation
   //const navigate = useNavigate();
   const [account, setAccount] = useState(false);
@@ -62,6 +66,14 @@ function VerReg() {
     }
   }
 
+  function handleSaveImage(newImageUrl, newImage) {
+    setSampleImg(newImageUrl);
+    console.log(newImage);
+    setBank((prev_val) => {
+      return { ...prev_val, photo_id: newImage };
+    });
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -69,15 +81,14 @@ function VerReg() {
     if (form.checkValidity() === false) {
       setValidated(true);
       e.stopPropagation();
-    }
-    else{
+    } else {
       setValidated(true);
       //console.log(person)
-  
+
       const formData = new FormData();
-      
-  
+
       formData.append("name", bank.name);
+      formData.append("photo_id", bank.photo_id);
       formData.append("cc_photo_id", bank.cc_photo_id);
       formData.append("email", bank.email);
       formData.append("password", bank.password);
@@ -86,9 +97,9 @@ function VerReg() {
       formData.append("role", bank.role);
       formData.append("isAccepted", bank.isAccepted);
       formData.append("account", account);
-      formData.append('loan', loan);
-      formData.append('card', card);
-  
+      formData.append("loan", loan);
+      formData.append("card", card);
+
       Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -101,11 +112,10 @@ function VerReg() {
         } else {
           // console.log("success");
           //navigate("/");
-          window.location.href = '/'
+          window.location.href = "/";
         }
-      });  
+      });
     }
-   
   }
   return (
     <MDBContainer fluid>
@@ -126,10 +136,7 @@ function VerReg() {
                 lg="6"
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
-                <h2
-                  classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
-                  style={{ color: "blue" }}
-                >
+                <h2 className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                   Register as a Verifier
                 </h2>
 
@@ -138,12 +145,16 @@ function VerReg() {
                     label="Name of Organization"
                     id="form1"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="name"
                     onChange={handleChange}
                     value={bank.first_name}
-                    minLength = '2'
-                    maxLength= '50'
+                    minLength="2"
+                    maxLength="50"
                     required
                   />
                 </div>
@@ -162,13 +173,17 @@ function VerReg() {
                     label="Address"
                     id="form3"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px"}}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="address"
                     onChange={handleChange}
                     value={bank.address}
                     required
-                    minLength='5'
-                    maxLength='1024'
+                    minLength="5"
+                    maxLength="1024"
                   />
                 </div>
 
@@ -185,7 +200,11 @@ function VerReg() {
                     label="Contact Number"
                     id="form5"
                     type="text"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="contact_number"
                     onChange={handleChange}
                     value={bank.contact_number}
@@ -197,19 +216,23 @@ function VerReg() {
                     label="E-mail"
                     id="form6"
                     type="email"
-                    style={{ display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="email"
                     onChange={handleChange}
                     value={bank.email}
                     required
-                    minLength='5'
-                    maxLength='255'
+                    minLength="5"
+                    maxLength="255"
                   />
                 </div>
 
                 <button
                   type="button"
-                  class="btn btn-warning ms-2"
+                  className="btn btn-primary ms-2"
                   onClick={() => {
                     document.querySelector(".firstPage").style.display = "none";
                     document.querySelector(".secondPage").style.display =
@@ -243,7 +266,7 @@ function VerReg() {
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
                 <p
-                  classNAme="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
                   style={{ color: "red" }}
                 >
                   * Do not submit forged documents *
@@ -258,7 +281,7 @@ function VerReg() {
                 >
                   <h5>Select required services</h5>
 
-                  <div class="form-check d-flex justify-content-left mb-3">
+                  <div className="form-check d-flex justify-content-left mb-3">
                     <input
                       type="checkbox"
                       id="0"
@@ -266,15 +289,15 @@ function VerReg() {
                       style={{ float: "right" }}
                       onChange={(e) => {
                         setAccount(!account);
-            
+
                         //console.log(services)
                       }}
                     />
-                    <label class="form-check-label" for="ch1">
+                    <label className="form-check-label" for="ch1">
                       Bank Account Creation
                     </label>
                   </div>
-                  <div class="form-check d-flex justify-content-left mb-3">
+                  <div className="form-check d-flex justify-content-left mb-3">
                     <input
                       type="checkbox"
                       id="1"
@@ -285,11 +308,11 @@ function VerReg() {
                         //console.log(services)
                       }}
                     />
-                    <label class="form-check-label" for="ch2">
+                    <label className="form-check-label" for="ch2">
                       Bank Loan Services
                     </label>
                   </div>
-                  <div class="form-check d-flex justify-content-left mb-3">
+                  <div className="form-check d-flex justify-content-left mb-3">
                     <input
                       type="checkbox"
                       id="2"
@@ -300,7 +323,7 @@ function VerReg() {
                         //console.log(services)
                       }}
                     />
-                    <label class="form-check-label" for="ch3">
+                    <label className="form-check-label" for="ch3">
                       Credit Card Services
                     </label>
                   </div>
@@ -309,9 +332,13 @@ function VerReg() {
                 <div className="d-flex flex-column align-items-center mb-4">
                   <MDBInput
                     type="file"
-                    class="form-control"
+                    className="form-control"
                     id="bankDoc"
-                    style={{display: "inline-block", width: "25vw", minWidth: "200px" }}
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
                     name="cc_photo_id"
                     onChange={(e) => {
                       setBank((prev_val) => {
@@ -328,7 +355,7 @@ function VerReg() {
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <button
                     type="button"
-                    class="btn btn-warning ms-2"
+                    className="btn btn-warning ms-2"
                     onClick={() => {
                       document.querySelector(".firstPage").style.display =
                         "block";
@@ -338,8 +365,17 @@ function VerReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" class="btn btn-primary ms-2">
-                    Submit
+                  <button
+                    type="button"
+                    className="btn btn-primary ms-2"
+                    onClick={() => {
+                      document.querySelector(".thirdPage").style.display =
+                        "block";
+                      document.querySelector(".secondPage").style.display =
+                        "none";
+                    }}
+                  >
+                    Next Page
                   </button>
                 </div>
               </MDBCol>
@@ -350,6 +386,70 @@ function VerReg() {
                 className="order-1 order-lg-2 d-flex align-items-center"
               >
                 <MDBCardImage src={bg2} fluid />
+              </MDBCol>
+            </MDBRow>
+          </MDBCardBody>
+        </MDBCard>
+        <MDBCard
+          className="text-black m-5 thirdPage"
+          style={{ borderRadius: "25px", display: "none" }}
+        >
+          <MDBCardBody>
+            <MDBRow center>
+              <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center">
+                <h2
+                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  style={{ marginBottom: "20px" }}
+                >
+                  Upload Your Bank Logo
+                </h2>
+                <div className="container-fluid p-10">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      padding: "20px",
+                    }}
+                  >
+                    <img
+                      src={sampleImg}
+                      alt=""
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        border: "5px solid",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </div>
+                  <AddImage
+                    saveImage={handleSaveImage}
+                    removeImage={() => {}}
+                    aspectRatio={1 / 1}
+                  />
+                </div>
+
+                <div
+                  style={{ display: "flex", flexDirection: "row" }}
+                  className="p-5"
+                >
+                  <button
+                    type="button"
+                    className="btn btn-warning  ms-2"
+                    onClick={() => {
+                      document.querySelector(".secondPage").style.display =
+                        "block";
+                      document.querySelector(".thirdPage").style.display =
+                        "none";
+                    }}
+                  >
+                    Prev Page
+                  </button>
+                  <button type="submit" className="btn btn-primary  ms-2">
+                    Submit
+                  </button>
+                </div>
               </MDBCol>
             </MDBRow>
           </MDBCardBody>

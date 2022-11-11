@@ -9,8 +9,8 @@ import {
   MDBCardImage,
 } from "mdb-react-ui-kit";
 import bg from "../../assets/images/idaccept.jpg";
-import { useLocation, useNavigate } from 'react-router-dom';
-import { saveAs } from 'file-saver'
+import { useLocation, useNavigate } from "react-router-dom";
+import { saveAs } from "file-saver";
 import Axios from "axios";
 
 export default function IDReqViewPage() {
@@ -19,30 +19,47 @@ export default function IDReqViewPage() {
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
-
     //console.log(e.target.name === 'accept')
-    (e.target.name === 'accept') ? obj.isAccepted = '1' : obj.isAccepted = '-1';
+    e.target.name === "accept"
+      ? (obj.isAccepted = "1")
+      : (obj.isAccepted = "-1");
 
-    await Axios.put("http://localhost:3001/api/v1/user/updateUser/" + obj._id, obj, {
-      headers: {
-        // 'x-auth-token': authService.getUserToken(),
-      },
-    }).then((res) => {
+    await Axios.put(
+      "http://localhost:3001/api/v1/user/updateUser/" + obj._id,
+      obj,
+      {
+        headers: {
+          // 'x-auth-token': authService.getUserToken(),
+        },
+      }
+    ).then((res) => {
       if (!res.data.success) {
-        console.log(res.data.error)
+        console.log(res.data.error);
         alert("Error occured !!");
       } else {
-        alert("Succefully Updated")
+        alert("Succefully Updated");
         //console.log("success");
         navigate("/issuer/ver-requests");
       }
-    })
-  }
-
-
+    });
+  };
 
   return (
     <div>
+      <div className="p-5 text-center">
+        <div className="p-5">
+          <img
+            src={`http://localhost:3001/reg/${obj.photo_id}`}
+            alt=""
+            style={{
+              width: "200px",
+              height: "200px",
+              borderRadius: "50%",
+            }}
+          />
+        </div>
+        <h1 className="mb-3 fs-1 fw-bold">Verifier Profile - {obj.name}</h1>
+      </div>
       <div>
         <MDBContainer fluid>
           <MDBRow>
@@ -117,7 +134,9 @@ export default function IDReqViewPage() {
                     </MDBCol>
                     <MDBCol sm="9">
                       <MDBCardText className="text-muted">
-                        {obj.services.map((cur) => { return (cur + ", ") })}
+                        {obj.services.map((cur) => {
+                          return cur + ", ";
+                        })}
                       </MDBCardText>
                     </MDBCol>
                   </MDBRow>
@@ -133,11 +152,11 @@ export default function IDReqViewPage() {
                           onClick={() => {
                             saveAs(
                               `http://localhost:3001/reg/${obj.cc_photo_id}`,
-                              'cc_copy.pdf',
-                            )
+                              "cc_copy.pdf"
+                            );
                           }}
                         >
-                          {' '}
+                          {" "}
                           Download
                         </button>
                       </MDBCardText>
@@ -149,26 +168,36 @@ export default function IDReqViewPage() {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-evenly",
+                    justifyContent: "end",
                     margin: "20px",
                   }}
                 >
-                  <button type="button" class="btn btn-primary  ms-2" onClick={handleClick} name="accept">
+                  <button
+                    type="button"
+                    class="btn btn-primary  ms-2"
+                    onClick={handleClick}
+                    name="accept"
+                  >
                     Accept
                   </button>
-                  <button type="button" class="btn btn-warning  ms-2" onClick={handleClick} name="reject">
+                  <button
+                    type="button"
+                    class="btn btn-warning  ms-2"
+                    onClick={handleClick}
+                    name="reject"
+                  >
                     Reject
                   </button>
                 </div>
               </MDBCard>
             </MDBCol>
-            <MDBCol
+            {/* <MDBCol
               md="10"
               lg="6"
               className="order-1 order-lg-2 d-flex align-items-center"
             >
               <MDBCardImage src={bg} fluid />
-            </MDBCol>
+            </MDBCol> */}
           </MDBRow>
         </MDBContainer>
       </div>

@@ -9,6 +9,7 @@ import {
   MDBCardBody,
   MDBCardText,
   MDBCardTitle,
+  MDBCardImage,
   MDBModal,
   MDBModalDialog,
   MDBModalContent,
@@ -190,7 +191,16 @@ function UserDashboard() {
         <MDBModalDialog>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Profile Info</MDBModalTitle>
+              <MDBModalTitle>
+                <MDBCardImage
+                  src={`http://localhost:3001/reg/${user_profile.photo_id}`}
+                  alt=""
+                  className="rounded-circle me-3"
+                  fluid
+                  style={{ width: "75px" }}
+                />
+                Profile Info
+              </MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"

@@ -17,6 +17,7 @@ import {
   MDBModalBody,
   MDBModalFooter,
   MDBInput,
+  MDBCardImage,
 } from "mdb-react-ui-kit";
 import axios from "axios";
 import authService from "../../services/authService";
@@ -151,6 +152,8 @@ function VerifierDashboard() {
     getVerifier();
   }, []);
 
+  console.log(verifier_profile);
+
   return (
     <MDBContainer fluid className="p-4">
       <MDBRow>
@@ -253,7 +256,16 @@ function VerifierDashboard() {
         <MDBModalDialog>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Profile Info</MDBModalTitle>
+              <MDBModalTitle>
+                <MDBCardImage
+                  src={`http://localhost:3001/reg/${verifier_profile.photo_id}`}
+                  alt=""
+                  className="rounded-circle me-3"
+                  fluid
+                  style={{ width: "75px" }}
+                />
+                Profile Info
+              </MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"

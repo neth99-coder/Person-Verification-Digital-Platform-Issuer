@@ -6,9 +6,11 @@
     "@chakra-ui/react": "^2.3.4",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@metamask/detect-provider": "^2.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@truffle/contract": "^4.6.5",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "bootstrap-select": "^1.13.18",
@@ -27,9 +29,10 @@
     "react-icons-md": "^1.1.0",
     "react-qr-code": "^2.0.8",
     "react-router-dom": "^6.4.0",
-    "react-scripts": "5.0.1",
-    "react-toastify": "^9.0.8",
-    "web-vitals": "^2.1.4"
+    "react-scripts": "^4.0.3",
+    "react-toastify": "^9.0.0",
+    "web-vitals": "^2.1.4",
+    "web3": "^1.8.0"
   },
   "scripts": {
     "start": "react-scripts start",

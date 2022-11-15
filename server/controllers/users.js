@@ -339,6 +339,18 @@ const checkPassword = async (req, res) => {
   }
 };
 
+const addVerifierDid = (req, res) => {
+  console.log(req.body);
+  const user = User.findOneAndUpdate(
+    { email: req.body.email },
+    { public_key: req.body.public_key },
+    function (err, doc) {
+      if (err) return res.send(500, { error: err });
+      return res.send("Succesfully added verifier DID.");
+    }
+  );
+};
+
 module.exports = {
   updatePassword,
   updateServices,
@@ -350,4 +362,5 @@ module.exports = {
   getPendingWalletUsers,
   getPendingBanks,
   checkPassword,
+  addVerifierDid,
 };

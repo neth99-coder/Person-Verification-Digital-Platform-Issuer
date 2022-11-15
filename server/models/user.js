@@ -108,6 +108,11 @@ const userSchema = mongoose.Schema({
     minlength: 5,
     maxlength: 1024,
   },
+  public_key:{
+    type: String,
+    minlength: 42,
+    maxlength: 1024,
+  },
   contact_number: {
     type: String,
     required: function () {

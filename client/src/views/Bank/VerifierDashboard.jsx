@@ -244,8 +244,14 @@ function VerifierDashboard() {
           "No ethereum browser detected !! Check out your Metamask."
         );
       }
-      contract = await loadContracts("AuthVerifier", provider);
-      setWeb3Api({ web3: new Web3(provider), provider, contract });
+      try{
+        contract = await loadContracts("AuthVerifier", provider);
+        setWeb3Api({ web3: new Web3(provider), provider, contract });
+      }
+      catch (error){
+          console.log(error);
+          toast.error("You have to enable web3 in this browser. Otherwise page will not function properly", { theme: "dark" })
+      }
       //console.log(provider, "PROVIDER");
       // console.log(contract, "Contract");
     };
@@ -253,9 +259,10 @@ function VerifierDashboard() {
   }, []);
 
   const getRegistered = async () => {
-    //console.log(web3Account, "Console");
+    
     let _verifierExist = false;
-    if (web3Account !== undefined) {
+    if (web3Account !== undefined && web3Account.length != 0) {
+      console.log(web3Account, "Console");
       if(publicKeyDb != undefined && web3Account != publicKeyDb){
         toast.error("Different public key", { theme: "dark" });
       }else{

@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 import authService from "../../services/authService";
 import styles from "./bank.module.css";
+import { toast } from "react-toastify";
 
 import bg from "../../assets/images/2154438.jpg";
 import Web3 from "web3";
@@ -46,7 +47,14 @@ function VerifierDashboard() {
   const [PasswordBox, setPasswordBox] = useState(false);
 
   const toggleShow = () => setBasicModal(!basicModal);
-  const toggleOptions = () => setOptionBox(!OptionBox);
+  const toggleOptions = () => {
+    
+    subscribedServices.includes("Bank Account Creation") ?
+            setAccount(true):setAccount(false);
+            subscribedServices.includes("Bank Loan Services") ? setLoan(true): setLoan(false);
+            subscribedServices.includes("Credit Card Services") ? setCard(true): setCard(false);
+            setOptionBox(!OptionBox);
+  }
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
   const toggleRegisterModal = () => setRegistrationModal(!RegisterationModal);
 
@@ -64,7 +72,7 @@ function VerifierDashboard() {
   //TODO: when open the modal and register -> add then update services
   //TODO: when we update service in database -> update it in blockchain as well
 
-  const saveServiceChange = () => {
+  const saveServiceChange = async () => {
     let metaMaskError = false;
     if (web3Account !== undefined) {
       const services = [];
@@ -96,7 +104,7 @@ function VerifierDashboard() {
             email: verifier_profile.email,
             services: services,
           });
-          toggleOptions();
+          window.location.reload(false);
         } else {
           console.log("Inside error")
           window.location.reload(false);
@@ -109,7 +117,14 @@ function VerifierDashboard() {
 
       updateServices();
     } else {
-      alert("Connect to metamask");
+      //alert("Connect to metamask");
+      
+      // subscribedServices.services.includes("Bank Account Creation") &&
+      //       setAccount(true);
+      //       subscribedServices.services.includes("Bank Loan Services") && setLoan(true);
+      //       subscribedServices.services.includes("Credit Card Services") && setCard(true);
+      toast.error("Connect to metamask", { theme: "dark" });
+      
     }
   };
 
@@ -237,7 +252,7 @@ function VerifierDashboard() {
       setRegistered(verifierExist);
       toggleRegisterModal();
     } else {
-      alert("Connect to metamask");
+      toast.error("Connect to metamask", { theme: "dark" });
     }
   };
 
@@ -252,7 +267,7 @@ function VerifierDashboard() {
       //console.log("After");
       window.location.reload(false);
     } else {
-      alert("Connect to metamask");
+      toast.error("Connect to metamask", { theme: "dark" });
     }
   };
 

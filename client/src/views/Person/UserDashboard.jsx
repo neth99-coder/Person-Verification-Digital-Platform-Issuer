@@ -146,7 +146,7 @@ function UserDashboard() {
 
   const encrypt = () => {
     //console.log(user_profile)
-    //full name | address | nic | contact number | status | dob | email | nationality
+    //full name | address | nic | contact number | status | dob | email | nationality | secret
     const text =
       user_profile.first_name +
       " " +
@@ -164,7 +164,9 @@ function UserDashboard() {
       "|" +
       user_profile.email +
       "|" +
-      user_profile.nationality;
+      user_profile.nationality +
+      "|" +
+      process.env.REACT_APP_SECRET;
     //console.log(text)
     const cipher = cryptoConverter.encrypt(text);
     setCipher(cipher);
@@ -172,27 +174,28 @@ function UserDashboard() {
     return cipher;
   };
 
-  // const decrypt = () => {
-  //   const original = cryptoConverter.decrypt(cipher).toString();
-  //   const data = original.split("|");
-  //   const person = {
-  //     name: data[0],
-  //     address: data[1],
-  //     nic: data[2],
-  //     contact_number: data[3],
-  //     status: data[4],
-  //     dob: data[5],
-  //     email: data[6],
-  //     nationality: data[7],
-  //   };
-  //   console.log(data);
-  //   console.log(person);
-  // };
+  const decrypt = () => {
+    const original = cryptoConverter.decrypt(cipher).toString();
+    const data = original.split("|");
+    const person = {
+      name: data[0],
+      address: data[1],
+      nic: data[2],
+      contact_number: data[3],
+      status: data[4],
+      dob: data[5],
+      email: data[6],
+      nationality: data[7],
+      secret: data[8],
+    };
+    console.log(data);
+    console.log(person);
+  };
 
   return (
     <MDBContainer fluid className="p-4">
       <MDBRow>
-        {/* <button onClick={decrypt}>Decrypt</button> */}
+        <button onClick={decrypt}>Decrypt</button>
         <MDBCol
           md="6"
           className="text-center text-md-start d-flex flex-column "

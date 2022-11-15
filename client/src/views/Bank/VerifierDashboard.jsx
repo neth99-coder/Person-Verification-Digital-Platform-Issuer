@@ -39,6 +39,8 @@ function VerifierDashboard() {
   const [card, setCard] = useState(false);
   const [validated, setValidated] = useState(false); //form validation
   const navigate = useNavigate();
+  const [publicKeyDb, setPublicKeyDb] = useState("");
+  const [verifierExist, setVerifierExist] = useState(false);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -49,12 +51,18 @@ function VerifierDashboard() {
   const toggleShow = () => setBasicModal(!basicModal);
   const toggleOptions = () => {
     
-    subscribedServices.includes("Bank Account Creation") ?
-            setAccount(true):setAccount(false);
-            subscribedServices.includes("Bank Loan Services") ? setLoan(true): setLoan(false);
-            subscribedServices.includes("Credit Card Services") ? setCard(true): setCard(false);
-            setOptionBox(!OptionBox);
-  }
+    subscribedServices.includes("Bank Account Creation")
+      ? setAccount(true)
+      : setAccount(false);
+    subscribedServices.includes("Bank Loan Services")
+      ? setLoan(true)
+      : setLoan(false);
+    subscribedServices.includes("Credit Card Services")
+      ? setCard(true)
+      : setCard(false);
+      
+    setOptionBox(!OptionBox);
+  };
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
   const toggleRegisterModal = () => setRegistrationModal(!RegisterationModal);
 
@@ -67,12 +75,15 @@ function VerifierDashboard() {
   });
 
   const [web3Account, setWeb3Account] = useState([]);
-  const [registered, setRegistered] = useState(true);
+  const [registered, setRegistered] = useState(false);
 
   //TODO: when open the modal and register -> add then update services
   //TODO: when we update service in database -> update it in blockchain as well
 
   const saveServiceChange = async () => {
+    // if(!registered){
+    //   toast.error("No DID", { theme: "dark" });
+    // }
     let metaMaskError = false;
     if (web3Account !== undefined) {
       const services = [];
@@ -80,51 +91,50 @@ function VerifierDashboard() {
       loan && services.push("Bank Loan Services");
       card && services.push("Credit Card Services");
 
-      // axios
-      //   .post("http://localhost:3001/api/v1/user/updateServices", {
-      //     email: verifier_profile.email,
-      //     services: services,
-      //   })
-
       const updateServices = async () => {
-        const { contract } = web3Api;
-        try {
-          const result = await contract.updateServices(account, loan, card, {
-            from: web3Account,
-          });
-          //console.log(result);
-        } catch (error) {
-          metaMaskError = true;
-          console.log("Error: ", error);
-          //window.location.reload(false);
+        
+        if (publicKeyDb != undefined && web3Account != publicKeyDb){
+          toast.error("Different public key", { theme: "dark" });
         }
-        if (!metaMaskError) {
-          console.log("Inside no error")
-          await axios.post("http://localhost:3001/api/v1/user/updateServices", {
-            email: verifier_profile.email,
-            services: services,
-          });
-          window.location.reload(false);
-        } else {
-          console.log("Inside error")
-          window.location.reload(false);
+        else if(!registered){
+          toast.error("No DID  Yet !!", { theme: "dark" });
         }
-
-        //alert("success");
-        // console.log(res.data)
-        // window.location.reload(false);
-      };
+        else{
+          const { contract } = web3Api;
+          try {
+            const result = await contract.updateServices(account, loan, card, {
+              from: web3Account,
+            });
+            //console.log(result);
+          } catch (error) {
+            metaMaskError = true;
+            console.log("Error: ", error);
+            //window.location.reload(false);
+          }
+          if (!metaMaskError) {
+            console.log("Inside no error");
+            await axios.post("http://localhost:3001/api/v1/user/updateServices", {
+              email: verifier_profile.email,
+              services: services,
+            });
+            window.location.reload(false);
+          } else {
+            console.log("Inside error");
+            window.location.reload(false);
+          }
+        };
+        }
+        
 
       updateServices();
     } else {
       //alert("Connect to metamask");
-      
+
       // subscribedServices.services.includes("Bank Account Creation") &&
       //       setAccount(true);
       //       subscribedServices.services.includes("Bank Loan Services") && setLoan(true);
       //       subscribedServices.services.includes("Credit Card Services") && setCard(true);
       toast.error("Connect to metamask", { theme: "dark" });
-      
     }
   };
 
@@ -197,6 +207,9 @@ function VerifierDashboard() {
           },
         })
         .then((res) => {
+          console.log(res.data.public_key, " DB PUBLIC KEY");
+          setPublicKeyDb(res.data.public_key);
+
           setVerifierProfile(res.data);
           // setAvailable([
           //   "Bank Account Creation",
@@ -231,8 +244,14 @@ function VerifierDashboard() {
           "No ethereum browser detected !! Check out your Metamask."
         );
       }
-      contract = await loadContracts("AuthVerifier", provider);
-      setWeb3Api({ web3: new Web3(provider), provider, contract });
+      try{
+        contract = await loadContracts("AuthVerifier", provider);
+        setWeb3Api({ web3: new Web3(provider), provider, contract });
+      }
+      catch (error){
+          console.log(error);
+          toast.error("You have to enable web3 in this browser. Otherwise page will not function properly", { theme: "dark" })
+      }
       //console.log(provider, "PROVIDER");
       // console.log(contract, "Contract");
     };
@@ -240,32 +259,69 @@ function VerifierDashboard() {
   }, []);
 
   const getRegistered = async () => {
-    //console.log(web3Account, "Console");
-    if (web3Account !== undefined) {
-      const { contract } = web3Api;
-      console.log("Hi");
-      const verifierExist = await contract.getVerifierExist({
-        from: web3Account,
-      });
-      //console.log(verifierExist);
+    
+    let _verifierExist = false;
+    if (web3Account !== undefined && web3Account.length != 0) {
+      console.log(web3Account, "Console");
+      if(publicKeyDb != undefined && web3Account != publicKeyDb){
+        toast.error("Different public key", { theme: "dark" });
+      }else{
+        const { contract } = web3Api;
+        //console.log("Hi");
+        _verifierExist = await contract.getVerifierExist({
+          from: web3Account,
+        });
+        //console.log(verifierExist);
+        if(publicKeyDb == web3Account){
+          setRegistered(_verifierExist);
+          setVerifierExist(_verifierExist);
+        }else{
+          setVerifierExist(_verifierExist);
+          if(publicKeyDb == undefined && _verifierExist){
+            toast.error("Suspicious Behaviour Detected", { theme: "dark" });
+          }
+                    
+        }
+        
+        // toggleRegisterModal();
+      }
 
-      setRegistered(verifierExist);
-      toggleRegisterModal();
     } else {
       toast.error("Connect to metamask", { theme: "dark" });
     }
+    
+    return _verifierExist;
   };
 
   const register = async () => {
+    let metaMaskError= false;
     if (web3Account !== undefined) {
       //console.log("B4");
       const { contract } = web3Api;
-      await contract.addVerifier(account, loan, card, {
-        from: web3Account,
-      });
+      try{
+        await contract.addVerifier(account, loan, card, {
+          from: web3Account,
+        });
+      }catch (error){
+          metaMaskError = true;
+          console.log(error)
+      }
+
+      if (!metaMaskError) {
+        console.log("Inside no error");
+        await axios.post("http://localhost:3001/api/v1/user/addVerifierDid", {
+          email: verifier_profile.email,
+          public_key: web3Account,
+        });
+        window.location.reload(false);
+      } else {
+        console.log("Inside error");
+        window.location.reload(false);
+      }
+      
 
       //console.log("After");
-      window.location.reload(false);
+      //window.location.reload(false);
     } else {
       toast.error("Connect to metamask", { theme: "dark" });
     }
@@ -279,6 +335,7 @@ function VerifierDashboard() {
     };
 
     web3Api.web3 && getAccounts();
+    
   }, [web3Api.web3]);
 
   return (
@@ -324,7 +381,7 @@ function VerifierDashboard() {
                 padding: "9pt 10pt",
                 fontSize: "10pt",
               }}
-              onClick={getRegistered}
+              onClick={async ()=>{const result = await getRegistered(); (publicKeyDb == undefined && !result && web3Account != undefined) ? toggleRegisterModal() : (web3Account == publicKeyDb && web3Account != undefined) && toggleRegisterModal() }} //registered && toggleRegisterModal();}}
             >
               View verifiable ID Details
             </MDBBtn>
@@ -353,7 +410,11 @@ function VerifierDashboard() {
                   className="text-white mb-6 hover-focus"
                   role="button"
                 >
-                  <MDBCardBody onClick={toggleOptions}>
+                  <MDBCardBody onClick={()=>{getRegistered(); 
+                    if(web3Account == publicKeyDb && web3Account != undefined) {toggleOptions() }
+                    else if (publicKeyDb == undefined){toast.error("No DID Yet !!", { theme: "dark" });}
+              
+                    }}> 
                     <MDBCardTitle
                       style={{ textAlign: "center", cursor: "pointer" }}
                     >

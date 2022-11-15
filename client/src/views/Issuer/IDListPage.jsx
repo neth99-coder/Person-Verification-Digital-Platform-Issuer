@@ -26,7 +26,7 @@ export default function IDListPage() {
     <div>
       <div>
         <div className="p-5 text-center">
-          <p className="mb-3 fs-1 fw-bold">USER ID REQUESTS</p>
+          <p className="mb-3 fs-1 fw-bold text-primary">USER ID REQUESTS</p>
         </div>
       </div>
       <div

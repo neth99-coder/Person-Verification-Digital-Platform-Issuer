@@ -31,7 +31,7 @@ export default function VerListPage() {
     <div>
       <div>
         <div className="p-5 text-center">
-          <p className="mb-3 fs-1 fw-bold">VERIFIER REQUESTS</p>
+          <p className="mb-3 fs-1 fw-bold text-primary">VERIFIER ID REQUESTS</p>
         </div>
       </div>
       <div

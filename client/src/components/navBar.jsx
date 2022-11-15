@@ -153,6 +153,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
                 </li>
               )}
               {user && (
+                
                 <li className="nav-item dropdown">
                   <span
                     className="nav-link dropdown-toggle hover-focus"
@@ -166,10 +167,12 @@ export default function NavBar({ theme, toggleTheme, user }) {
                       style={{ fill: "grey" }}
                     ></MdManageAccounts>
                   </span>
+                  
                   <ul
-                    className="dropdown-menu collapsed"
+                    className="dropdown-menu collapsed dropdown-menu-end"
                     id="profile-collapse"
                     aria-labelledby="profileDropdown"
+                    
                   >
                     <li>
                       <span className="dropdown-item">{`${user.email}`}</span>
@@ -201,6 +204,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
                       </li>
                     )}
                   </ul>
+                  
                 </li>
               )}
               <li className="nav-item d-flex align-items-center">

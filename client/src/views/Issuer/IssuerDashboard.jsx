@@ -43,13 +43,14 @@ function IssuerDashboard() {
               <MDBCard
                 background="primary"
                 className="text-white mb-6 hover-focus"
+                role="button"
               >
                 <MDBCardBody
                   onClick={() => {
                     window.location.href = "/issuer/id-requests";
                   }}
                 >
-                  <MDBCardTitle style={{ textAlign: "center" }}>
+                  <MDBCardTitle style={{ textAlign: "center" }} >
                     View ID Requests
                   </MDBCardTitle>
                 </MDBCardBody>
@@ -57,6 +58,7 @@ function IssuerDashboard() {
               <MDBCard
                 background="primary"
                 className="text-white mb-6 hover-focus"
+                role="button"
               >
                 <MDBCardBody
                   onClick={() => {

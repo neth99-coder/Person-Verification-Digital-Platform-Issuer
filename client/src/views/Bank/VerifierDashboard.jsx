@@ -65,30 +65,49 @@ function VerifierDashboard() {
   //TODO: when we update service in database -> update it in blockchain as well
 
   const saveServiceChange = () => {
+    let metaMaskError = false;
     if (web3Account !== undefined) {
       const services = [];
       account && services.push("Bank Account Creation");
       loan && services.push("Bank Loan Services");
       card && services.push("Credit Card Services");
 
-      axios
-        .post("http://localhost:3001/api/v1/user/updateServices", {
-          email: verifier_profile.email,
-          services: services,
-        })
-        .then(async (res) => {
-          if (res.data.error) {
-            alert("Error occured !!");
-          } else {
-            const { contract } = web3Api;
-            await contract.updateServices(account, loan, card, {
-              from: web3Account,
-            });
-            alert("success");
-            // console.log(res.data)
-            window.location.reload(false);
-          }
-        });
+      // axios
+      //   .post("http://localhost:3001/api/v1/user/updateServices", {
+      //     email: verifier_profile.email,
+      //     services: services,
+      //   })
+
+      const updateServices = async () => {
+        const { contract } = web3Api;
+        try {
+          const result = await contract.updateServices(account, loan, card, {
+            from: web3Account,
+          });
+          //console.log(result);
+        } catch (error) {
+          metaMaskError = true;
+          console.log("Error: ", error);
+          //window.location.reload(false);
+        }
+        if (!metaMaskError) {
+          console.log("Inside no error")
+          await axios.post("http://localhost:3001/api/v1/user/updateServices", {
+            email: verifier_profile.email,
+            services: services,
+          });
+          toggleOptions();
+        } else {
+          console.log("Inside error")
+          window.location.reload(false);
+        }
+
+        //alert("success");
+        // console.log(res.data)
+        // window.location.reload(false);
+      };
+
+      updateServices();
     } else {
       alert("Connect to metamask");
     }
@@ -199,21 +218,21 @@ function VerifierDashboard() {
       }
       contract = await loadContracts("AuthVerifier", provider);
       setWeb3Api({ web3: new Web3(provider), provider, contract });
-      console.log(provider, "PROVIDER");
-      console.log(contract, "Contract");
+      //console.log(provider, "PROVIDER");
+      // console.log(contract, "Contract");
     };
     loadProvider();
   }, []);
 
   const getRegistered = async () => {
-    console.log(web3Account, "Console");
+    //console.log(web3Account, "Console");
     if (web3Account !== undefined) {
       const { contract } = web3Api;
       console.log("Hi");
       const verifierExist = await contract.getVerifierExist({
         from: web3Account,
       });
-      console.log(verifierExist);
+      //console.log(verifierExist);
 
       setRegistered(verifierExist);
       toggleRegisterModal();
@@ -224,13 +243,13 @@ function VerifierDashboard() {
 
   const register = async () => {
     if (web3Account !== undefined) {
-      console.log("B4");
+      //console.log("B4");
       const { contract } = web3Api;
       await contract.addVerifier(account, loan, card, {
         from: web3Account,
       });
 
-      console.log("After");
+      //console.log("After");
       window.location.reload(false);
     } else {
       alert("Connect to metamask");
@@ -240,7 +259,7 @@ function VerifierDashboard() {
   useEffect(() => {
     const getAccounts = async () => {
       let accounts = await web3Api.web3.eth.getAccounts();
-      console.log(accounts[0]);
+      //console.log(accounts[0]);
       setWeb3Account(accounts[0]);
     };
 
@@ -259,19 +278,39 @@ function VerifierDashboard() {
             <span className="text-primary">Digital Platform</span>
           </h1>
 
-          <p className="px-3" style={{ marginTop:"-10pt",color: "hsl(217, 10%, 50.8%)" }}>
+          <p
+            className="px-3"
+            style={{ marginTop: "-10pt", color: "hsl(217, 10%, 50.8%)" }}
+          >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
             itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
             at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
             aliquid ipsum atque?
           </p>
-          <div className="px-3" >
-            <MDBCard className={styles['public-key']} style={{display:"inline",backgroundColor:"rgb(0,0,0,0.05)",padding:"0.7vw",width:"6vw"}}>
+          <div className="px-3">
+            <MDBCard
+              className={styles["public-key"]}
+              style={{
+                display: "inline",
+                backgroundColor: "rgb(0,0,0,0.05)",
+                padding: "0.7vw",
+                width: "6vw",
+              }}
+            >
               {"Public Key: "}
               {web3Account ? web3Account : "0x..........."}
             </MDBCard>
 
-            <MDBBtn className={styles['id-details']} style={{display:"inline",marginLeft:"10pt",padding:"9pt 10pt",fontSize:"10pt"}} onClick={getRegistered}>
+            <MDBBtn
+              className={styles["id-details"]}
+              style={{
+                display: "inline",
+                marginLeft: "10pt",
+                padding: "9pt 10pt",
+                fontSize: "10pt",
+              }}
+              onClick={getRegistered}
+            >
               View verifiable ID Details
             </MDBBtn>
           </div>
@@ -284,6 +323,7 @@ function VerifierDashboard() {
                 <MDBCard
                   background="primary"
                   className="text-white mb-6 hover-focus"
+                  role="button"
                 >
                   <MDBCardBody onClick={toggleShow}>
                     <MDBCardTitle
@@ -296,6 +336,7 @@ function VerifierDashboard() {
                 <MDBCard
                   background="primary"
                   className="text-white mb-6 hover-focus"
+                  role="button"
                 >
                   <MDBCardBody onClick={toggleOptions}>
                     <MDBCardTitle

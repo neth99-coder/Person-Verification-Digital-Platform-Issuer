@@ -24,6 +24,8 @@ import authService from "../../services/authService";
 
 import bg from "../../assets/images/2154438.jpg";
 
+import cryptoConverter from "../../utils/crypto-converter";
+
 function UserDashboard() {
   const [basicModal, setBasicModal] = useState(false);
   const [QR, setQR] = useState(false);
@@ -41,6 +43,7 @@ function UserDashboard() {
   const toggleQR = () => setQR(!QR);
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
   const togglePasswordBox2 = () => setPasswordBox2(!PasswordBox2);
+  const [cipher, setCipher] = useState("");
 
   let User;
   const handleChange = (e) => {
@@ -111,6 +114,7 @@ function UserDashboard() {
           } else if (!res.data.success) {
             alert("error");
           } else if (res.data.success) {
+            encrypt();
             togglePasswordBox2();
             toggleQR();
             console.log(`${user_profile}`);
@@ -140,9 +144,55 @@ function UserDashboard() {
     getUser();
   }, []);
 
+  const encrypt = () => {
+    //console.log(user_profile)
+    //full name | address | nic | contact number | status | dob | email | nationality
+    const text =
+      user_profile.first_name +
+      " " +
+      user_profile.last_name +
+      "|" +
+      user_profile.address +
+      "|" +
+      user_profile.nic +
+      "|" +
+      user_profile.contact_number +
+      "|" +
+      user_profile.status +
+      "|" +
+      user_profile.dob +
+      "|" +
+      user_profile.email +
+      "|" +
+      user_profile.nationality;
+    //console.log(text)
+    const cipher = cryptoConverter.encrypt(text);
+    setCipher(cipher);
+    console.log(cipher);
+    return cipher;
+  };
+
+  // const decrypt = () => {
+  //   const original = cryptoConverter.decrypt(cipher).toString();
+  //   const data = original.split("|");
+  //   const person = {
+  //     name: data[0],
+  //     address: data[1],
+  //     nic: data[2],
+  //     contact_number: data[3],
+  //     status: data[4],
+  //     dob: data[5],
+  //     email: data[6],
+  //     nationality: data[7],
+  //   };
+  //   console.log(data);
+  //   console.log(person);
+  // };
+
   return (
     <MDBContainer fluid className="p-4">
       <MDBRow>
+        {/* <button onClick={decrypt}>Decrypt</button> */}
         <MDBCol
           md="6"
           className="text-center text-md-start d-flex flex-column "
@@ -166,6 +216,7 @@ function UserDashboard() {
               <MDBCard
                 background="primary"
                 className="text-white mb-6 hover-focus"
+                role="button"
               >
                 <MDBCardBody onClick={toggleShow}>
                   <MDBCardTitle style={{ textAlign: "center" }}>
@@ -176,6 +227,7 @@ function UserDashboard() {
               <MDBCard
                 background="primary"
                 className="text-white mb-6 hover-focus"
+                role="button"
               >
                 <MDBCardBody onClick={togglePasswordBox2}>
                   <MDBCardTitle style={{ textAlign: "center" }}>
@@ -456,20 +508,7 @@ function UserDashboard() {
                       "border-radius": "10px",
                     }}
                   >
-                    <QRCode
-                      bgColor="#FFFFFF"
-                      value={JSON.stringify({
-                        first_name: user_profile.first_name,
-                        last_name: user_profile.last_name,
-                        status: user_profile.status,
-                        nationanality: user_profile.nationanality,
-                        nic: user_profile.nic,
-                        dob: user_profile.dob,
-                        email: user_profile.email,
-                        address: user_profile.address,
-                        contact_number: user_profile.contact_number,
-                      })}
-                    />
+                    <QRCode bgColor="#FFFFFF" value={cipher} />
                   </div>
                 </div>
               </div>

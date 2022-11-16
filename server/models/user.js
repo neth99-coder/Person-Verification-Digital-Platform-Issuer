@@ -28,6 +28,13 @@ const userSchema = mongoose.Schema({
     },
     enum: ["Single", "Married", "Divorced", "Widowed"],
   },
+  gender: {
+    type: String,
+    required: function () {
+      return this.role == "wallet_owner";
+    },
+    enum: ["Male", "Female"],
+  },
   nationality: {
     type: String,
     required: function () {

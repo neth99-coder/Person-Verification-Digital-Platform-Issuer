@@ -17,6 +17,7 @@ import {
 } from "mdb-react-ui-kit";
 import bg1 from "../../assets/images/Data_security_05.jpg";
 import bg2 from "../../assets/images/Tiny cartoon business people reading legal document.jpg";
+import bg3 from "../../assets/images/signupbanner.jpg";
 import { HiHome } from "react-icons/fa";
 import { Button } from "bootstrap";
 import { useState } from "react";
@@ -47,6 +48,7 @@ function UsrReg() {
     contact_number: "",
     role: "wallet_owner",
     isAccepted: "0",
+    gender:"Male"
   });
 
   const [src, setsrc] = useState(
@@ -95,12 +97,16 @@ function UsrReg() {
       setPerson((prev_val) => {
         return { ...prev_val, email: value };
       });
+    }else if (name === "gender") {
+      setPerson((prev_val) => {
+        return { ...prev_val, gender: value };
+      });
     }
   }
 
   function handleSaveImage(newImageUrl, newImage) {
     setsrc(newImageUrl);
-    console.log(newImage);
+    console.log(newImage,newImageUrl);
     setPerson((prev_val) => {
       return { ...prev_val, photo_id: newImage };
     });
@@ -135,6 +141,7 @@ function UsrReg() {
       formData.append("contact_number", person.contact_number);
       formData.append("role", person.role);
       formData.append("isAccepted", person.isAccepted);
+      formData.append("gender", person.gender);
 
       console.log(...formData);
 
@@ -167,7 +174,7 @@ function UsrReg() {
           className="text-black m-5 firstPage"
           style={{ borderRadius: "25px" }}
         >
-          <MDBCardBody>
+          <MDBCardBody className="m-auto">
             <MDBRow>
               <MDBCol
                 md="10"
@@ -175,13 +182,13 @@ function UsrReg() {
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
                 <h2
-                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h2 fw-bold mx-1 mx-md-4 mt-2"
                   style={{ color: "blue", marginBottom: "20px" }}
                 >
                   Register as a User
                 </h2>
 
-                <div className="d-flex flex-row align-items-center mb-4 ">
+                <div className="d-flex flex-row align-items-center mb-3 ">
                   <MDBInput
                     label="First Name"
                     id="form1"
@@ -200,7 +207,7 @@ function UsrReg() {
                   />
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-3">
                   <MDBInput
                     label="Last Name"
                     id="form2"
@@ -218,68 +225,8 @@ function UsrReg() {
                     maxLength="50"
                   />
                 </div>
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "25vw",
-                      minWidth: "200px",
-                    }}
-                  >
-                    <label className="mb-1">Marital Status</label>
-                    <Form.Select
-                      value={person.status}
-                      onChange={handleChange}
-                      name="status"
-                    >
-                      <option value="Single">Single</option>
-                      <option value="Married">Married</option>
-                      <option value="Divorced">Divorced</option>
-                    </Form.Select>
-                  </div>
-                </div>
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "25vw",
-                      minWidth: "200px",
-                    }}
-                  >
-                    <label className="mb-1">Nationality</label>
-                    <Form.Select
-                      value={person.nationality}
-                      onChange={handleChange}
-                      name="nationality"
-                    >
-                      <option value="Sinhalese">Sinhalese</option>
-                      <option value="Tamils">Tamil</option>
-                      <option value="Moor">Moor</option>
-                      <option value="Burgher">Burgher</option>
-                      <option value="Malay">Malay</option>
-                      <option value="Vedda">Vedda</option>
-                    </Form.Select>
-                  </div>
-                </div>
 
-                <div className="d-flex flex-row align-items-center mb-4">
-                  <MDBInput
-                    label="NIC Number"
-                    id="form3"
-                    type="text"
-                    style={{
-                      display: "inline-block",
-                      width: "25vw",
-                      minWidth: "200px",
-                    }}
-                    name="nic"
-                    onChange={handleChange}
-                    value={person.nic}
-                    required
-                  />
-                </div>
-
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-3">
                   <MDBInput
                     label="DOB"
                     id="form4"
@@ -312,21 +259,87 @@ function UsrReg() {
                   />
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-3">
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
+                    <label className="mb-1">Gender</label>
+                    <Form.Select
+                      value={person.gender}
+                      onChange={handleChange}
+                      name="gender"
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </Form.Select>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-row align-items-center mb-3">
                   <MDBInput
-                    label="Phone Number"
-                    id="form5"
+                    label="NIC Number"
+                    id="form3"
                     type="text"
                     style={{
                       display: "inline-block",
                       width: "25vw",
                       minWidth: "200px",
                     }}
-                    name="contact_number"
+                    name="nic"
                     onChange={handleChange}
-                    value={person.contact_number}
+                    value={person.nic}
                     required
+                    pattern="[0-9]{9}V|[0-9]{12}"
                   />
+                </div>
+
+                <div className="d-flex flex-row align-items-center mb-3">
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
+                    <label className="mb-1">Marital Status</label>
+                    <Form.Select
+                      value={person.status}
+                      onChange={handleChange}
+                      name="status"
+                    >
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                    </Form.Select>
+                  </div>
+                </div>
+
+                <div className="d-flex flex-row align-items-center mb-3">
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
+                    <label className="mb-1">Nationality</label>
+                    <Form.Select
+                      value={person.nationality}
+                      onChange={handleChange}
+                      name="nationality"
+                    >
+                      <option value="Sinhalese">Sinhalese</option>
+                      <option value="Tamils">Tamil</option>
+                      <option value="Moor">Moor</option>
+                      <option value="Burgher">Burgher</option>
+                      <option value="Malay">Malay</option>
+                      <option value="Vedda">Vedda</option>
+                    </Form.Select>
+                  </div>
                 </div>
 
                 <button
@@ -343,34 +356,34 @@ function UsrReg() {
               </MDBCol>
 
               <MDBCol
-                md="10"
-                lg="6"
-                className="order-1 order-lg-2 d-flex align-items-center"
+                md="6"
+                lg="5"
+                className="order-1 order-lg-2 d-flex align-items-center "
               >
-                <MDBCardImage src={bg1} fluid />
+                <MDBCardImage src={bg1} fluid className="align-self-center" />
               </MDBCol>
             </MDBRow>
           </MDBCardBody>
         </MDBCard>
         <MDBCard
-          className="text-black m-5 secondPage"
+          className="text-black m-3 secondPage mt-5"
           style={{ borderRadius: "25px", display: "none" }}
         >
-          <MDBCardBody>
+          <MDBCardBody className="mb-1">
             <MDBRow>
               <MDBCol
                 md="10"
                 lg="6"
-                className="order-2 order-lg-1 d-flex flex-column align-items-center"
+                className="order-2 order-lg-1 d-flex flex-column align-items-center "
               >
                 <p
-                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h4 fw-bold mb-5 mx-1 mx-md-4 mt-2"
                   style={{ color: "red" }}
                 >
                   * Do not submit forged documents *
                 </p>
 
-                <div className="d-flex flex-row align-items-center mb-4 ">
+                <div className="d-flex flex-row align-items-center mb-5 ">
                   <MDBInput
                     label="Address"
                     id="form6"
@@ -408,7 +421,7 @@ function UsrReg() {
                     }}
                     required
                   />
-                  <p style={{ color: "blue" }}>upload copy of NIC</p>
+                  <p style={{ color: "blue", marginTop:"10px" }}>upload copy of NIC</p>
                 </div>
 
                 <div className="d-flex flex-column align-items-center mb-4">
@@ -429,10 +442,10 @@ function UsrReg() {
                     }}
                     required
                   />
-                  <p style={{ color: "blue" }}>upload Birth Certificate copy</p>
+                  <p style={{ color: "blue" , marginTop:"10px"}}>upload Birth Certificate copy</p>
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-5">
                   <MDBInput
                     label="email"
                     id="form7"
@@ -448,6 +461,23 @@ function UsrReg() {
                     required
                     minLength="5"
                     maxLength="255"
+                  />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBInput
+                    label="Phone Number"
+                    id="form5"
+                    type="text"
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                    name="contact_number"
+                    onChange={handleChange}
+                    value={person.contact_number}
+                    required
+                    pattern="[0-9]{10}"
                   />
                 </div>
 
@@ -490,28 +520,28 @@ function UsrReg() {
           </MDBCardBody>
         </MDBCard>
         <MDBCard
-          className="text-black m-5 thirdPage"
+          className="text-black m-3 thirdPage mt-5"
           style={{ borderRadius: "25px", display: "none" }}
         >
-          <MDBCardBody>
-            <MDBRow center>
-              <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center">
+          <MDBCardBody >
+            <MDBRow center className="pb-3">
+              <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center ">
                 <h2
-                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
-                  style={{ marginBottom: "20px" }}
+                  className="text-center h4 fw-bold mb-5 mx-1 mx-md-4 mt-5 pb-4"
+                  // style={{ marginBottom: "10px" }}
                 >
                   Upload Your Profile Picture
                 </h2>
-                <div className="container-fluid p-10">
+                <div className="container-fluid p-10 mt-3">
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "row",
                       justifyContent: "center",
-                      padding: "20px",
+                      padding: "30px",
                     }}
                   >
-                    <img
+                    {/* <img
                       src={src}
                       alt=""
                       style={{
@@ -520,18 +550,19 @@ function UsrReg() {
                         border: "5px solid",
                         borderRadius: "50%",
                       }}
-                    />
+                    /> */}
                   </div>
                   <AddImage
                     saveImage={handleSaveImage}
                     removeImage={() => {}}
                     aspectRatio={1 / 1}
+                    className="w-75"
                   />
                 </div>
 
                 <div
                   style={{ display: "flex", flexDirection: "row" }}
-                  className="p-5"
+                  className="p-5 mt-5"
                 >
                   <button
                     type="button"
@@ -549,6 +580,14 @@ function UsrReg() {
                     Submit
                   </button>
                 </div>
+              </MDBCol>
+
+              <MDBCol
+                md="10"
+                lg="6"
+                className="order-1 order-lg-2 d-flex align-items-center"
+              >
+                <MDBCardImage src={bg3} fluid />
               </MDBCol>
             </MDBRow>
           </MDBCardBody>

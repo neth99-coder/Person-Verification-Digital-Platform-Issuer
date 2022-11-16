@@ -163,6 +163,7 @@ const addUser = async (req, res) => {
         contact_number: req.body.contact_number,
         role: req.body.role,
         isAccepted: req.body.isAccepted,
+        gender:req.body.gender,
       });
     } else {
       user = new User({

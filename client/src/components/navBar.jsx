@@ -13,7 +13,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
   const isWalletOwner = user && user.role === "wallet_owner";
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-custom mb-5">
+      <nav className="navbar navbar-expand-lg navbar-custom">
         <div className="container-fluid">
           {!user && (
             <a className="navbar-brand hover-focus" href="/">

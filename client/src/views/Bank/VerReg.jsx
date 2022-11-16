@@ -22,7 +22,7 @@ import {
 import sbi from "../../assets/images/sample_bank.png";
 import bg2 from "../../assets/images/Tiny cartoon business people reading legal document.jpg";
 import bg3 from "../../assets/images/5869.jpg";
-
+import bg4 from "../../assets/images/signupbanner.jpg";
 function VerReg() {
   const [bank, setBank] = useState({
     name: "",
@@ -136,7 +136,7 @@ function VerReg() {
                 lg="6"
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
-                <h2 className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                <h2 className="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-5" style={{ color: "blue", marginBottom: "20px" }}>
                   Register as a Verifier
                 </h2>
 
@@ -266,7 +266,7 @@ function VerReg() {
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
                 <p
-                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
+                  className="text-center h4 fw-bold mb-4 mx-1 mx-md-4 mt-5"
                   style={{ color: "red" }}
                 >
                   * Do not submit forged documents *
@@ -279,9 +279,9 @@ function VerReg() {
                     alignContent: "center",
                   }}
                 >
-                  <h5>Select required services</h5>
+                  <h5 className="justify-content-left mb-3 mt-2">Select required services</h5>
 
-                  <div className="form-check d-flex justify-content-left mb-3">
+                  <div className="form-check d-flex justify-content-left mb-3 mt-2">
                     <input
                       type="checkbox"
                       id="0"
@@ -329,7 +329,7 @@ function VerReg() {
                   </div>
                 </div>
 
-                <div className="d-flex flex-column align-items-center mb-4">
+                <div className="d-flex flex-column align-items-center mb-4 mt-3">
                   <MDBInput
                     type="file"
                     className="form-control"
@@ -347,15 +347,15 @@ function VerReg() {
                     }}
                     required
                   />
-                  <p style={{ color: "blue" }}>
+                  <p style={{ color: "blue", marginTop:"10px" }}>
                     upload proof of company registration
                   </p>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ display: "flex", flexDirection: "row" }} >
                   <button
                     type="button"
-                    className="btn btn-warning ms-2"
+                    className="btn btn-warning ms-2 mb-5"
                     onClick={() => {
                       document.querySelector(".firstPage").style.display =
                         "block";
@@ -367,7 +367,7 @@ function VerReg() {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-primary ms-2"
+                    className="btn btn-primary ms-2 mb-5"
                     onClick={() => {
                       document.querySelector(".thirdPage").style.display =
                         "block";
@@ -395,25 +395,25 @@ function VerReg() {
           style={{ borderRadius: "25px", display: "none" }}
         >
           <MDBCardBody>
-            <MDBRow center>
-              <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center">
+          <MDBRow center className="pb-3">
+              <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center ">
                 <h2
-                  className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4"
-                  style={{ marginBottom: "20px" }}
+                  className="text-center h4 fw-bold mb-5 mx-1 mx-md-4 mt-5 pb-4"
+                  // style={{ marginBottom: "10px" }}
                 >
-                  Upload Your Bank Logo
+                  Upload Bank Logo
                 </h2>
-                <div className="container-fluid p-10">
+                <div className="container-fluid p-10 mt-3">
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "row",
                       justifyContent: "center",
-                      padding: "20px",
+                      padding: "15px",
                     }}
                   >
-                    <img
-                      src={sampleImg}
+                    {/* <img
+                      src={src}
                       alt=""
                       style={{
                         width: "200px",
@@ -421,12 +421,13 @@ function VerReg() {
                         border: "5px solid",
                         borderRadius: "50%",
                       }}
-                    />
+                    /> */}
                   </div>
                   <AddImage
                     saveImage={handleSaveImage}
                     removeImage={() => {}}
                     aspectRatio={1 / 1}
+                    className="w-75"
                   />
                 </div>
 
@@ -450,6 +451,14 @@ function VerReg() {
                     Submit
                   </button>
                 </div>
+              </MDBCol>
+
+              <MDBCol
+                md="10"
+                lg="5"
+                className="order-1 order-lg-2 d-flex align-items-center"
+              >
+                <MDBCardImage src={bg4} fluid />
               </MDBCol>
             </MDBRow>
           </MDBCardBody>

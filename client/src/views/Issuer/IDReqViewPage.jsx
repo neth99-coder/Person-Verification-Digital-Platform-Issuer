@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import Axios from "axios";
 import { toast } from "react-toastify";
+
 export default function IDReqViewPage() {
   let location = useLocation();
   let { obj } = location.state;
@@ -50,7 +51,7 @@ export default function IDReqViewPage() {
       <div className="p-5 text-center">
         <div className="p-5">
           <img
-            src={`http://localhost:3001/reg/${obj.photo_id}`}
+            src={obj.photo_id.url}
             alt=""
             style={{
               width: "200px",
@@ -155,8 +156,8 @@ export default function IDReqViewPage() {
                         className="btn  btn-outline-dark btn-sm"
                         onClick={() => {
                           saveAs(
-                            `http://localhost:3001/reg/${obj.nic_photo_id}`,
-                            "nic_copy.pdf"
+                            obj.nic_photo_id.url,
+                            "nic_copy"
                           );
                         }}
                       >
@@ -176,8 +177,8 @@ export default function IDReqViewPage() {
                           className="btn  btn-outline-dark btn-sm"
                           onClick={() => {
                             saveAs(
-                              `http://localhost:3001/reg/${obj.bc_photo_id}`,
-                              "bc_copy.pdf"
+                              obj.bc_photo_id.url,
+                              "bc_copy"
                             );
                           }}
                         >

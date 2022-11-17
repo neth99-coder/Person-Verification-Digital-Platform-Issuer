@@ -76,7 +76,7 @@ function VerifierDashboard() {
 
   const [web3Account, setWeb3Account] = useState([]);
   const [registered, setRegistered] = useState(false);
-
+  const [profilePic, setProfilePic] = useState("")
   //TODO: when open the modal and register -> add then update services
   //TODO: when we update service in database -> update it in blockchain as well
 
@@ -207,9 +207,9 @@ function VerifierDashboard() {
           },
         })
         .then((res) => {
-          console.log(res.data.public_key, " DB PUBLIC KEY");
+          //console.log(res.data.public_key, " DB PUBLIC KEY");
           setPublicKeyDb(res.data.public_key);
-
+          setProfilePic(res.data.photo_id.url)
           setVerifierProfile(res.data);
           // setAvailable([
           //   "Bank Account Creation",
@@ -484,7 +484,7 @@ function VerifierDashboard() {
             <MDBModalHeader>
               <MDBModalTitle>
                 <MDBCardImage
-                  src={`http://localhost:3001/reg/${verifier_profile.photo_id}`}
+                  src={profilePic}
                   alt=""
                   className="rounded-circle me-3"
                   fluid

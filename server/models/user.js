@@ -55,28 +55,64 @@ const userSchema = mongoose.Schema({
     },
   },
   photo_id: {
-    type: String,
-    required: function () {
-      return this.role != "admin";
-    },
+    public_id: {
+      type: String,
+      required: function () {
+        return this.role != "admin" ;
+      },},
+    
+    url: {
+        type: String,
+        required: function () {
+          return this.role != "admin";
+        },
+    
+  }
   },
   nic_photo_id: {
-    type: String,
-    required: function () {
-      return this.role == "wallet_owner";
-    },
+    public_id: {
+      type: String,
+      required: function () {
+        return this.role == "wallet_owner";
+      },},
+    
+    url: {
+        type: String,
+        required: function () {
+          return this.role == "wallet_owner";
+        },
+    
+  }
   },
   bc_photo_id: {
-    type: String,
-    required: function () {
-      return this.role == "wallet_owner";
-    },
+    public_id: {
+      type: String,
+      required: function () {
+        return this.role == "wallet_owner";
+      },},
+    
+    url: {
+        type: String,
+        required: function () {
+          return this.role == "wallet_owner";
+        },
+    
+  }
   },
   cc_photo_id: {
-    type: String,
-    required: function () {
-      return this.role == "bank";
-    },
+    public_id: {
+      type: String,
+      required: function () {
+        return this.role == "bank";
+      },},
+    
+    url: {
+        type: String,
+        required: function () {
+          return this.role == "bank";
+        },
+    
+  }
   },
   name: {
     type: String,

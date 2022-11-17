@@ -5,9 +5,10 @@ const transporter = require("../helpers/transporter");
 var generator = require("generate-password");
 const bcrypt = require("bcrypt");
 const { has } = require("config");
+const cloudinary = require("../helpers/cloudinary");
 
 const updatePassword = async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const user = await User.findOne({ email: req.body.email });
   console.log(user);
   if (!user) {
@@ -67,82 +68,89 @@ const getUsers = async (req, res) => {
   res.send(userList);
 };
 
-const addUser = async (req, res) => {
+const addUser = async (req, res,next) => {
   const doesExist = await User.findOne({ email: req.body.email });
-
+  let result_bc = null;
+  let result_cc = null;
+  let result_nic = null;
+  let result_pp = null;
+  console.log("b4exist")
   if (!doesExist) {
-    const nic = req.files.nic_photo_id;
-    const bc = req.files.bc_photo_id;
-    const cc = req.files.cc_photo_id;
-    const pp = req.files.photo_id;
+    console.log("inside exist")
+    const nic = req.body.nic_photo_id;
+    const bc = req.body.bc_photo_id;
+    const cc = req.body.cc_photo_id;
+    const pp = req.body.photo_id;
+    console.log("after get photo")
+  //console.log(pp)
 
-    const nic_type = nic != null ? nic.mimetype.split("/")[1] : "";
-    const bc_type = bc != null ? bc.mimetype.split("/")[1] : "";
-    const cc_type = cc != null ? cc.mimetype.split("/")[1] : "";
-    const pp_type = pp != null ? pp.mimetype.split("/")[1] : "";
+    // const nic_type = nic != null ? nic.mimetype.split("/")[1] : "";
+    // const bc_type = bc != null ? bc.mimetype.split("/")[1] : "";
+    // const cc_type = cc != null ? cc.mimetype.split("/")[1] : "";
+    // const pp_type = pp != null ? pp.mimetype.split("/")[1] : "";
 
     const addedServices = [];
     req.body.account == "true" && addedServices.push("Bank Account Creation");
     req.body.loan == "true" && addedServices.push("Bank Loan Services");
-    req.body.card == "true" && addedServices.push("Credit Card Services");
-
+    req.body.card == "true" && addedServices.push("Credit Card Services");  
+    console.log("after services")
     if (nic != null) {
-      nic.mv(
-        `${__dirname}/../public/reg/${"nic_" + req.body.nic + "." + nic_type}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
+      console.log("Not here")
+      try{
+        result_nic = await cloudinary.uploader.upload(nic, {folder:"dwallet"})
+      }catch(err){
+        console.log(err)
+        return res.status(201).json({
+          error: "ERROR CLOUD", 
+          success: false,
+        });
+      }
+   
+    
     }
 
     if (bc != null) {
-      bc.mv(
-        `${__dirname}/../public/reg/${"bc_" + req.body.nic + "." + bc_type}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
+      try{
+        result_bc = await cloudinary.uploader.upload(bc, {folder:"dwallet"})
+      }catch(err){
+        console.log(err)
+        return res.status(201).json({
+          error: "ERROR CLOUD", 
+          success: false,
+        });
+      }
+      
     }
 
     if (cc != null) {
-      cc.mv(
-        `${__dirname}/../public/reg/${"cc_" + req.body.name + "." + cc_type}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
+      console.log("cc")
+      try{
+        result_cc = await cloudinary.uploader.upload(cc, {folder:"dwallet"})
+      }
+      catch (err){
+        console.log(err)
+        return res.status(201).json({
+          error: "ERROR CLOUD", 
+          success: false,
+        });
+      }
+    }
+ 
+  
+      if (pp != null) {
+        try{
+          result_pp = await cloudinary.uploader.upload(pp, {folder:"dwallet"})
+        }catch(err){
+          console.log(err)
+        return res.status(201).json({
+          man_error: "ERROR CLOUD", 
+          success: false,
+        });
         }
-      );
-    }
-
-    if (req.body.role == "wallet_owner") {
-      if (pp != null) {
-        pp.mv(
-          `${__dirname}/../public/reg/${"pp_" + req.body.nic + "." + pp_type}`,
-          (err) => {
-            if (err) {
-              console.error(err);
-            }
-          }
-        );
+       
       }
-    } else {
-      if (pp != null) {
-        pp.mv(
-          `${__dirname}/../public/reg/${"pp_" + req.body.name + "." + pp_type}`,
-          (err) => {
-            if (err) {
-              console.error(err);
-            }
-          }
-        );
-      }
-    }
-
+    
+    //console.log(result_bc, result_cc, result_pp)
     //TODO: password ??????
 
     let user = null;
@@ -154,9 +162,9 @@ const addUser = async (req, res) => {
         nationality: req.body.nationality,
         nic: req.body.nic,
         dob: req.body.dob,
-        photo_id: "pp_" + req.body.nic + "." + pp_type,
-        nic_photo_id: "nic_" + req.body.nic + "." + nic_type,
-        bc_photo_id: "bc_" + req.body.nic + "." + bc_type,
+        photo_id: {public_id: result_pp.public_id, url: result_pp.url},
+        nic_photo_id: {public_id: result_nic.public_id, url: result_nic.url},
+        bc_photo_id:  {public_id: result_bc.public_id, url: result_bc.url},
         email: req.body.email,
         // password: req.body.password,
         address: req.body.address,
@@ -173,8 +181,8 @@ const addUser = async (req, res) => {
         contact_number: req.body.contact_number,
         role: req.body.role,
         isAccepted: req.body.isAccepted,
-        photo_id: "pp_" + req.body.name + "." + pp_type,
-        cc_photo_id: "cc_" + req.body.name + "." + cc_type,
+        photo_id: {public_id: result_pp.public_id, url: result_pp.url},
+        cc_photo_id: {public_id: result_cc.public_id, url: result_cc.url},
         name: req.body.name,
         services: addedServices,
       });
@@ -365,3 +373,4 @@ module.exports = {
   checkPassword,
   addVerifierDid,
 };
+ 

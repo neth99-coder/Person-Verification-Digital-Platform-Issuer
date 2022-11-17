@@ -29,6 +29,7 @@ class LoginBody extends Form {
         this.props.navigate("/issuer");
       }
       if (userRole === "wallet_owner") {
+        console.log("navigation")
         this.props.navigate("/wallet_owner");
       }
       if (userRole === "bank") {

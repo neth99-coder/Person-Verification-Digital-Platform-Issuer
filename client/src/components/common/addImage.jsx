@@ -107,7 +107,6 @@ class AddImage extends React.Component {
             <MDBInput
               className="form-control"
               type="file"
-              accept="image/jpeg,image/png,image/webp"
               name="product-title-image"
               onChange={(event) => {
                 console.log(event.target.files[0].name)
@@ -120,6 +119,7 @@ class AddImage extends React.Component {
               }}
               // value={fileName}
               required
+              accept=".jpg, .jpeg, .png, .webp"
             />
           </div>
           

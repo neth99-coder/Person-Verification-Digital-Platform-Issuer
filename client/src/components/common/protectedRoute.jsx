@@ -3,11 +3,13 @@ import { Route, Navigate, useParams } from "react-router-dom";
 import auth from "../../services/authService";
 
 const ProtectedRoute = ({ permissions, children }) => {
+  
   const currentUser = auth.getCurrentUser();
-  // console.log("currentUser: ", currentUser);
+  
   if (currentUser) {
-    if (!permissions) return children;
-    else if (permissions.includes(currentUser.role)) return children;
+    
+    if (!permissions)return children;
+    else if (permissions.includes(currentUser.role)){ return children}
     else {
       return (
         <Navigate

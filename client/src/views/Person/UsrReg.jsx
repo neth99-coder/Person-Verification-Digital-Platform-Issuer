@@ -107,10 +107,59 @@ function UsrReg() {
   function handleSaveImage(newImageUrl, newImage) {
     setsrc(newImageUrl);
     console.log(newImage,newImageUrl);
-    setPerson((prev_val) => {
-      return { ...prev_val, photo_id: newImage };
-    });
+    const reader = new FileReader();
+    reader.readAsDataURL(newImage);
+    reader.onloadend = () =>{
+      setPerson((prev_val) => {
+        return { ...prev_val, photo_id: reader.result };
+      });
+
+    }
+
   }
+
+  function handleBc(e){
+    const file = e.target.files[0];
+    const name = e.target.name
+    setFileToBase(file,name);
+    console.log(file);
+  }
+
+  function handleNic(e){
+    const file = e.target.files[0];
+    const name = e.target.name
+    setFileToBase(file,name);
+    console.log(file);
+  }
+
+  // function handlePp(e){
+  //   const file = e.target.files[0];
+  //   const name = e.target.name
+  //   setFileToBase(file,name);
+  //   console.log(file);
+  // }
+
+  const setFileToBase = (file,name) =>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () =>{
+       if(name == "bc_photo_id"){
+        setPerson((prev_val) => {
+          return { ...prev_val, bc_photo_id: reader.result };
+          });
+        }else if(name == "nic_photo_id"){
+          setPerson((prev_val) => {
+            return { ...prev_val, nic_photo_id: reader.result };
+            });
+          }else if(name == "photo_id"){
+            setPerson((prev_val) => {
+              return { ...prev_val, photo_id: reader.result };
+              });
+            } 
+
+    }
+
+}
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -143,7 +192,8 @@ function UsrReg() {
       formData.append("isAccepted", person.isAccepted);
       formData.append("gender", person.gender);
 
-      console.log(...formData);
+      // console.log(...formData);
+      
 
       Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
         headers: {
@@ -413,13 +463,15 @@ function UsrReg() {
                       minWidth: "200px",
                     }}
                     name="nic_photo_id"
-                    onChange={(e) => {
-                      console.log(e.target.files[0]);
-                      setPerson((prev_val) => {
-                        return { ...prev_val, nic_photo_id: e.target.files[0] };
-                      });
-                    }}
+                    // onChange={(e) => {
+                    //   console.log(e.target.files[0]);
+                    //   setPerson((prev_val) => {
+                    //     return { ...prev_val, nic_photo_id: e.target.files[0] };
+                    //   });
+                    // }}
+                    onChange={handleNic}
                     required
+                    accept=".jpg, .jpeg, .png, .webp"
                   />
                   <p style={{ color: "blue", marginTop:"10px" }}>upload copy of NIC</p>
                 </div>
@@ -435,12 +487,14 @@ function UsrReg() {
                       minWidth: "200px",
                     }}
                     name="bc_photo_id"
-                    onChange={(e) => {
-                      setPerson((prev_val) => {
-                        return { ...prev_val, bc_photo_id: e.target.files[0] };
-                      });
-                    }}
+                    // onChange={(e) => {
+                    //   setPerson((prev_val) => {
+                    //     return { ...prev_val, bc_photo_id: e.target.files[0] };
+                    //   });
+                    // }}
+                    onChange={handleBc}
                     required
+                    accept=".jpg, .jpeg, .png, .webp"
                   />
                   <p style={{ color: "blue" , marginTop:"10px"}}>upload Birth Certificate copy</p>
                 </div>

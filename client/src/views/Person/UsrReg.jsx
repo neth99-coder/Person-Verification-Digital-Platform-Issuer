@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import Joi from "joi-browser";
 import {
   MDBBtn,
   MDBContainer,
@@ -22,6 +22,8 @@ import { HiHome } from "react-icons/fa";
 import { Button } from "bootstrap";
 import { useState } from "react";
 import AddImage from "../../components/common/addImage";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 function formatDate(n) {
   if (n < 10) {
@@ -48,8 +50,32 @@ function UsrReg() {
     contact_number: "",
     role: "wallet_owner",
     isAccepted: "0",
-    gender:"Male"
+    gender: "Male",
   });
+  const [submiited, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const schema = {
+    first_name: Joi.string().required().min(2).max(50),
+    last_name: Joi.string().required().min(2).max(50),
+    status: Joi.string().required(),
+    nationality: Joi.string().required(),
+    nic: Joi.string()
+      .required()
+      .regex(/[0-9]{9}V|[0-9]{12}/),
+    dob: Joi.string().required(),
+    photo_id: Joi.string().required(),
+    nic_photo_id: Joi.string().required(),
+    bc_photo_id: Joi.string().required(),
+    email: Joi.string().required().min(5).max(255).email(),
+    // password: "XXXXX",
+    address: Joi.string().required().min(5).max(1024),
+    contact_number: Joi.string()
+      .required()
+      .regex(/[0-9]{10}/),
+    role: Joi.string().required(),
+    isAccepted: Joi.string().required(),
+    gender: Joi.string().required(),
+  };
 
   const [src, setsrc] = useState(
     "https://github.com/OlgaKoplik/CodePen/blob/master/profile.jpg?raw=true"
@@ -57,119 +83,166 @@ function UsrReg() {
   const [validated, setValidated] = useState(false); //form validation
   // const navigate = useNavigate();
 
+     
+
   function handleChange(e) {
     const value = e.target.value;
     const name = e.target.name;
 
     if (name === "f_name") {
+      
       setPerson((prev_val) => {
         return { ...prev_val, first_name: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,"first_name":""}})
     } else if (name === "last_name") {
       setPerson((prev_val) => {
         return { ...prev_val, last_name: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "status") {
       setPerson((prev_val) => {
         return { ...prev_val, status: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "nationality") {
       setPerson((prev_val) => {
         return { ...prev_val, nationality: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "nic") {
       setPerson((prev_val) => {
         return { ...prev_val, nic: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "dob") {
       setPerson((prev_val) => {
         return { ...prev_val, dob: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "contact_number") {
       setPerson((prev_val) => {
         return { ...prev_val, contact_number: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "address") {
       setPerson((prev_val) => {
         return { ...prev_val, address: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "email") {
       setPerson((prev_val) => {
         return { ...prev_val, email: value };
-      });
-    }else if (name === "gender") {
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+    } else if (name === "gender") {
       setPerson((prev_val) => {
         return { ...prev_val, gender: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     }
   }
 
   function handleSaveImage(newImageUrl, newImage) {
     setsrc(newImageUrl);
-    console.log(newImage,newImageUrl);
+    console.log(newImage, newImageUrl);
     const reader = new FileReader();
     reader.readAsDataURL(newImage);
-    reader.onloadend = () =>{
+    reader.onloadend = () => {
       setPerson((prev_val) => {
         return { ...prev_val, photo_id: reader.result };
       });
-
-    }
-
+    };
   }
 
-  function handleBc(e){
+  function handleBc(e) {
     const file = e.target.files[0];
-    const name = e.target.name
-    setFileToBase(file,name);
+    const name = e.target.name;
+    setFileToBase(file, name);
     console.log(file);
   }
 
-  function handleNic(e){
+  function handleNic(e) {
     const file = e.target.files[0];
-    const name = e.target.name
-    setFileToBase(file,name);
+    const name = e.target.name;
+    setFileToBase(file, name);
     console.log(file);
   }
 
-  // function handlePp(e){
-  //   const file = e.target.files[0];
-  //   const name = e.target.name
-  //   setFileToBase(file,name);
-  //   console.log(file);
-  // }
-
-  const setFileToBase = (file,name) =>{
+  const setFileToBase = (file, name) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onloadend = () =>{
-       if(name == "bc_photo_id"){
+    reader.onloadend = () => {
+      if (name == "bc_photo_id") {
         setPerson((prev_val) => {
           return { ...prev_val, bc_photo_id: reader.result };
-          });
-        }else if(name == "nic_photo_id"){
-          setPerson((prev_val) => {
-            return { ...prev_val, nic_photo_id: reader.result };
-            });
-          }else if(name == "photo_id"){
-            setPerson((prev_val) => {
-              return { ...prev_val, photo_id: reader.result };
-              });
-            } 
+        });
+      } else if (name == "nic_photo_id") {
+        setPerson((prev_val) => {
+          return { ...prev_val, nic_photo_id: reader.result };
+        });
+      } else if (name == "photo_id") {
+        setPerson((prev_val) => {
+          return { ...prev_val, photo_id: reader.result };
+        });
+      }
+    };
+  };
 
+  function checkValidityJoi() {
+    const result = Joi.validate(person, schema, { abortEarly: false });
+    console.log(result);
+    const { error } = result;
+    if (error) {
+      const errorData = {};
+      for (let item of error.details) {
+        const name = item.path[0];
+        const message = item.message;
+        if (name== "nic" || name == "contact_number") {
+          let msg = message.split(`" `)[2];
+
+          errorData[name] = msg != undefined && msg.split(":")[0];
+        } else {
+          errorData[name] = message.split(`" `)[1];
+        }
+      }
+
+      console.log(errorData);
+      setErrors(errorData);
     }
+  }
 
-}
+  // function checkValidityField(name) {
+  //   const result = Joi.validate(person, schema, { abortEarly: false });
+    
+  //   const { error } = result;
+  //   let message = "";
+  //   if (error) {
+      
+  //     for (let item of error.details) {
+  //       const name_field = item.path[0];
+        
+  //       if (name_field == name) {
+  //         console.log(name_field);
+  //         console.log("YES")
+  //         message = item.message;
+  //         if (name== "nic" || name == "contact_number") {
+  //           let msg = message.split(`" `)[2];
+  //           message = msg != undefined && msg.split(":")[0];
+  //         } else {
+  //           message = message.split(`" `)[1];
+  //         }
+  //       }
+  //     }
+  //   }
+  //  const validity =  message =="" ? true:false
+  //  return validity
+  // }
 
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+
+    checkValidityJoi();
+
     //form validation
     if (form.checkValidity() === false) {
+      toast.error("Invalid Inputs !! Checkout !!", { theme: "dark" });
       console.log("Empty");
       setValidated(true);
       e.stopPropagation();
     } else {
+      setSubmitted(!submiited)
       setValidated(true);
       //console.log(person)
 
@@ -193,7 +266,6 @@ function UsrReg() {
       formData.append("gender", person.gender);
 
       // console.log(...formData);
-      
 
       Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
         headers: {
@@ -202,7 +274,8 @@ function UsrReg() {
         },
       }).then((res) => {
         if (!res.data.success) {
-          alert("Error occured !!");
+          setSubmitted(false);
+          toast.error("Something went wrong !!", { theme: "dark" });
         } else {
           //console.log("success");
           // navigate("/");
@@ -238,7 +311,7 @@ function UsrReg() {
                   Register as a User
                 </h2>
 
-                <div className="d-flex flex-row align-items-center mb-3 ">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="First Name"
                     id="form1"
@@ -256,8 +329,13 @@ function UsrReg() {
                     maxLength="50"
                   />
                 </div>
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">
+                    {errors["first_name"]}
+                  </p>
+                </div>
 
-                <div className="d-flex flex-row align-items-center mb-3">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="Last Name"
                     id="form2"
@@ -274,6 +352,9 @@ function UsrReg() {
                     minLength="2"
                     maxLength="50"
                   />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">{errors["last_name"]}</p>
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-3">
@@ -309,7 +390,7 @@ function UsrReg() {
                   />
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-3">
+                <div className="d-flex flex-row align-items-center mb-4">
                   <div
                     style={{
                       display: "inline-block",
@@ -329,7 +410,7 @@ function UsrReg() {
                   </div>
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-3">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="NIC Number"
                     id="form3"
@@ -346,26 +427,8 @@ function UsrReg() {
                     pattern="[0-9]{9}V|[0-9]{12}"
                   />
                 </div>
-
-                <div className="d-flex flex-row align-items-center mb-3">
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "25vw",
-                      minWidth: "200px",
-                    }}
-                  >
-                    <label className="mb-1">Marital Status</label>
-                    <Form.Select
-                      value={person.status}
-                      onChange={handleChange}
-                      name="status"
-                    >
-                      <option value="Single">Single</option>
-                      <option value="Married">Married</option>
-                      <option value="Divorced">Divorced</option>
-                    </Form.Select>
-                  </div>
+                <div className="d-flex flex-row align-items-center mb-0">
+                  <p class="fs-6 fw-light text-danger">{errors["nic"]}</p>
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-3">
@@ -433,7 +496,7 @@ function UsrReg() {
                   * Do not submit forged documents *
                 </p>
 
-                <div className="d-flex flex-row align-items-center mb-5 ">
+                <div className="d-flex flex-row align-items-center mb-1 ">
                   <MDBInput
                     label="Address"
                     id="form6"
@@ -451,8 +514,31 @@ function UsrReg() {
                     maxLength="1024"
                   />
                 </div>
+                <div className="d-flex flex-row align-items-center mb-0">
+                  <p class="fs-6 fw-light text-danger">{errors["address"]}</p>
+                </div>
 
-                <div className="d-flex flex-column align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-3">
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "25vw",
+                      minWidth: "200px",
+                    }}
+                  >
+                    <label className="mb-1">Marital Status</label>
+                    <Form.Select
+                      value={person.status}
+                      onChange={handleChange}
+                      name="status"
+                    >
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                    </Form.Select>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-center mb-1">
                   <MDBInput
                     type="file"
                     className="form-control"
@@ -473,10 +559,12 @@ function UsrReg() {
                     required
                     accept=".jpg, .jpeg, .png, .webp"
                   />
-                  <p style={{ color: "blue", marginTop:"10px" }}>upload copy of NIC</p>
+                  <p style={{ color: "blue", marginTop: "10px" }}>
+                    upload copy of NIC
+                  </p>
                 </div>
 
-                <div className="d-flex flex-column align-items-center mb-4">
+                <div className="d-flex flex-column align-items-center mb-1">
                   <MDBInput
                     type="file"
                     className="form-control"
@@ -496,10 +584,12 @@ function UsrReg() {
                     required
                     accept=".jpg, .jpeg, .png, .webp"
                   />
-                  <p style={{ color: "blue" , marginTop:"10px"}}>upload Birth Certificate copy</p>
+                  <p style={{ color: "blue", marginTop: "10px" }}>
+                    upload Birth Certificate copy
+                  </p>
                 </div>
 
-                <div className="d-flex flex-row align-items-center mb-5">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="email"
                     id="form7"
@@ -517,7 +607,10 @@ function UsrReg() {
                     maxLength="255"
                   />
                 </div>
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">{errors["email"]}</p>
+                </div>
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="Phone Number"
                     id="form5"
@@ -533,6 +626,12 @@ function UsrReg() {
                     required
                     pattern="[0-9]{10}"
                   />
+                </div>
+
+                <div className="d-flex flex-row align-items-center mb-2">
+                  <p class="fs-6 fw-light text-danger">
+                    {errors["contact_number"]}
+                  </p>
                 </div>
 
                 <div style={{ display: "flex", flexDirection: "row" }}>
@@ -577,7 +676,7 @@ function UsrReg() {
           className="text-black m-3 thirdPage mt-5"
           style={{ borderRadius: "25px", display: "none" }}
         >
-          <MDBCardBody >
+          <MDBCardBody>
             <MDBRow center className="pb-3">
               <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center ">
                 <h2
@@ -627,11 +726,19 @@ function UsrReg() {
                       document.querySelector(".thirdPage").style.display =
                         "none";
                     }}
+                    hidden={submiited}
                   >
                     Prev Page
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2">
+                  <button type="submit" className="btn btn-warning  ms-2" disabled hidden={!submiited}>
+                  Prev Page
+                  </button>
+                  <button type="submit" className="btn btn-primary  ms-2" hidden={submiited}>
                     Submit
+                  </button>
+                  <button type="submit" className="btn btn-primary  ms-2" disabled hidden={!submiited}>
+                    Submitting .... {" "}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   </button>
                 </div>
               </MDBCol>

@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import Axios from "axios";
 import AddImage from "../../components/common/addImage";
-
+import Joi from "joi-browser";
+import { toast } from "react-toastify";
 import {
   MDBBtn,
   MDBContainer,
@@ -35,6 +36,18 @@ function VerReg() {
     role: "bank",
     isAccepted: "0",
   });
+  const [errors, setErrors] = useState({});
+  const schema = {
+    name: Joi.string().required().min(2).max(50),
+    photo_id: Joi.string().required(),
+    cc_photo_id: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    address: Joi.string().required().min(5).max(1024),
+    contact_number: Joi.string().required().regex(/[0-9]{10}/),
+    role: Joi.string().required(),
+    isAccepted: Joi.string().required(),
+  };
 
   const [sampleImg, setSampleImg] = useState(sbi);
   const [validated, setValidated] = useState(false); //form validation
@@ -42,6 +55,7 @@ function VerReg() {
   const [account, setAccount] = useState(false);
   const [loan, setLoan] = useState(false);
   const [card, setCard] = useState(false);
+  const [submiited, setSubmitted] = useState(false);
 
   function handleChange(e) {
     const value = e.target.value;
@@ -50,62 +64,84 @@ function VerReg() {
     if (name === "name") {
       setBank((prev_val) => {
         return { ...prev_val, name: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "contact_number") {
       setBank((prev_val) => {
         return { ...prev_val, contact_number: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "address") {
       setBank((prev_val) => {
         return { ...prev_val, address: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     } else if (name === "email") {
       setBank((prev_val) => {
         return { ...prev_val, email: value };
-      });
+      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
     }
   }
 
   function handleSaveImage(newImageUrl, newImage) {
     setSampleImg(newImageUrl);
-    console.log(newImage,newImageUrl);
+    console.log(newImage, newImageUrl);
     const reader = new FileReader();
     reader.readAsDataURL(newImage);
-    reader.onloadend = () =>{
+    reader.onloadend = () => {
       setBank((prev_val) => {
         return { ...prev_val, photo_id: reader.result };
       });
-
-    }
-
+    };
   }
 
-  function handleCc(e){
+  function handleCc(e) {
     const file = e.target.files[0];
     setFileToBase(file);
     console.log(file);
   }
 
-  const setFileToBase = (file) =>{
+  const setFileToBase = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onloadend = () =>{
-     
-        setBank((prev_val) => {
-          return { ...prev_val, cc_photo_id: reader.result };
-          });
-        
+    reader.onloadend = () => {
+      setBank((prev_val) => {
+        return { ...prev_val, cc_photo_id: reader.result };
+      });
+    };
+  };
+  
+  function checkValidityJoi(){
+    const result = Joi.validate(bank, schema, { abortEarly: false });
+    console.log(result);
+    const { error } = result;
+    if (error) {
+      const errorData = {};
+      for (let item of error.details) {
+        const name = item.path[0];
+        const message = item.message;
+        if(name=="contact_number"){
+          let msg = message.split(`" `)[2];
+          
+          errorData[name] = msg!=undefined && msg.split(":")[0]}
+        else{errorData[name] = message.split(`" `)[1]};
+      }
+      
+      console.log(errorData);
+      setErrors(errorData);
     }
+  }
 
-}
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+
+    checkValidityJoi();
+
     //form validation
     if (form.checkValidity() === false) {
+      toast.error("Invalid Inputs !! Checkout !!", { theme: "dark" });
       setValidated(true);
       e.stopPropagation();
     } else {
+      setSubmitted(!submiited)
       setValidated(true);
       //console.log(person)
 
@@ -132,7 +168,8 @@ function VerReg() {
       }).then((res) => {
         if (!res.data.success) {
           // console.log(res.data.error)
-          alert("Error occured !!");
+          setSubmitted(false);
+          toast.error("Something went wrong !!", { theme: "dark" });
         } else {
           // console.log("success");
           //navigate("/");
@@ -145,7 +182,7 @@ function VerReg() {
     <MDBContainer fluid>
       <Form
         noValidate
-        validated={validated} 
+        validated={validated}
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
@@ -160,11 +197,14 @@ function VerReg() {
                 lg="6"
                 className="order-2 order-lg-1 d-flex flex-column align-items-center"
               >
-                <h2 className="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-5" style={{ color: "blue", marginBottom: "20px" }}>
+                <h2
+                  className="text-center h2 fw-bold mb-5 mx-1 mx-md-4 mt-5"
+                  style={{ color: "blue", marginBottom: "20px" }}
+                >
                   Register as a Verifier
                 </h2>
 
-                <div className="d-flex flex-row align-items-center mb-4 ">
+                <div className="d-flex flex-row align-items-center mb-1 ">
                   <MDBInput
                     label="Name of Organization"
                     id="form1"
@@ -182,6 +222,9 @@ function VerReg() {
                     required
                   />
                 </div>
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">{errors["name"]}</p>
+                </div>
 
                 {/* <div className="d-flex flex-row align-items-center mb-4">
                   <MDBInput
@@ -192,7 +235,7 @@ function VerReg() {
                   />
                 </div> */}
 
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="Address"
                     id="form3"
@@ -210,6 +253,9 @@ function VerReg() {
                     maxLength="1024"
                   />
                 </div>
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">{errors["address"]}</p>
+                </div>
 
                 {/* <div className="d-flex flex-row align-items-center mb-4">
                   <MDBInput
@@ -219,7 +265,7 @@ function VerReg() {
                     style={{ width: "250px" }}
                   />
                 </div> */}
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="Contact Number"
                     id="form5"
@@ -233,9 +279,15 @@ function VerReg() {
                     onChange={handleChange}
                     value={bank.contact_number}
                     required
+                    pattern="[0-9]{10}"
                   />
                 </div>
-                <div className="d-flex flex-row align-items-center mb-4">
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">
+                    {errors["contact_number"]}
+                  </p>
+                </div>
+                <div className="d-flex flex-row align-items-center mb-1">
                   <MDBInput
                     label="E-mail"
                     id="form6"
@@ -253,7 +305,9 @@ function VerReg() {
                     maxLength="255"
                   />
                 </div>
-
+                <div className="d-flex flex-row align-items-center mb-1">
+                  <p class="fs-6 fw-light text-danger">{errors["email"]}</p>
+                </div>
                 <button
                   type="button"
                   className="btn btn-primary ms-2"
@@ -303,7 +357,9 @@ function VerReg() {
                     alignContent: "center",
                   }}
                 >
-                  <h5 className="justify-content-left mb-3 mt-2">Select required services</h5>
+                  <h5 className="justify-content-left mb-3 mt-2">
+                    Select required services
+                  </h5>
 
                   <div className="form-check d-flex justify-content-left mb-3 mt-2">
                     <input
@@ -373,12 +429,12 @@ function VerReg() {
                     required
                     accept=".jpg, .jpeg, .png, .webp"
                   />
-                  <p style={{ color: "blue", marginTop:"10px" }}>
+                  <p style={{ color: "blue", marginTop: "10px" }}>
                     upload proof of company registration
                   </p>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "row" }} >
+                <div style={{ display: "flex", flexDirection: "row" }}>
                   <button
                     type="button"
                     className="btn btn-warning ms-2 mb-5"
@@ -421,7 +477,7 @@ function VerReg() {
           style={{ borderRadius: "25px", display: "none" }}
         >
           <MDBCardBody>
-          <MDBRow center className="pb-3">
+            <MDBRow center className="pb-3">
               <MDBCol className="order-2 order-lg-1 d-flex flex-column align-items-center ">
                 <h2
                   className="text-center h4 fw-bold mb-5 mx-1 mx-md-4 mt-5 pb-4"
@@ -470,11 +526,19 @@ function VerReg() {
                       document.querySelector(".thirdPage").style.display =
                         "none";
                     }}
+                    hidden={submiited}
                   >
                     Prev Page
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2">
+                  <button type="submit" className="btn btn-warning  ms-2" disabled hidden={!submiited}>
+                  Prev Page
+                  </button>
+                  <button type="submit" className="btn btn-primary  ms-2" hidden={submiited}>
                     Submit
+                  </button>
+                  <button type="submit" className="btn btn-primary  ms-2" disabled hidden={!submiited}>
+                    Submitting .... {" "}
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   </button>
                 </div>
               </MDBCol>

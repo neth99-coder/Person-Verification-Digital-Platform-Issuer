@@ -49,7 +49,7 @@ export default function IDReqViewPage() {
       <div className="p-5 text-center">
         <div className="p-5">
           <img
-            src={`http://localhost:3001/reg/${obj.photo_id}`}
+            src={obj.photo_id.url}
             alt=""
             style={{
               width: "200px",
@@ -151,8 +151,8 @@ export default function IDReqViewPage() {
                           className="btn  btn-outline-dark btn-sm "
                           onClick={() => {
                             saveAs(
-                              `http://localhost:3001/reg/${obj.cc_photo_id}`,
-                              "cc_copy.pdf"
+                              obj.cc_photo_id.url,
+                              "cc_copy"
                             );
                           }}
                         >

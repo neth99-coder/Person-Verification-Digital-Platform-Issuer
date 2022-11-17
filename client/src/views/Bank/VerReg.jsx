@@ -68,12 +68,36 @@ function VerReg() {
 
   function handleSaveImage(newImageUrl, newImage) {
     setSampleImg(newImageUrl);
-    console.log(newImage);
-    setBank((prev_val) => {
-      return { ...prev_val, photo_id: newImage };
-    });
+    console.log(newImage,newImageUrl);
+    const reader = new FileReader();
+    reader.readAsDataURL(newImage);
+    reader.onloadend = () =>{
+      setBank((prev_val) => {
+        return { ...prev_val, photo_id: reader.result };
+      });
+
+    }
+
   }
 
+  function handleCc(e){
+    const file = e.target.files[0];
+    setFileToBase(file);
+    console.log(file);
+  }
+
+  const setFileToBase = (file) =>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () =>{
+     
+        setBank((prev_val) => {
+          return { ...prev_val, cc_photo_id: reader.result };
+          });
+        
+    }
+
+}
   function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
@@ -121,7 +145,7 @@ function VerReg() {
     <MDBContainer fluid>
       <Form
         noValidate
-        validated={validated}
+        validated={validated} 
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
@@ -340,12 +364,14 @@ function VerReg() {
                       minWidth: "200px",
                     }}
                     name="cc_photo_id"
-                    onChange={(e) => {
-                      setBank((prev_val) => {
-                        return { ...prev_val, cc_photo_id: e.target.files[0] };
-                      });
-                    }}
+                    // onChange={(e) => {
+                    //   setBank((prev_val) => {
+                    //     return { ...prev_val, cc_photo_id: e.target.files[0] };
+                    //   });
+                    // }}
+                    onChange={handleCc}
                     required
+                    accept=".jpg, .jpeg, .png, .webp"
                   />
                   <p style={{ color: "blue", marginTop:"10px" }}>
                     upload proof of company registration

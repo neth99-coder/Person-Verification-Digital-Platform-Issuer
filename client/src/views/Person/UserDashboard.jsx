@@ -44,6 +44,7 @@ function UserDashboard() {
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
   const togglePasswordBox2 = () => setPasswordBox2(!PasswordBox2);
   const [cipher, setCipher] = useState("");
+  const [profilePic, setProfilePic] = useState("")
 
   let User;
   const handleChange = (e) => {
@@ -129,8 +130,9 @@ function UserDashboard() {
   useEffect(() => {
     // setUserEmail(email);
     // const user_email = email;
-
+    console.log("Something")
     function getUser() {
+      console.log("get cur user")
       axios
         .get("http://localhost:3001/api/v1/user/getUser", {
           params: {
@@ -138,6 +140,7 @@ function UserDashboard() {
           },
         })
         .then((res) => {
+          setProfilePic(res.data.photo_id.url)
           setUserProfile(res.data);
         });
     }
@@ -248,13 +251,13 @@ function UserDashboard() {
             <MDBModalHeader>
               <MDBModalTitle>
                 <MDBCardImage
-                  src={`http://localhost:3001/reg/${user_profile.photo_id}`}
+                  src={profilePic}
                   alt=""
                   className="rounded-circle me-3"
                   fluid
                   style={{ width: "75px" }}
                 />
-                Profile Info
+                Profile Info 
               </MDBModalTitle>
               <MDBBtn
                 className="btn-close"

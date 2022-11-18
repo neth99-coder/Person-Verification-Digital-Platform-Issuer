@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import ContactUs from "../components/ContactUs";
+import Footer from "../components/footer";
 
 export default function AppRouter() {
   const [theme, setTheme] = useState(getTheme());
@@ -134,6 +135,7 @@ export default function AppRouter() {
         <Route path="/" element={<Home />}></Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

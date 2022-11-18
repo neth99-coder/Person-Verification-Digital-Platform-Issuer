@@ -1,5 +1,6 @@
 {
     "jwtPrivateKey": "unsecureKey",
+    "jwtRefreshKey": "unsecureKey",
     "db_username": "root",
     "db_password": ""
 

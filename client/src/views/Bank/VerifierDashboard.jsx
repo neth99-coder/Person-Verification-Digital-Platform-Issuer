@@ -27,7 +27,6 @@ import { toast } from "react-toastify";
 import bg from "../../assets/images/2154438.jpg";
 import Web3 from "web3";
 import { loadContracts } from "./../../utils/load-contracts";
-import authService from "../../services/authService";
 
 function VerifierDashboard() {
   const [basicModal, setBasicModal] = useState(false);
@@ -347,7 +346,7 @@ function VerifierDashboard() {
     <MDBContainer
       fluid
       className="p-5 bg-gradient m-2"
-      style={{ "background-color": "#022D36" }}
+      style={{ backgroundColor: "#022D36" }}
     >
       <MDBRow>
         <MDBCol
@@ -364,9 +363,9 @@ function VerifierDashboard() {
             style={{
               marginTop: "-10pt",
               color: "hsl(217, 10%, 50.8%)",
-              "font-size": "40px",
+              fontSize: "40px",
               color: "white",
-              "letter-spacing": "2px",
+              letterSpacing: "2px",
               fontFamily: "Sans-serif",
             }}
           >

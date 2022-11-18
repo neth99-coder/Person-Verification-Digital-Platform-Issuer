@@ -17,7 +17,7 @@ function Home(props) {
     <MDBContainer fluid className="p-3">
       <MDBRow
         className="bg-gradient text-white p-5 m-2"
-        style={{ "background-color": "#022D36" }}
+        style={{ backgroundColor: "#022D36" }}
       >
         <MDBCol
           md="9"
@@ -48,7 +48,7 @@ function Home(props) {
       </MDBRow>
       <MDBRow>
         <MDBCol
-          style={{ "background-color": "#241571", "border-radius": "10px" }}
+          style={{ backgroundColor: "#241571", "border-radius": "10px" }}
           className="mx-4 hover-focus my-1"
         >
           <a className="text-decoration-none" href="/register-user">
@@ -74,7 +74,7 @@ function Home(props) {
         </MDBCol>
 
         <MDBCol
-          style={{ "background-color": "#241571", "border-radius": "10px" }}
+          style={{ backgroundColor: "#241571", "border-radius": "10px" }}
           className="mx-4 hover-focus my-1"
         >
           <a className="text-decoration-none" href="/register-veri">

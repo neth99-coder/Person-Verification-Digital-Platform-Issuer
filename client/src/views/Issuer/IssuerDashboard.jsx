@@ -21,7 +21,7 @@ function IssuerDashboard() {
     <MDBContainer
       fluid
       className="p-5 bg-gradient m-2"
-      style={{ "background-color": "#022D36" }}
+      style={{ backgroundColor: "#022D36" }}
     >
       <MDBRow>
         <MDBCol
@@ -37,9 +37,9 @@ function IssuerDashboard() {
             className="px-3"
             style={{
               color: "hsl(217, 10%, 50.8%)",
-              "font-size": "40px",
+              fontSize: "40px",
               color: "white",
-              "letter-spacing": "2px",
+              letterSpacing: "2px",
               fontFamily: "Sans-serif",
             }}
           >

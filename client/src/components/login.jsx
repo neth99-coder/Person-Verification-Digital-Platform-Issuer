@@ -29,7 +29,7 @@ class LoginBody extends Form {
         this.props.navigate("/issuer");
       }
       if (userRole === "wallet_owner") {
-        console.log("navigation")
+        console.log("navigation");
         this.props.navigate("/wallet_owner");
       }
       if (userRole === "bank") {
@@ -49,7 +49,7 @@ class LoginBody extends Form {
     if (auth.getCurrentUser()) return <Navigate to="/" />;
 
     return (
-      <div className="container w-50 mb-5">
+      <div className="container w-50 mb-5 p-5">
         <div className=" p-5 div-dark align-items-center justify-content-center">
           <div>
             <h1 className="text-center">Login</h1>

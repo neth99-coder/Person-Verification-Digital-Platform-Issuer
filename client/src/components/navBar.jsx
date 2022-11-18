@@ -76,24 +76,6 @@ export default function NavBar({ theme, toggleTheme, user }) {
           </button>
           <div className="collapse navbar-collapse" id="nav-body">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              {/* <li className="nav-item">
-              <NavLink className="nav-link hover-focus" to="#">
-                Add New Verifier Services
-              </NavLink>
-            </li> */}
-              {/* {!isAdmin && user && (
-                <li className="nav-item">
-                  <a className="nav-link hover-focus" href="#">
-                    View Profile
-                  </a>
-                </li>
-              )} */}
-
-              {/* <li className="nav-item">
-              <NavLink className="nav-link hover-focus" to="#">
-                Request Digital Identity
-              </NavLink>
-            </li> */}
               <li className="nav-item">
                 <a className="nav-link hover-focus" href="/contact-us">
                   Contact Us
@@ -153,7 +135,6 @@ export default function NavBar({ theme, toggleTheme, user }) {
                 </li>
               )}
               {user && (
-                
                 <li className="nav-item dropdown">
                   <span
                     className="nav-link dropdown-toggle hover-focus"
@@ -167,12 +148,11 @@ export default function NavBar({ theme, toggleTheme, user }) {
                       style={{ fill: "grey" }}
                     ></MdManageAccounts>
                   </span>
-                  
+
                   <ul
                     className="dropdown-menu collapsed dropdown-menu-end"
                     id="profile-collapse"
                     aria-labelledby="profileDropdown"
-                    
                   >
                     <li>
                       <span className="dropdown-item">{`${user.email}`}</span>
@@ -180,11 +160,11 @@ export default function NavBar({ theme, toggleTheme, user }) {
                     <li>
                       <hr className="dropdown-divider" />
                     </li>
-                    {user && !isAdmin && (
+                    {/* {user && !isAdmin && (
                       <li>
                         <a
                           className="dropdown-item hover-focus"
-                          // to={`/customers/${user._id}`}
+                          href={`/${user._id}`}
                         >
                           <span>
                             <FaRegUser></FaRegUser>
@@ -192,7 +172,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
                           </span>
                         </a>
                       </li>
-                    )}
+                    )} */}
                     {user && (
                       <li>
                         <a className="dropdown-item hover-focus" href="\logout">
@@ -204,7 +184,6 @@ export default function NavBar({ theme, toggleTheme, user }) {
                       </li>
                     )}
                   </ul>
-                  
                 </li>
               )}
               <li className="nav-item d-flex align-items-center">

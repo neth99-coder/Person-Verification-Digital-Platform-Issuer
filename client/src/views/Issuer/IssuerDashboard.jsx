@@ -18,7 +18,11 @@ import bg from "../../assets/images/2154438.jpg";
 
 function IssuerDashboard() {
   return (
-    <MDBContainer fluid className="p-4">
+    <MDBContainer
+      fluid
+      className="p-5 bg-gradient m-2"
+      style={{ "background-color": "#022D36" }}
+    >
       <MDBRow>
         <MDBCol
           md="6"
@@ -29,11 +33,18 @@ function IssuerDashboard() {
             <span className="text-primary">Digital Platform</span>
           </h1>
 
-          <p className="px-3" style={{ color: "hsl(217, 10%, 50.8%)" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-            itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
-            at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
-            aliquid ipsum atque?
+          <p
+            className="px-3"
+            style={{
+              color: "hsl(217, 10%, 50.8%)",
+              "font-size": "40px",
+              color: "white",
+              "letter-spacing": "2px",
+              fontFamily: "Sans-serif",
+            }}
+          >
+            Own a trusted and secured, distributed digital identity and ensure
+            full ownership of your privacy.
           </p>
         </MDBCol>
 
@@ -50,7 +61,7 @@ function IssuerDashboard() {
                     window.location.href = "/issuer/id-requests";
                   }}
                 >
-                  <MDBCardTitle style={{ textAlign: "center" }} >
+                  <MDBCardTitle style={{ textAlign: "center" }}>
                     View ID Requests
                   </MDBCardTitle>
                 </MDBCardBody>

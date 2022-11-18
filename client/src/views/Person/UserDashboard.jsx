@@ -44,7 +44,7 @@ function UserDashboard() {
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
   const togglePasswordBox2 = () => setPasswordBox2(!PasswordBox2);
   const [cipher, setCipher] = useState("");
-  const [profilePic, setProfilePic] = useState("")
+  const [profilePic, setProfilePic] = useState("");
 
   let User;
   const handleChange = (e) => {
@@ -130,9 +130,9 @@ function UserDashboard() {
   useEffect(() => {
     // setUserEmail(email);
     // const user_email = email;
-    console.log("Something")
+    console.log("Something");
     function getUser() {
-      console.log("get cur user")
+      console.log("get cur user");
       axios
         .get("http://localhost:3001/api/v1/user/getUser", {
           params: {
@@ -140,7 +140,7 @@ function UserDashboard() {
           },
         })
         .then((res) => {
-          setProfilePic(res.data.photo_id.url)
+          setProfilePic(res.data.photo_id.url);
           setUserProfile(res.data);
         });
     }
@@ -196,7 +196,11 @@ function UserDashboard() {
   // };
 
   return (
-    <MDBContainer fluid className="p-4">
+    <MDBContainer
+      fluid
+      className="p-5 bg-gradient m-2"
+      style={{ "background-color": "#022D36" }}
+    >
       <MDBRow>
         {/* <button onClick={decrypt}>Decrypt</button> */}
         <MDBCol
@@ -208,11 +212,18 @@ function UserDashboard() {
             <span className="text-primary">Digital Platform</span>
           </h1>
 
-          <p className="px-3" style={{ color: "hsl(217, 10%, 50.8%)" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-            itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
-            at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
-            aliquid ipsum atque?
+          <p
+            className="px-3"
+            style={{
+              color: "hsl(217, 10%, 50.8%)",
+              "font-size": "40px",
+              color: "white",
+              "letter-spacing": "2px",
+              fontFamily: "Sans-serif",
+            }}
+          >
+            Own a trusted and secured, distributed digital identity and ensure
+            full ownership of your privacy.
           </p>
         </MDBCol>
 
@@ -257,7 +268,7 @@ function UserDashboard() {
                   fluid
                   style={{ width: "75px" }}
                 />
-                Profile Info 
+                Profile Info
               </MDBModalTitle>
               <MDBBtn
                 className="btn-close"

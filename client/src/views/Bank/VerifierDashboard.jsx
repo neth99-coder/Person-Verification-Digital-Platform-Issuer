@@ -50,7 +50,6 @@ function VerifierDashboard() {
 
   const toggleShow = () => setBasicModal(!basicModal);
   const toggleOptions = () => {
-    
     subscribedServices.includes("Bank Account Creation")
       ? setAccount(true)
       : setAccount(false);
@@ -60,7 +59,7 @@ function VerifierDashboard() {
     subscribedServices.includes("Credit Card Services")
       ? setCard(true)
       : setCard(false);
-      
+
     setOptionBox(!OptionBox);
   };
   const togglePasswordBox = () => setPasswordBox(!PasswordBox);
@@ -76,7 +75,7 @@ function VerifierDashboard() {
 
   const [web3Account, setWeb3Account] = useState([]);
   const [registered, setRegistered] = useState(false);
-  const [profilePic, setProfilePic] = useState("")
+  const [profilePic, setProfilePic] = useState("");
   //TODO: when open the modal and register -> add then update services
   //TODO: when we update service in database -> update it in blockchain as well
 
@@ -92,14 +91,11 @@ function VerifierDashboard() {
       card && services.push("Credit Card Services");
 
       const updateServices = async () => {
-        
-        if (publicKeyDb != undefined && web3Account != publicKeyDb){
+        if (publicKeyDb != undefined && web3Account != publicKeyDb) {
           toast.error("Different public key", { theme: "dark" });
-        }
-        else if(!registered){
+        } else if (!registered) {
           toast.error("No DID  Yet !!", { theme: "dark" });
-        }
-        else{
+        } else {
           const { contract } = web3Api;
           try {
             const result = await contract.updateServices(account, loan, card, {
@@ -113,18 +109,20 @@ function VerifierDashboard() {
           }
           if (!metaMaskError) {
             console.log("Inside no error");
-            await axios.post("http://localhost:3001/api/v1/user/updateServices", {
-              email: verifier_profile.email,
-              services: services,
-            });
+            await axios.post(
+              "http://localhost:3001/api/v1/user/updateServices",
+              {
+                email: verifier_profile.email,
+                services: services,
+              }
+            );
             window.location.reload(false);
           } else {
             console.log("Inside error");
             window.location.reload(false);
           }
-        };
         }
-        
+      };
 
       updateServices();
     } else {
@@ -209,7 +207,7 @@ function VerifierDashboard() {
         .then((res) => {
           //console.log(res.data.public_key, " DB PUBLIC KEY");
           setPublicKeyDb(res.data.public_key);
-          setProfilePic(res.data.photo_id.url)
+          setProfilePic(res.data.photo_id.url);
           setVerifierProfile(res.data);
           // setAvailable([
           //   "Bank Account Creation",
@@ -244,13 +242,15 @@ function VerifierDashboard() {
           "No ethereum browser detected !! Check out your Metamask."
         );
       }
-      try{
+      try {
         contract = await loadContracts("AuthVerifier", provider);
         setWeb3Api({ web3: new Web3(provider), provider, contract });
-      }
-      catch (error){
-          console.log(error);
-          toast.error("You have to enable web3 in this browser. Otherwise page will not function properly", { theme: "dark" })
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          "You have to enable web3 in this browser. Otherwise page will not function properly",
+          { theme: "dark" }
+        );
       }
       //console.log(provider, "PROVIDER");
       // console.log(contract, "Contract");
@@ -259,52 +259,49 @@ function VerifierDashboard() {
   }, []);
 
   const getRegistered = async () => {
-    
     let _verifierExist = false;
     if (web3Account !== undefined && web3Account.length != 0) {
       console.log(web3Account, "Console");
-      if(publicKeyDb != undefined && web3Account != publicKeyDb){
+      if (publicKeyDb != undefined && web3Account != publicKeyDb) {
         toast.error("Different public key", { theme: "dark" });
-      }else{
+      } else {
         const { contract } = web3Api;
         //console.log("Hi");
         _verifierExist = await contract.getVerifierExist({
           from: web3Account,
         });
         //console.log(verifierExist);
-        if(publicKeyDb == web3Account){
+        if (publicKeyDb == web3Account) {
           setRegistered(_verifierExist);
           setVerifierExist(_verifierExist);
-        }else{
+        } else {
           setVerifierExist(_verifierExist);
-          if(publicKeyDb == undefined && _verifierExist){
+          if (publicKeyDb == undefined && _verifierExist) {
             toast.error("Suspicious Behaviour Detected", { theme: "dark" });
           }
-                    
         }
-        
+
         // toggleRegisterModal();
       }
-
     } else {
       toast.error("Connect to metamask", { theme: "dark" });
     }
-    
+
     return _verifierExist;
   };
 
   const register = async () => {
-    let metaMaskError= false;
+    let metaMaskError = false;
     if (web3Account !== undefined) {
       //console.log("B4");
       const { contract } = web3Api;
-      try{
+      try {
         await contract.addVerifier(account, loan, card, {
           from: web3Account,
         });
-      }catch (error){
-          metaMaskError = true;
-          console.log(error)
+      } catch (error) {
+        metaMaskError = true;
+        console.log(error);
       }
 
       if (!metaMaskError) {
@@ -318,7 +315,6 @@ function VerifierDashboard() {
         console.log("Inside error");
         window.location.reload(false);
       }
-      
 
       //console.log("After");
       //window.location.reload(false);
@@ -335,11 +331,14 @@ function VerifierDashboard() {
     };
 
     web3Api.web3 && getAccounts();
-    
   }, [web3Api.web3]);
 
   return (
-    <MDBContainer fluid className="p-4">
+    <MDBContainer
+      fluid
+      className="p-5 bg-gradient m-2"
+      style={{ "background-color": "#022D36" }}
+    >
       <MDBRow>
         <MDBCol
           md="6"
@@ -352,20 +351,26 @@ function VerifierDashboard() {
 
           <p
             className="px-3"
-            style={{ marginTop: "-10pt", color: "hsl(217, 10%, 50.8%)" }}
+            style={{
+              marginTop: "-10pt",
+              color: "hsl(217, 10%, 50.8%)",
+              "font-size": "40px",
+              color: "white",
+              "letter-spacing": "2px",
+              fontFamily: "Sans-serif",
+            }}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet,
-            itaque accusantium odio, soluta, corrupti aliquam quibusdam tempora
-            at cupiditate quis eum maiores libero veritatis? Dicta facilis sint
-            aliquid ipsum atque?
+            Own a trusted and secured, distributed digital identity and ensure
+            full ownership of your privacy.
           </p>
           <div className="px-3">
             <MDBCard
               className={styles["public-key"]}
               style={{
                 display: "inline",
-                backgroundColor: "rgb(0,0,0,0.05)",
+                backgroundColor: "rgb(0,0,0,0)",
                 padding: "0.7vw",
+                color: "white",
                 width: "6vw",
               }}
             >
@@ -381,7 +386,14 @@ function VerifierDashboard() {
                 padding: "9pt 10pt",
                 fontSize: "10pt",
               }}
-              onClick={async ()=>{const result = await getRegistered(); (publicKeyDb == undefined && !result && web3Account != undefined) ? toggleRegisterModal() : (web3Account == publicKeyDb && web3Account != undefined) && toggleRegisterModal() }} //registered && toggleRegisterModal();}}
+              onClick={async () => {
+                const result = await getRegistered();
+                publicKeyDb == undefined && !result && web3Account != undefined
+                  ? toggleRegisterModal()
+                  : web3Account == publicKeyDb &&
+                    web3Account != undefined &&
+                    toggleRegisterModal();
+              }} //registered && toggleRegisterModal();}}
             >
               View verifiable ID Details
             </MDBBtn>
@@ -410,11 +422,19 @@ function VerifierDashboard() {
                   className="text-white mb-6 hover-focus"
                   role="button"
                 >
-                  <MDBCardBody onClick={()=>{getRegistered(); 
-                    if(web3Account == publicKeyDb && web3Account != undefined) {toggleOptions() }
-                    else if (publicKeyDb == undefined){toast.error("No DID Yet !!", { theme: "dark" });}
-              
-                    }}> 
+                  <MDBCardBody
+                    onClick={() => {
+                      getRegistered();
+                      if (
+                        web3Account == publicKeyDb &&
+                        web3Account != undefined
+                      ) {
+                        toggleOptions();
+                      } else if (publicKeyDb == undefined) {
+                        toast.error("No DID Yet !!", { theme: "dark" });
+                      }
+                    }}
+                  >
                     <MDBCardTitle
                       style={{ textAlign: "center", cursor: "pointer" }}
                     >

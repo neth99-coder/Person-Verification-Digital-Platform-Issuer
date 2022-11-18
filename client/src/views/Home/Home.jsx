@@ -13,18 +13,6 @@ import {
 import logo from "../../assets/images/logo.png";
 
 function Home(props) {
-  //   const [products, setProducts] = useState([]);
-  //   useEffect(() => {
-  //     const populateProducts = async () => {
-  //       const { data: products } = await getProducts();
-  //       if (products && products.length > 0) setProducts(products);
-  //     };
-  //     populateProducts().catch((e) => {
-  //       console.log(e);
-  //       toast.error("An error occurred!", { theme: "dark" });
-  //     });
-  //   }, []);
-
   return (
     <MDBContainer fluid className="p-3">
       <MDBRow

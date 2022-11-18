@@ -110,7 +110,7 @@ function VerifierDashboard() {
           if (!metaMaskError) {
             console.log("Inside no error");
             await axios.post(
-              "http://localhost:3001/api/v1/user/updateServices",
+              process.env.REACT_APP_API_URL + "/user/updateServices",
               {
                 email: verifier_profile.email,
                 services: services,
@@ -174,7 +174,7 @@ function VerifierDashboard() {
       );
     } else {
       axios
-        .post("http://localhost:3001/api/v1/user/updatePassword", {
+        .post(process.env.REACT_APP_API_URL + "/user/updatePassword", {
           email: verifier_profile.email,
           oldPassword: oldPassword,
           newPassword: newPassword,
@@ -199,7 +199,7 @@ function VerifierDashboard() {
   useEffect(() => {
     const getVerifier = async () => {
       await axios
-        .get("http://localhost:3001/api/v1/user/getUser", {
+        .get(process.env.REACT_APP_API_URL + "/user/getUser", {
           params: {
             email: email,
           },
@@ -306,10 +306,13 @@ function VerifierDashboard() {
 
       if (!metaMaskError) {
         console.log("Inside no error");
-        await axios.post("http://localhost:3001/api/v1/user/addVerifierDid", {
-          email: verifier_profile.email,
-          public_key: web3Account,
-        });
+        await axios.post(
+          process.env.REACT_APP_API_URL + "/user/addVerifierDid",
+          {
+            email: verifier_profile.email,
+            public_key: web3Account,
+          }
+        );
         window.location.reload(false);
       } else {
         console.log("Inside error");

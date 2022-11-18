@@ -83,53 +83,80 @@ function UsrReg() {
   const [validated, setValidated] = useState(false); //form validation
   // const navigate = useNavigate();
 
-     
-
   function handleChange(e) {
     const value = e.target.value;
     const name = e.target.name;
 
     if (name === "f_name") {
-      
       setPerson((prev_val) => {
         return { ...prev_val, first_name: value };
-      }); setErrors((prev_val)=>{return {...prev_val,"first_name":""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, first_name: "" };
+      });
     } else if (name === "last_name") {
       setPerson((prev_val) => {
         return { ...prev_val, last_name: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "status") {
       setPerson((prev_val) => {
         return { ...prev_val, status: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "nationality") {
       setPerson((prev_val) => {
         return { ...prev_val, nationality: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "nic") {
       setPerson((prev_val) => {
         return { ...prev_val, nic: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "dob") {
       setPerson((prev_val) => {
         return { ...prev_val, dob: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "contact_number") {
       setPerson((prev_val) => {
         return { ...prev_val, contact_number: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "address") {
       setPerson((prev_val) => {
         return { ...prev_val, address: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "email") {
       setPerson((prev_val) => {
         return { ...prev_val, email: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "gender") {
       setPerson((prev_val) => {
         return { ...prev_val, gender: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     }
   }
 
@@ -188,7 +215,7 @@ function UsrReg() {
       for (let item of error.details) {
         const name = item.path[0];
         const message = item.message;
-        if (name== "nic" || name == "contact_number") {
+        if (name == "nic" || name == "contact_number") {
           let msg = message.split(`" `)[2];
 
           errorData[name] = msg != undefined && msg.split(":")[0];
@@ -204,14 +231,14 @@ function UsrReg() {
 
   // function checkValidityField(name) {
   //   const result = Joi.validate(person, schema, { abortEarly: false });
-    
+
   //   const { error } = result;
   //   let message = "";
   //   if (error) {
-      
+
   //     for (let item of error.details) {
   //       const name_field = item.path[0];
-        
+
   //       if (name_field == name) {
   //         console.log(name_field);
   //         console.log("YES")
@@ -242,7 +269,7 @@ function UsrReg() {
       setValidated(true);
       e.stopPropagation();
     } else {
-      setSubmitted(!submiited)
+      setSubmitted(!submiited);
       setValidated(true);
       //console.log(person)
 
@@ -267,7 +294,7 @@ function UsrReg() {
 
       // console.log(...formData);
 
-      Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
+      Axios.post(process.env.REACT_APP_API_URL + "/user/addUser", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // 'x-auth-token': authService.getUserToken(),
@@ -730,15 +757,33 @@ function UsrReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" className="btn btn-warning  ms-2" disabled hidden={!submiited}>
-                  Prev Page
+                  <button
+                    type="submit"
+                    className="btn btn-warning  ms-2"
+                    disabled
+                    hidden={!submiited}
+                  >
+                    Prev Page
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2" hidden={submiited}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary  ms-2"
+                    hidden={submiited}
+                  >
                     Submit
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2" disabled hidden={!submiited}>
-                    Submitting .... {" "}
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button
+                    type="submit"
+                    className="btn btn-primary  ms-2"
+                    disabled
+                    hidden={!submiited}
+                  >
+                    Submitting ....{" "}
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
                   </button>
                 </div>
               </MDBCol>

@@ -81,7 +81,7 @@ function UserDashboard() {
       );
     } else {
       axios
-        .post("http://localhost:3001/api/v1/user/updatePassword", {
+        .post(process.env.REACT_APP_API_URL + "/user/updatePassword", {
           email: user_profile.email,
           oldPassword: oldPassword,
           newPassword: newPassword,
@@ -105,7 +105,7 @@ function UserDashboard() {
       alert("Please fill the field");
     } else {
       axios
-        .post("http://localhost:3001/api/v1/user/checkPassword", {
+        .post(process.env.REACT_APP_API_URL + "/user/checkPassword", {
           email: user_profile.email,
           password: password,
         })
@@ -134,7 +134,7 @@ function UserDashboard() {
     function getUser() {
       console.log("get cur user");
       axios
-        .get("http://localhost:3001/api/v1/user/getUser", {
+        .get(process.env.REACT_APP_API_URL + "/user/getUser", {
           params: {
             email: email,
           },

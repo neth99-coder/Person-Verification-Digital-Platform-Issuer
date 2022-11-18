@@ -11,7 +11,7 @@ export default function IDListPage() {
   useEffect(() => {
     const getRequests = async () => {
       await Axios.get(
-        "http://localhost:3001/api/v1/user/getPendingWalletUsers",
+        process.env.REACT_APP_API_URL + "/user/getPendingWalletUsers",
         {
           headers: { "x-auth-token": authService.getJwt() },
         }

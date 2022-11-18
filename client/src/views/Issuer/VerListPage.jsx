@@ -17,7 +17,7 @@ export default function VerListPage() {
 
   useEffect(() => {
     const getRequests = async () => {
-      await Axios.get("http://localhost:3001/api/v1/user/getPendingBanks", {
+      await Axios.get(process.env.REACT_APP_API_URL + "/user/getPendingBanks", {
         //headers: { 'x-auth-token': authService.getUserToken() },
       }).then((res) => {
         //console.log(res.data);

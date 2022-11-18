@@ -44,7 +44,9 @@ function VerReg() {
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     address: Joi.string().required().min(5).max(1024),
-    contact_number: Joi.string().required().regex(/[0-9]{10}/),
+    contact_number: Joi.string()
+      .required()
+      .regex(/[0-9]{10}/),
     role: Joi.string().required(),
     isAccepted: Joi.string().required(),
   };
@@ -64,19 +66,31 @@ function VerReg() {
     if (name === "name") {
       setBank((prev_val) => {
         return { ...prev_val, name: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "contact_number") {
       setBank((prev_val) => {
         return { ...prev_val, contact_number: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "address") {
       setBank((prev_val) => {
         return { ...prev_val, address: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     } else if (name === "email") {
       setBank((prev_val) => {
         return { ...prev_val, email: value };
-      }); setErrors((prev_val)=>{return {...prev_val,[name]:""}})
+      });
+      setErrors((prev_val) => {
+        return { ...prev_val, [name]: "" };
+      });
     }
   }
 
@@ -107,8 +121,8 @@ function VerReg() {
       });
     };
   };
-  
-  function checkValidityJoi(){
+
+  function checkValidityJoi() {
     const result = Joi.validate(bank, schema, { abortEarly: false });
     console.log(result);
     const { error } = result;
@@ -117,13 +131,15 @@ function VerReg() {
       for (let item of error.details) {
         const name = item.path[0];
         const message = item.message;
-        if(name=="contact_number"){
+        if (name == "contact_number") {
           let msg = message.split(`" `)[2];
-          
-          errorData[name] = msg!=undefined && msg.split(":")[0]}
-        else{errorData[name] = message.split(`" `)[1]};
+
+          errorData[name] = msg != undefined && msg.split(":")[0];
+        } else {
+          errorData[name] = message.split(`" `)[1];
+        }
       }
-      
+
       console.log(errorData);
       setErrors(errorData);
     }
@@ -141,7 +157,7 @@ function VerReg() {
       setValidated(true);
       e.stopPropagation();
     } else {
-      setSubmitted(!submiited)
+      setSubmitted(!submiited);
       setValidated(true);
       //console.log(person)
 
@@ -160,7 +176,7 @@ function VerReg() {
       formData.append("loan", loan);
       formData.append("card", card);
 
-      Axios.post("http://localhost:3001/api/v1/user/addUser", formData, {
+      Axios.post(process.env.REACT_APP_API_URL + "/user/addUser", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // 'x-auth-token': authService.getUserToken(),
@@ -530,15 +546,33 @@ function VerReg() {
                   >
                     Prev Page
                   </button>
-                  <button type="submit" className="btn btn-warning  ms-2" disabled hidden={!submiited}>
-                  Prev Page
+                  <button
+                    type="submit"
+                    className="btn btn-warning  ms-2"
+                    disabled
+                    hidden={!submiited}
+                  >
+                    Prev Page
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2" hidden={submiited}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary  ms-2"
+                    hidden={submiited}
+                  >
                     Submit
                   </button>
-                  <button type="submit" className="btn btn-primary  ms-2" disabled hidden={!submiited}>
-                    Submitting .... {" "}
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <button
+                    type="submit"
+                    className="btn btn-primary  ms-2"
+                    disabled
+                    hidden={!submiited}
+                  >
+                    Submitting ....{" "}
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
                   </button>
                 </div>
               </MDBCol>

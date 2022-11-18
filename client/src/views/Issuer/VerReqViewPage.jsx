@@ -25,7 +25,7 @@ export default function IDReqViewPage() {
       : (obj.isAccepted = "-1");
 
     await Axios.put(
-      "http://localhost:3001/api/v1/user/updateUser/" + obj._id,
+      process.env.REACT_APP_API_URL + "/user/updateUser/" + obj._id,
       obj,
       {
         headers: {
@@ -150,10 +150,7 @@ export default function IDReqViewPage() {
                         <button
                           className="btn  btn-outline-dark btn-sm "
                           onClick={() => {
-                            saveAs(
-                              obj.cc_photo_id.url,
-                              "cc_copy"
-                            );
+                            saveAs(obj.cc_photo_id.url, "cc_copy");
                           }}
                         >
                           {" "}

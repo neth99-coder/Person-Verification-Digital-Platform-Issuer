@@ -11,6 +11,7 @@ import IDReq from "./IDReqCard";
 import Axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
+import authService from "../../services/authService";
 
 export default function VerListPage() {
   const [requestList, setRequestList] = useState([]);
@@ -18,7 +19,7 @@ export default function VerListPage() {
   useEffect(() => {
     const getRequests = async () => {
       await Axios.get(process.env.REACT_APP_API_URL + "/user/getPendingBanks", {
-        //headers: { 'x-auth-token': authService.getUserToken() },
+        headers: { "x-auth-token": authService.getJwt() },
       }).then((res) => {
         //console.log(res.data);
         setRequestList(res.data);

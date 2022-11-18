@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import bg from "../../assets/images/2154438.jpg";
 import Web3 from "web3";
 import { loadContracts } from "./../../utils/load-contracts";
+import authService from "../../services/authService";
 
 function VerifierDashboard() {
   const [basicModal, setBasicModal] = useState(false);
@@ -114,6 +115,9 @@ function VerifierDashboard() {
               {
                 email: verifier_profile.email,
                 services: services,
+              },
+              {
+                headers: { "x-auth-token": authService.getJwt() },
               }
             );
             window.location.reload(false);
@@ -311,6 +315,9 @@ function VerifierDashboard() {
           {
             email: verifier_profile.email,
             public_key: web3Account,
+          },
+          {
+            headers: { "x-auth-token": authService.getJwt() },
           }
         );
         window.location.reload(false);

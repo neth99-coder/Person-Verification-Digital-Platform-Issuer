@@ -12,6 +12,7 @@ import bg from "../../assets/images/idaccept.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import Axios from "axios";
+import authService from "../../services/authService";
 
 export default function IDReqViewPage() {
   let location = useLocation();
@@ -29,7 +30,7 @@ export default function IDReqViewPage() {
       obj,
       {
         headers: {
-          // 'x-auth-token': authService.getUserToken(),
+          "x-auth-token": authService.getJwt(),
         },
       }
     ).then((res) => {

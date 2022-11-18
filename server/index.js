@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
+const error = require("./middleware/error");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
@@ -15,6 +16,7 @@ const api = process.env.API_URL;
 //middleware
 const bodyParser = require("body-parser");
 app.use(morgan("tiny"));
+// const authMiddleware = require("./middlewares/auth");
 
 app.use(express.json());
 app.use(cors());
@@ -23,8 +25,9 @@ require("dotenv").config();
 app.use(express.static("public"));
 app.use(fileUpload());
 
-app.use(api + "/auth", auth); // TODO: "wrong url ????"
+app.use(api + "/auth", auth);
 app.use(api + "/user", user);
+app.use(error);
 
 //establish database connection
 mongoose

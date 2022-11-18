@@ -3,6 +3,7 @@ import IDReq from "./IDReqCard";
 import Axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
+import authService from "../../services/authService";
 
 export default function IDListPage() {
   const [requestList, setRequestList] = useState([]);
@@ -12,7 +13,7 @@ export default function IDListPage() {
       await Axios.get(
         "http://localhost:3001/api/v1/user/getPendingWalletUsers",
         {
-          //headers: { 'x-auth-token': authService.getUserToken() },
+          headers: { "x-auth-token": authService.getJwt() },
         }
       ).then((res) => {
         //console.log(res.data);

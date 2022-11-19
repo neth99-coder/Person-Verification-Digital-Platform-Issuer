@@ -49,16 +49,20 @@ class LoginBody extends Form {
     if (auth.getCurrentUser()) return <Navigate to="/" />;
 
     return (
-      <div className="container w-50 mb-5 p-5">
-        <div className=" p-5 div-dark align-items-center justify-content-center">
-          <div>
-            <h1 className="text-center">Login</h1>
+      <div className="container  h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div className=" p-5 div-dark align-items-center justify-content-center">
+              <div>
+                <h1 className="text-center">Login</h1>
 
-            <form onSubmit={this.handleSubmit}>
-              {this.renderInput("username", "Username")}
-              {this.renderInput("password", "Password", "password")}
-              {this.renderButton("Login")}
-            </form>
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("username", "Username")}
+                  {this.renderInput("password", "Password", "password")}
+                  {this.renderButton("Login")}
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -508,7 +508,7 @@ function UserDashboard() {
         <MDBModalDialog>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Scan this QR code uing your mobile</MDBModalTitle>
+              <MDBModalTitle>Scan this QR code uing your DWallet App</MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"

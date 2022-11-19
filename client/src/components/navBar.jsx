@@ -118,7 +118,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
                         className="dropdown-item hover-focus"
                         href="/register-veri/"
                       >
-                        Register as Bank
+                        Register as Verifier
                       </a>
                     </li>
                   </ul>

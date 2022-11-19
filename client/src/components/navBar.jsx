@@ -155,7 +155,7 @@ export default function NavBar({ theme, toggleTheme, user }) {
                     aria-labelledby="profileDropdown"
                   >
                     <li>
-                      <span className="dropdown-item">{`${user.email}`}</span>
+                      <span className="dropdown-item disabled">{`${user.email}`}</span>
                     </li>
                     <li>
                       <hr className="dropdown-divider" />

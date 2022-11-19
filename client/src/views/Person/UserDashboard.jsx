@@ -198,7 +198,7 @@ function UserDashboard() {
   return (
     <MDBContainer
       fluid
-      className="p-5 bg-gradient m-2"
+      className="p-5 bg-gradient m-0"
       style={{ backgroundColor: "#022D36" }}
     >
       <MDBRow>

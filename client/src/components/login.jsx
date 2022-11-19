@@ -52,7 +52,7 @@ class LoginBody extends Form {
       <div className="container  h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-            <div className=" p-5 div-dark align-items-center justify-content-center">
+            <div className=" p-5 div-dark ">
               <div>
                 <h1 className="text-center">Login</h1>
 

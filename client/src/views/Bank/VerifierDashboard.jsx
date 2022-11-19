@@ -76,9 +76,10 @@ function VerifierDashboard() {
   const [web3Account, setWeb3Account] = useState([]);
   const [registered, setRegistered] = useState(false);
   const [profilePic, setProfilePic] = useState("");
-  //TODO: when open the modal and register -> add then update services
-  //TODO: when we update service in database -> update it in blockchain as well
 
+  const [submiitedServices, setSubmittedServices] = useState(false);
+  const [submiitedGenerateID, setSubmittedGenerateID] = useState(false);
+  
   const saveServiceChange = async () => {
     // if(!registered){
     //   toast.error("No DID", { theme: "dark" });
@@ -98,6 +99,7 @@ function VerifierDashboard() {
         } else {
           const { contract } = web3Api;
           try {
+            setSubmittedServices(true);
             const result = await contract.updateServices(account, loan, card, {
               from: web3Account,
             });
@@ -164,6 +166,7 @@ function VerifierDashboard() {
   }
 
   const handlePasswordSubmit = (e) => {
+    
     e.preventDefault();
     if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
       alert("Please fill all the fields");
@@ -184,8 +187,10 @@ function VerifierDashboard() {
         })
         .then((res) => {
           if (res.data.message) {
+            
             alert("password incorrect!!");
           } else if (!res.data.success) {
+           
             alert("error");
           } else if (res.data.success) {
             alert("success");
@@ -299,6 +304,7 @@ function VerifierDashboard() {
       //console.log("B4");
       const { contract } = web3Api;
       try {
+        setSubmittedGenerateID(true);
         await contract.addVerifier(account, loan, card, {
           from: web3Account,
         });
@@ -468,6 +474,7 @@ function VerifierDashboard() {
                   toggleOptions();
                   console.log(subscribedServices);
                 }}
+                disabled={submiitedServices}
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
@@ -499,10 +506,29 @@ function VerifierDashboard() {
             </MDBModalBody>
 
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={toggleOptions}>
+              <MDBBtn
+                color="secondary"
+                onClick={toggleOptions}
+                disabled={submiitedServices}
+              >
                 Close
               </MDBBtn>
-              <MDBBtn onClick={saveServiceChange}>Save changes</MDBBtn>
+              <MDBBtn onClick={saveServiceChange} hidden={submiitedServices}>
+                Save changes
+              </MDBBtn>
+              <button
+                class="btn btn-primary"
+                type="button"
+                disabled
+                hidden={!submiitedServices}
+              >
+                Saving ....{" "}
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </button>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
@@ -704,6 +730,7 @@ function VerifierDashboard() {
                 className="btn-close"
                 color="none"
                 onClick={toggleRegisterModal}
+                disabled={submiitedGenerateID}
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
@@ -711,9 +738,23 @@ function VerifierDashboard() {
                 <MDBCardBody style={{ paddingLeft: "30px" }}>
                   <MDBRow>
                     {!registered ? (
-                      <MDBBtn className="primary" onClick={register}>
-                        Generate Verifiable ID
-                      </MDBBtn>
+                      <div>
+                        <MDBBtn
+                          className="primary"
+                          onClick={register}
+                          hidden={submiitedGenerateID}
+                        >
+                          Generate Verifiable ID
+                        </MDBBtn>
+                        <button class="btn btn-primary" type="button" disabled hidden={!submiitedGenerateID}>
+                          Genetating ID ...{" "}
+                          <span
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        </button>
+                      </div>
                     ) : (
                       <>
                         <p>You have registered for</p>
@@ -732,7 +773,7 @@ function VerifierDashboard() {
             </MDBModalBody>
 
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={toggleRegisterModal}>
+              <MDBBtn color="secondary" onClick={toggleRegisterModal} disabled={submiitedGenerateID}>
                 Close
               </MDBBtn>
             </MDBModalFooter>

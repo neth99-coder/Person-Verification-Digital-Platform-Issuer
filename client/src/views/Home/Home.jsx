@@ -93,7 +93,7 @@ function Home(props) {
                 className=" mb-4 d-flex justify-content-center font-weight-bold"
                 style={{ color: "white" }}
               >
-                REGISTER AS BANK
+                REGISTER AS VERIFIER
               </MDBCardText>
             </MDBCardBody>
           </a>

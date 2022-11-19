@@ -9,7 +9,7 @@ export default function Footer() {
           src={logo}
           alt=""
           width="40"
-          className="d-inline-block align-text-top"
+          className="d-inline-block align-text-top rounded-circle"
         />
         <p className="mb-0 text-muted">© {process.env.REACT_APP_SITE_NAME}</p>
       </div>

@@ -528,6 +528,12 @@ function VerReg() {
                     className="w-75"
                   />
                 </div>
+                <MDBRow className="order-2 order-lg-1 d-flex flex-column align-items-center text-primary">
+                  <>
+                    Results of your pending request will be sent to the provided
+                    email after few days.
+                  </>
+                </MDBRow>
 
                 <div
                   style={{ display: "flex", flexDirection: "row" }}

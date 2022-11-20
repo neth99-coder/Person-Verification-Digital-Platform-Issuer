@@ -10,6 +10,7 @@ class LoginBody extends Form {
   state = {
     data: { username: "", password: "" },
     errors: {},
+    submitted:false,
   };
 
   schema = {
@@ -19,6 +20,7 @@ class LoginBody extends Form {
 
   doSubmit = async () => {
     try {
+      this.setState({submitted:true})
       const { data } = this.state;
       await auth.loginUser(data.username, data.password);
 
@@ -36,6 +38,7 @@ class LoginBody extends Form {
         this.props.navigate("/bank");
       }
     } catch (ex) {
+      this.setState({submitted:false})
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
@@ -57,7 +60,13 @@ class LoginBody extends Form {
             <form onSubmit={this.handleSubmit}>
               {this.renderInput("username", "Email")}
               {this.renderInput("password", "Password", "password")}
-              {this.renderButton("Login")}
+              {!this.state.submitted && this.renderButton("Login")}
+              {this.state.submitted && this.renderButton(<span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>)}
+                {console.log(this.state.submitted)}
             </form>
           </div>
         </div>

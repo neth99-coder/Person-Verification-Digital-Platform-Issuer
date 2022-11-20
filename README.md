@@ -9,12 +9,13 @@
 <h3>Description:</h3>
 <h6>This repositary contains all the frontend and baceknd materials for the issuer's web application of Person Verification Digital Platform</h6>
 <h6>This application is responsible for granting the eligibility of the verifiers and the wallet owners to use digital distributed identity</h6>
+<a href="https://pvdp.netlify.app/" target="_blank"> Checkout !! We are live 🎉</a>
 </p>
 
 ---
-
+<h2>Developer Guide</h2>
 <p>
-<h3>Prerequisites:</h3>
+<h3>1. Prerequisites:</h3>
 <ul>
 <li>NodeJS</li>
 <li>NPM</li>
@@ -22,26 +23,63 @@
 </ul>
 </p>
 
----
+
+<h1></h1>
+
 <p>
-<h3>Install Packages:</h3>
-<h6>Direct into the client folder which includes package.json and execute the command "npm install"</h6>
-<h6>Direct into the server folder which includes package.json and execute the command "npm install"</h6>
+<h3>2. Install Packages:</h3>
+
+  + Installing packages in front end
+
+    `$ cd client`
+
+    `$ npm install`
+
+  + Installing packages in back end
+
+
+    `$ cd server`
+
+    `$ npm install`
 
 </p>
 
----
+<h1></h1>
+
+
 <p>
-<h3>NPM Commands:</h3>
-<h6>Start Front end           :  Direct into the client folder which includes package.json and execute the command "npm start"</h6>
-<h6>Start Back end            :  Direct into the server folder which includes package.json and execute the command "npm start"</h6>
-<h6>Test Front end            :  Direct into the client folder which includes package.json and execute the command "npm test"</h6>
-<h6>Test Back end            :  Direct into the server folder which includes package.json and execute the command "npm test"</h6>
+<h3>3. NPM Commands:</h3>
+
++ Start Front end          
+
+  `$ cd client`
+
+  `$ npm start`
+
++ Start Back end   
+
+  `$ cd server`
+
+  `$ npm start`
+
++ Test Front end   
+
+  `$ cd client`
+
+  `$ npm test`
+
++ Test Back end  
+
+  `$ cd server`
+
+  `$ npm test`
+
 
 </p>
 
 
----
+<h1></h1>
+
 <details>
 <summary>📃 Frontend Environment Variables</summary>
   <ul>
@@ -53,7 +91,7 @@
 </details>
 
 
----
+
 <details>
 <summary>📃 Backend Environment Variables</summary>
   <ul>

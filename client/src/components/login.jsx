@@ -10,7 +10,7 @@ class LoginBody extends Form {
   state = {
     data: { username: "", password: "" },
     errors: {},
-    submitted:false,
+    submitted: false,
   };
 
   schema = {
@@ -20,7 +20,7 @@ class LoginBody extends Form {
 
   doSubmit = async () => {
     try {
-      this.setState({submitted:true})
+      this.setState({ submitted: true });
       const { data } = this.state;
       await auth.loginUser(data.username, data.password);
 
@@ -38,7 +38,7 @@ class LoginBody extends Form {
         this.props.navigate("/bank");
       }
     } catch (ex) {
-      this.setState({submitted:false})
+      this.setState({ submitted: false });
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.username = ex.response.data;
@@ -52,22 +52,29 @@ class LoginBody extends Form {
     if (auth.getCurrentUser()) return <Navigate to="/" />;
 
     return (
-      <div className="container w-50 mb-5 p-5">
-        <div className=" p-5 div-dark align-items-center justify-content-center">
-          <div>
-            <h1 className="text-center">Login</h1>
+      <div className="container  h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div className=" p-5 div-dark ">
+              <div>
+                <h1 className="text-center">Login</h1>
 
-            <form onSubmit={this.handleSubmit}>
-              {this.renderInput("username", "Email")}
-              {this.renderInput("password", "Password", "password")}
-              {!this.state.submitted && this.renderButton("Login")}
-              {this.state.submitted && this.renderButton(<span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>)}
-                {console.log(this.state.submitted)}
-            </form>
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("username", "Email")}
+                  {this.renderInput("password", "Password", "password")}
+                  {!this.state.submitted && this.renderButton("Login")}
+                  {this.state.submitted &&
+                    this.renderButton(
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                  {console.log(this.state.submitted)}
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
